@@ -1,0 +1,393 @@
+// 设置画布初始属性
+const canvasMain = document.querySelector('.canvasMain');
+const canvas = document.getElementById('canvas');
+const resultGroup = document.querySelector('.resultGroup');
+const mapType = {
+	0: {
+		type: "正常",
+		color: "28,214,34",
+		rgb: "#1CD622"
+	},
+	1: {
+		type: "交叉一次",
+		color: "39,152,232",
+		rgb: "#2798E8",
+	},
+	2: {
+		type: "畸形血管",
+		color: "255,0,0",
+		rgb: "#FF0000",
+	}
+}
+
+// 设置画布宽高背景色
+canvas.width = canvas.clientWidth;
+canvas.height = canvas.clientHeight;
+canvas.style.background = "#8c919c";
+
+const annotate = new LabelImage({
+	canvas: canvas,
+	scaleCanvas: document.querySelector('.scaleCanvas'),
+	scalePanel: document.querySelector('.scalePanel'),
+	annotateState: document.querySelector('.annotateState'),
+	canvasMain: canvasMain,
+	resultGroup: resultGroup,
+	crossLine: document.querySelector('.crossLine'),
+	labelShower: document.querySelector('.labelShower'),
+	screenShot: document.querySelector('.screenShot'),
+	screenFull: document.querySelector('.screenFull'),
+	colorHex: document.querySelector('#colorHex'),
+	toolTagsManager: document.querySelector('.toolTagsManager'),
+	historyGroup: document.querySelector('.historyGroup'),
+	showHistory: document.querySelector('.showHistory'),
+	history: document.querySelector('.history'),
+	historyGroupModal: document.querySelector('.historyGroupModal'),
+	dateInput: document.querySelector('#test1-btn'),
+	keyWordInput: document.querySelector('#test2-btn'),
+	closeModalLabel: document.querySelector('.closeLabelManage'),
+});
+
+// 初始化交互操作节点
+const prevBtn = document.querySelector('.pagePrev');                    // 上一张
+const nextBtn = document.querySelector('.pageNext');                    // 下一张
+const taskName = document.querySelector('.pageName');                   // 标注任务名称
+const processIndex = document.querySelector('.processIndex');           // 当前标注进度
+const processSum = document.querySelector('.processSum');               // 当前标注任务总数
+
+let imgFiles = ['./images/example/football.jpg', './images/example/person.jpg', './images/example/band.jpg',
+	'./images/example/street.jpg', './images/example/dog.jpeg', './images/example/cat.jpg', './images/example/dogs.jpg',
+	'./images/example/furniture.jpg', './images/example/basketball.jpg', './images/example/alley.jpg'];    //选择上传的文件数据集
+let imgIndex = 1;       //标定图片默认下标;
+let imgSum = 10;        // 选择图片总数;
+
+initImage();
+// 初始化图片状态
+function initImage() {
+	selectImage(0);
+	// initEditor();
+	$('#canvas').css('display', 'none');
+	$('.scaleBox').css('display', 'none');
+	$('.selectOperation').css("display", "none");
+	$('.videoEdit').css("display", "block");
+	processSum.innerText = imgSum;
+}
+
+function initEditor() {
+	let qlEditorContent = document.querySelector('.ql-editor');
+	let task = localStorage.getItem(taskName.innerText.split('.')[0]);
+	if (task) {
+		qlEditorContent.innerHTML = task;
+	}
+}
+
+//切换操作选项卡
+let tool = document.getElementById('tools');
+tool.addEventListener('click', function (e) {
+	for (let i = 0; i < tool.children.length; i++) {
+		tool.children[i].classList.remove('focus');
+	}
+	e.target.classList.add('focus');
+	switch (true) {
+		case e.target.className.indexOf('toolDrag') > -1:  // 拖拽
+			annotate.SetFeatures('dragOn', true);
+			break;
+		case e.target.className.indexOf('toolRect') > -1:  // 矩形
+			annotate.SetFeatures('rectOn', true);
+			break;
+		case e.target.className.indexOf('toolPolygon') > -1:  // 多边形
+			annotate.SetFeatures('polygonOn', true);
+			break;
+		case e.target.className.indexOf('toolTagsManager') > -1:  // 标签管理工具
+			annotate.SetFeatures('tagsOn', true);
+			break;
+		default:
+			break;
+	}
+});
+
+// 获取下一张图片
+nextBtn.onclick = function () {
+	annotate.Arrays.imageAnnotateMemory.length > 0 && localStorage.setItem(taskName.textContent, JSON.stringify(annotate.Arrays.imageAnnotateMemory));  // 保存已标定的图片信息
+	if (imgIndex >= imgSum) {
+		imgIndex = 1;
+		selectImage(0);
+	}
+	else {
+		imgIndex++;
+		selectImage(imgIndex - 1);
+	}
+};
+
+// 获取上一张图片
+prevBtn.onclick = function () {
+	annotate.Arrays.imageAnnotateMemory.length > 0 && localStorage.setItem(taskName.textContent, JSON.stringify(annotate.Arrays.imageAnnotateMemory));  // 保存已标定的图片信息
+	if (imgIndex === 1) {
+		imgIndex = imgSum;
+		selectImage(imgSum - 1);
+	}
+	else {
+		imgIndex--;
+		selectImage(imgIndex - 1);
+	}
+};
+
+document.querySelector('.openFolder').addEventListener('click', function () {
+	document.querySelector('.openFolderInput').click()
+});
+
+document.querySelector('.openVideo').addEventListener('click', function () {
+	document.querySelector('.openVideoInput').click()
+});
+
+function changeFolder(e) {
+	imgFiles = e.files;
+	imgSum = imgFiles.length;
+	processSum.innerText = imgSum;
+	imgIndex = 1;
+	selectImage(0);
+}
+
+function selectImage(index) {
+	openBox('#loading', true);
+	$('.selectOperation').css('display', "block");
+	processIndex.innerText = imgIndex;
+	taskName.innerText = imgFiles[index].name || imgFiles[index].split('/')[3];
+	let content = localStorage.getItem(taskName.textContent);
+	let img = imgFiles[index].name ? window.URL.createObjectURL(imgFiles[index]) : imgFiles[index];
+	content ? annotate.SetImage(img, JSON.parse(content)) : annotate.SetImage(img);
+}
+
+document.querySelector('.saveJson').addEventListener('click', function () {
+	let filename = taskName.textContent.split('.')[0] + '.json';
+	annotate.Arrays.imageAnnotateMemory.length > 0 ? saveJson(annotate.Arrays.imageAnnotateMemory, filename) : alert('当前图片未有有效的标定数据');
+});
+
+function saveJson(data, filename) {
+	if (!data) {
+		alert('保存的数据为空');
+		return false;
+	}
+	if (!filename) {
+		filename = 'json.json';
+	}
+	if (typeof data === 'object') {
+		data = JSON.stringify(data, undefined, 4);
+	}
+	let blob = new Blob([data], { type: 'text/json' }),
+		e = document.createEvent('MouseEvent'),
+		a = document.createElement('a');
+	a.download = filename;
+	a.href = window.URL.createObjectURL(blob);
+	a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
+	e.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+	a.dispatchEvent(e)
+}
+
+//弹出框
+function openBox(e, isOpen) {
+	let el = document.querySelector(e);
+	let maskBox = document.querySelector('.mask_box');
+	if (isOpen) {
+		maskBox.style.display = "block";
+		el.style.display = "block";
+	}
+	else {
+		maskBox.style.display = "none";
+		el.style.display = "none";
+	}
+}
+let qlEditorContent = document.querySelector('.ql-editor');
+document.querySelector('.downloadReport').addEventListener('click', function () {
+	let filename = taskName.textContent.split('.')[0] + '-report.html';
+	buildReport(qlEditorContent.innerHTML)
+});
+
+function downloadReportFunc(data, filename) {
+	if (!data) {
+		alert('保存的数据为空');
+		return false;
+	}
+	if (!filename) {
+		filename = 'report.html';
+	}
+	let blob = new Blob([data], { type: 'text/html' }),
+		e = document.createEvent('MouseEvent'),
+		a = document.createElement('a');
+	a.download = filename;
+	a.href = window.URL.createObjectURL(blob);
+	a.dataset.downloadurl = ['text/html', a.download, a.href].join(':');
+	e.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+	a.dispatchEvent(e)
+}
+
+document.querySelector('.saveReport').addEventListener('click', function () {
+	localStorage.setItem(taskName.textContent.split('.')[0], qlEditorContent.innerHTML)
+});
+
+let globalData;
+let detectingImg;
+// 血管检测
+$("#screenShot").on("click", ".anal-pic", function () {
+	let videoURL = $('.pageName').text();
+	detectingImg = $($(this)[0].parentElement.parentElement.childNodes[0])[0];
+	let id = detectingImg.getAttribute('data-id');
+	$('.loading').show();
+	detecting(videoURL, id);
+	let ctxNode = canvas;
+	ctxNode.height = ctxNode.height;
+	$('#canvas').css('display', 'block');
+	$('.scaleBox').css('display', 'block');
+	$('.videoEdit').css("display", "none");
+	$('.selectOperation').css('display', "none");
+	$('.scaleParams').show();
+})
+
+$("#title-analysis").on("click", ".analysis", function () {
+	getFormData();
+	// analysis()
+})
+
+$('.scaleParams').hide();
+
+let flag = false;
+$('.canvasContent').on('click', '.scaleParams', function () {
+	if (flag) {
+		$('.scaleParams').css("right", "-196px");
+		flag = false;
+	} else {
+		$('.scaleParams').css("right", "0");
+		flag = true;
+	}
+})
+
+$('.closeDiv').on('click', '.expend-quit', function () {
+	$('.resultSelectLabel').removeClass('focus')
+	$('.resultSelectLabel').addClass('blur')
+})
+
+
+function getFormData() {
+	$('#inflow')
+	$('#outflow')
+	$('#inflow-len')
+	$('#outflow-len')
+	$('#inflow-pipe')
+	$('#outflow-pipe')
+	$('#loop-pipe')
+
+}
+
+/**
+ * 1. 血管检测
+ * @param {*} videoID 
+ * @param {*} picID 
+ */
+function detecting(videoID, picID) {
+	$.ajax({
+		url: "http://127.0.0.1:3000/video/detecting",
+		type: "get",
+		dataType: 'JSON',
+		data: { videoID, picID },
+		success: (res) => {
+			$('.loading').hide();
+			let data = res.data.map(v => {
+				return {
+					"content": [
+						{
+							"x": v[1],
+							"y": v[2],
+						},
+						{
+							"x": v[3],
+							"y": v[2],
+						},
+						{
+							"x": v[3],
+							"y": v[4],
+						},
+						{
+							"x": v[1],
+							"y": v[4],
+						}
+					],
+					"rectMask": {
+						"xMin": v[1],
+						"yMin": v[2],
+						"width": v[3] - v[1],
+						"height": v[4] - v[2],
+					},
+					"labels": {
+						"labelName": mapType[v[0]].type,
+						"labelColor": mapType[v[0]].rgb,
+						"labelColorRGB": mapType[v[0]].color,
+						"visibility": false
+					},
+					"labelLocation": {
+						"x": 489,
+						"y": 229.5
+					},
+					"contentType": "rect"
+				}
+			})
+			annotate.SetImage(detectingImg.src, data);
+			res.data.forEach(v => {
+				analysis(videoID, picID, v[1], v[2], v[3], v[4]);
+			})
+		},
+		error: () => {
+			console.log("失败");
+		}
+	})
+}
+
+/**
+ * 2. 血管分析
+ * @param {*} videoID 
+ * @param {*} picID 
+ * @param {*} x 矩形左下角坐标
+ * @param {*} y 矩形右下角坐标
+ */
+function analysis(videoID, picID, leftX, leftY, rightX, rightY) {
+	$.ajax({
+		url: "http://127.0.0.1:3000/video/analysis",
+		type: "get",
+		dataType: 'JSON',
+		data: JSON.stringify({ videoID, picID, coordinate: [leftX, leftY, rightX, rightY] }),
+		success: (res) => {
+			annotate.Arrays.paramsArray.push(res.data);
+		},
+		error: () => {
+			console.log("失败");
+		}
+	})
+}
+
+
+
+/**
+ * 4. 生成诊断报告
+ * @param {*} json 
+ */
+function buildReport(json) {
+	return axios.get('').then(res => {
+
+	})
+		.catch(err => {
+			console.log(err);
+		})
+}
+
+function randomNumber() {
+	const now = new Date()
+	let month = now.getMonth() + 1
+	let day = now.getDate()
+	let hour = now.getHours()
+	let minutes = now.getMinutes()
+	let seconds = now.getSeconds()
+	month = this.setTimeDateFmt(month)
+	hour = this.setTimeDateFmt(hour)
+	minutes = this.setTimeDateFmt(minutes)
+	seconds = this.setTimeDateFmt(seconds)
+	return now.getFullYear()
+		.toString() + month.toString() + day + hour + minutes + seconds + (Math.round(Math.random() * 89 + 100)).toString()
+}
