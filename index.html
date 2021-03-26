@@ -88,6 +88,37 @@
                                     class="layui-btn layui-btn-primary btn-sure">确定</button>
                             </div>
                         </div>
+                        <form name="form" method="post" ab-load="demo/demo/get?id={id}" ng-model="data">
+                            <table class="form-table">
+                                <tr>
+                                    <th><span>名称：</span><span class="required">*</span></th>
+                                    <td>
+                                        <input class="form-control" type="text" ng-model="data.mz"
+                                            ab-validate="{required:true,maxlength:192}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th><span>爱好：</span><span class="required">*</span></th>
+                                    <td>
+                                        <input class="form-control" id="alias" type="text" ng-model="data.ah" />
+                                        您可以尝试不去录入此项，来感受URL表单校验的的逻辑
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th><span>部门：</span></th>
+                                    <td>
+                                        <input class="form-control" id="description" type="text" ng-model="data.bm" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2">
+                                        请参考 demoEdit.html , DemoManagerImpl <br>
+                                        关于流程 URL 表单帮助文档 https://agile-bpm.gitee.io/website/zh-cn/docs/flowConf.html
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
                         <div class="historyGroup"></div>
                         <div class="closeLabelManage"><span class="icon-remove-sign"></span></div>
                     </div>
@@ -239,26 +270,43 @@
                     </div>
                 </div>
                 <div class="historyContent">
-                    <div class="title">
+                    <div class="title   ">
                         <div>健康报告</div>
                         <button class="buttonBtm btm-primary downloadReport">生成健康报告</button>
-                        <button class="buttonBtm btm-primary saveReport">保存</button>
+                        <button class="buttonBtm btm-primary saveReport">保存结果</button>
                     </div>
                     <div id="editor">
-                        <div>
-                            <label class="e-title">检查所见</label>
-                            <textarea placeholder="请输入内容" class="layui-textarea e-textarea"></textarea>
-                        </div>
-                        <div>
-                            <label class="e-title">评估结论</label>
-                            <textarea placeholder="请输入内容" class="layui-textarea e-textarea"></textarea>
-                        </div>
-                        <div>
-                            <label class="e-title">健康建议</label>
-                            <textarea placeholder="请输入内容" class="layui-textarea e-textarea"></textarea>
-                        </div>
+                        <form name="form" method="post" ab-load="demo/demo/get?id={id}" ng-model="data">
+                            <table class="form-table">
+                                <tr>
+                                    <th><label class="control-label form-th-span" for="ng-inspect">检查所见</label></th>
+                                    <td>
+                                        <textarea id="ng-inspect" class="form-control e-inspect editor-textarea"
+                                            type="text" ng-model="data.mz" cols="28" rows="6"
+                                            placeholder="请输入内容"></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th><label class="control-label form-th-span" for="ng-eval">评估结论</label></th>
+                                    <td>
+                                        <textarea id="ng-eval" class="form-control e-eval editor-textarea" type="text"
+                                            ng-model="data.mz" cols="28" rows="6" placeholder="请输入内容"></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th><label class="control-label form-th-span" for="ng-suggest">健康建议</label></th>
+                                    <td>
+                                        <textarea id="ng-suggest" class="form-control e-suggest editor-textarea"
+                                            type="text" ng-model="data.mz" cols="28" rows="6"
+                                            placeholder="请输入内容"></textarea>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+
                     </div>
                 </div>
+
             </div>
 
             <!--  标签管理  -->

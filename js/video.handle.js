@@ -100,7 +100,6 @@ function dynamicDetecting(videoID) {
 $("#video").change(function () {
   let objUrl = getObjectURL(this.files[0]);
   let name = this.files[0].name.split('.')[0];
-  // console.dir(this.files, objUrl);
   if (objUrl) {
     $('.returnVideo').css('display', 'block');
     returnVideo();

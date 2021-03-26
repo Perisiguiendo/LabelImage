@@ -1013,13 +1013,16 @@ class LabelImage {
 
 		// 关闭标签管理
 		closeLabel.onclick = function () {
-			$('.resultSelectLabel').hide();
+			resultSelectLabel.classList.remove("focus");
+			resultSelectLabel.classList.add("blur");
 		}
 	};
 
 	getLabelParams = (index) => {
-		let arr = this.Arrays.paramsArray[index];
-		console.log(index);
+		// console.log('====================================');
+		// console.log(this.Arrays.paramsArray, index);
+		// console.log('====================================');
+		let arr = this.Arrays.paramsArray[0][index];
 		$('#inflow').val(arr[0]);
 		$('#outflow').val(arr[1])
 		$('#inflow-len').val(arr[2]);

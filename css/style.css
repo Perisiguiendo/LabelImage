@@ -677,7 +677,6 @@ body, html {
     top: 32px;
 }
 
-
 .canvasMain .commentResult {
     width: 300px;
     height: 100%;
@@ -997,7 +996,7 @@ body, html {
     }
 }
 
-.commentResult .historyContent {
+.historyContent {
     width: 100%;
     height: 0;
     flex: 1;
@@ -1006,7 +1005,7 @@ body, html {
     background: aliceblue;
 }
 
-.commentResult .historyContent .title {
+.historyContent .title {
     width: 100%;
     display: flex;
     align-items: center;
@@ -1317,7 +1316,7 @@ body, html {
     height: 25px;
     line-height: 5px;
     font-size: 12px;
-    padding: 0 10px;
+    padding: 0 15px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -1692,19 +1691,53 @@ th, td {
 
 #editor {
     overflow-y: scroll;
+    padding: 10px 0;
 }
 
-.e-textarea {
-    width: 100%;
-    height: 200px;
-}
-
-.e-textarea::-webkit-scrollbar, #editor::-webkit-scrollbar {
+.editor-textarea::-webkit-scrollbar, #editor::-webkit-scrollbar {
     width: 5px;
     height: 5px;
 }
 
-.e-textarea::-webkit-scrollbar-thumb, #editor::-webkit-scrollbar-thumb {
+.editor-textarea::-webkit-scrollbar-thumb, #editor::-webkit-scrollbar-thumb {
     background-color: #a1a3a9;
     border-radius: 10px;
+}
+
+#editor th {
+    width: 15%;
+}
+
+.editor-textarea {
+    border: 1px solid rgb(184, 184, 184);
+    outline: none;
+    font-size: 16px;
+    border-radius: 5px;
+    margin-bottom: 7px;
+}
+
+.btn-form-report {
+    display: flex;
+    justify-content: space-between;
+}
+
+.downloadReport, .saveReport {
+    border: 1px solid rgb(122, 122, 122);
+    margin-bottom: 5px;
+}
+
+.form-th-span {
+    writing-mode: vertical-lr;
+    font-size: 16px;
+    line-height: 22px;
+}
+.btn-tr {
+    display: flex;
+    justify-content: space-between;
+}
+
+.titleHistoryContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
 }

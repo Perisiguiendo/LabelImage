@@ -3,17 +3,17 @@ const canvasMain = document.querySelector('.canvasMain');
 const canvas = document.getElementById('canvas');
 const resultGroup = document.querySelector('.resultGroup');
 const mapType = {
-	0: {
+	"0": {
 		type: "正常",
 		color: "28,214,34",
 		rgb: "#1CD622"
 	},
-	1: {
+	"1": {
 		type: "交叉一次",
 		color: "39,152,232",
 		rgb: "#2798E8",
 	},
-	2: {
+	"2": {
 		type: "畸形血管",
 		color: "255,0,0",
 		rgb: "#FF0000",
@@ -63,7 +63,7 @@ let imgSum = 10;        // 选择图片总数;
 initImage();
 // 初始化图片状态
 function initImage() {
-	selectImage(0);
+	// selectImage(0);
 	// initEditor();
 	$('#canvas').css('display', 'none');
 	$('.scaleBox').css('display', 'none');
@@ -196,43 +196,72 @@ function openBox(e, isOpen) {
 		el.style.display = "none";
 	}
 }
-let qlEditorContent = document.querySelector('.ql-editor');
-document.querySelector('.downloadReport').addEventListener('click', function () {
-	let filename = taskName.textContent.split('.')[0] + '-report.html';
-	buildReport(qlEditorContent.innerHTML)
-});
 
-function downloadReportFunc(data, filename) {
-	if (!data) {
-		alert('保存的数据为空');
-		return false;
-	}
-	if (!filename) {
-		filename = 'report.html';
-	}
-	let blob = new Blob([data], { type: 'text/html' }),
-		e = document.createEvent('MouseEvent'),
-		a = document.createElement('a');
-	a.download = filename;
-	a.href = window.URL.createObjectURL(blob);
-	a.dataset.downloadurl = ['text/html', a.download, a.href].join(':');
-	e.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-	a.dispatchEvent(e)
+$('.titleHistoryContent').on('click', '.downloadReport', function () {
+
+})
+
+/**
+ * 3. 获取数据的接口
+ * @param {*} video 
+ * @param {*} frame 
+ * @param {*} xy 
+ */
+function getImgData(video, frame, xy) {
+	$.ajax({
+		url: "http://127.0.0.1:3000/test",
+		type: 'get',
+		dataType: 'json',
+		data: { video, frame, xy },
+		success: function (data) {
+			if (data.retCode == 0) {
+				console.log(res.imgInfo);
+				// annotate.Arrays.paramsArray.push(res.data);
+
+			} else {
+				setTimeout(getImgData, 5000);
+			}
+		}
+	})
 }
 
-document.querySelector('.saveReport').addEventListener('click', function () {
-	localStorage.setItem(taskName.textContent.split('.')[0], qlEditorContent.innerHTML)
-});
 
-let globalData;
+/**
+ * 4. 生成诊断报告
+ * @param {*} json 
+ */
+function buildReport(video, frame, params) {
+	$.ajax({
+		url: "http://127.0.0.1:3000/ReportGen",
+		type: "get",
+		dataType: 'JSON',
+		data: { video, frame, params },
+		success: (res) => {
+			if (res.error_code === 2) {
+				$('.e-inspect').text(res.inspect);
+				$('.e-eval').text(res.eval);
+				$('.e-suggest').text(res.suggest);
+			} else if (res.report_gen_code === 2) {
+				let msg = "正在处理中......";
+				$('.e-inspect').text(msg);
+				$('.e-eval').text(msg);
+				$('.e-suggest').text(msg);
+			}
+		},
+		error: () => {
+			console.log("失败");
+		}
+	})
+}
+
 let detectingImg;
 // 血管检测
 $("#screenShot").on("click", ".anal-pic", function () {
-	let videoURL = $('.pageName').text();
+	let video = $('.pageName').text();
 	detectingImg = $($(this)[0].parentElement.parentElement.childNodes[0])[0];
-	let id = detectingImg.getAttribute('data-id');
+	let frame = detectingImg.getAttribute('data-id');
 	$('.loading').show();
-	detecting(videoURL, id);
+	detecting('1.wmv', frame);
 	let ctxNode = canvas;
 	ctxNode.height = ctxNode.height;
 	$('#canvas').css('display', 'block');
@@ -242,9 +271,30 @@ $("#screenShot").on("click", ".anal-pic", function () {
 	$('.scaleParams').show();
 })
 
+// 血管分析
 $("#title-analysis").on("click", ".analysis", function () {
-	getFormData();
-	// analysis()
+	let xyData = annotate.Arrays.imageAnnotateMemory;
+	if (xyData.length) {
+		let temp = null;
+		let video = $('.pageName').text();
+		let frame = annotate.Nodes.image.getAttribute('data-id');
+		let xys = annotate.Arrays.imageAnnotateMemory.map(v => {
+			temp = Object.values(v.rectMask);
+			temp = temp.map(v => Math.floor(v));
+			return `${temp[0]}_${temp[1]}_${temp[2]}_${temp[3]}`
+		});
+		let xyss = annotate.Arrays.imageAnnotateMemory.map(v => {
+			temp = Object.values(v.rectMask);
+			temp = temp.map(v => Math.floor(v));
+			return `${temp[0]},${temp[1]},${temp[2]},${temp[3]}`
+		});
+		xys.forEach(v => {
+			analysis(video, frame, v);
+		})
+		xyss.forEach(v => {
+			getImgData(video, frame, v);
+		})
+	}
 })
 
 $('.scaleParams').hide();
@@ -274,23 +324,24 @@ function getFormData() {
 	$('#inflow-pipe')
 	$('#outflow-pipe')
 	$('#loop-pipe')
-
 }
 
 /**
  * 1. 血管检测
- * @param {*} videoID 
- * @param {*} picID 
+ * @param {*} video
+ * @param {*} frame 
  */
-function detecting(videoID, picID) {
+function detecting(video, frame) {
 	$.ajax({
-		url: "http://127.0.0.1:3000/video/detecting",
+		url: "http://ailw.xianglu-china.com/vessel/vesselDet",
 		type: "get",
 		dataType: 'JSON',
-		data: { videoID, picID },
+		data: { video, frame },
 		success: (res) => {
 			$('.loading').hide();
-			let data = res.data.map(v => {
+			let xys = res.data.xy.split("\n").filter(v => v).map(v => v.trim());
+			let datas = xys.map(v => v.split(' '));
+			let data = datas.map(v => {
 				return {
 					"content": [
 						{
@@ -330,9 +381,11 @@ function detecting(videoID, picID) {
 				}
 			})
 			annotate.SetImage(detectingImg.src, data);
-			res.data.forEach(v => {
-				analysis(videoID, picID, v[1], v[2], v[3], v[4]);
+			$('#canvas').attr('data-id', detectingImg["data-id"]);
+			datas.forEach(v => {
+				analysis(video, frame, v[1], v[2], v[3], v[4]);
 			})
+
 		},
 		error: () => {
 			console.log("失败");
@@ -342,19 +395,21 @@ function detecting(videoID, picID) {
 
 /**
  * 2. 血管分析
- * @param {*} videoID 
- * @param {*} picID 
+ * @param {*} video 
+ * @param {*} frame 
  * @param {*} x 矩形左下角坐标
  * @param {*} y 矩形右下角坐标
  */
-function analysis(videoID, picID, leftX, leftY, rightX, rightY) {
+function analysis(video, frame, leftX, leftY, rightX, rightY) {
 	$.ajax({
-		url: "http://127.0.0.1:3000/video/analysis",
+		url: "http://ailw.xianglu-china.com/vessel/getImgData",
 		type: "get",
 		dataType: 'JSON',
-		data: JSON.stringify({ videoID, picID, coordinate: [leftX, leftY, rightX, rightY] }),
+		data: {
+			video, frame, xy: `${leftX}_${leftY}_${rightX}_${rightY}`
+		},
 		success: (res) => {
-			annotate.Arrays.paramsArray.push(res.data);
+			console.log("success");
 		},
 		error: () => {
 			console.log("失败");
@@ -364,18 +419,7 @@ function analysis(videoID, picID, leftX, leftY, rightX, rightY) {
 
 
 
-/**
- * 4. 生成诊断报告
- * @param {*} json 
- */
-function buildReport(json) {
-	return axios.get('').then(res => {
 
-	})
-		.catch(err => {
-			console.log(err);
-		})
-}
 
 function randomNumber() {
 	const now = new Date()
@@ -390,4 +434,46 @@ function randomNumber() {
 	seconds = this.setTimeDateFmt(seconds)
 	return now.getFullYear()
 		.toString() + month.toString() + day + hour + minutes + seconds + (Math.round(Math.random() * 89 + 100)).toString()
+}
+
+
+/**
+ * 4. 血管动态分析
+ * @param {*} video 
+ */
+function dynamicAnalysis(video) {
+	$.ajax({
+		url: "http://ailw.xianglu-china.com/vessel/VideoAna",
+		type: "get",
+		dataType: 'JSON',
+		data: { video },
+		success: (res) => {
+			console.log("success");
+		},
+		error: () => {
+			console.log("失败");
+		}
+	})
+}
+
+/**
+ * 5. 获取数据的接口
+ * @param {*} video 
+ */
+function getVideoData(video) {
+	$.ajax({
+		url: "http://127.0.0.1:3000/test",
+		type: 'get',
+		dataType: 'json',
+		data: { video, frame, xy },
+		success: function (data) {
+			if (data.retCode == 0) {
+				console.log(res.imgInfo);
+				// annotate.Arrays.paramsArray.push(res.data);
+
+			} else {
+				setTimeout(getVideoData, 5000);
+			}
+		}
+	})
 }
