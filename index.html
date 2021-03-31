@@ -132,10 +132,10 @@
                     <div class="videoWrap">
                         <video id="video0" controls="controls">
                         </video>
+                        <div id="btn-picshot">截图</div>
                     </div>
                     <div id="picPre">
-                        <!-- <button class="buttonBtm an">血管动态检测</button> -->
-                        <div class="loading" id="data-loading">
+                        <!-- <div class="loading" id="data-loading">
                             <div class="loadEffect">
                                 <span></span>
                                 <span></span>
@@ -146,7 +146,7 @@
                                 <span></span>
                                 <span></span>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div id="screenShot"></div>
                 </div>
@@ -154,20 +154,6 @@
                 <div class="scaleBox">
                     <div class="scaleCanvas"></div>
                     <div class="scalePanel"></div>
-                </div>
-                <div class="scaleParams">
-                    <div>
-                        <span>血管参数平均值 ：</span>
-                        <span class="average">...计算中</span>
-                    </div>
-                    <div>
-                        <span>流速白微栓参数 ：</span>
-                        <span class="baiweishuan">...计算中</span>
-                    </div>
-                    <div>
-                        <span>流速 ：</span>
-                        <span class="speed">...计算中</span>
-                    </div>
                 </div>
                 <div class="loading">
                     <div class="loadEffect">
@@ -263,8 +249,22 @@
                         <div class="closeLabelManage"><span class="icon-remove-sign"></span></div>
                     </div>
                 </div>
+                <div class="scaleParams">
+                    <div>
+                        <span>血管参数平均值 ：</span>
+                        <span class="average">...计算中</span>
+                    </div>
+                    <div>
+                        <span>流速白微栓参数 ：</span>
+                        <span class="baiweishuan">...计算中</span>
+                    </div>
+                    <div>
+                        <span>流速 ：</span>
+                        <span class="speed">...计算中</span>
+                    </div>
+                </div>
                 <div class="historyContent">
-                    <div class="title   ">
+                    <div class="title titleHistoryContent">
                         <div>健康报告</div>
                         <button class="buttonBtm btm-primary downloadReport">生成健康报告</button>
                         <button class="buttonBtm btm-primary saveReport">保存结果</button>
@@ -276,7 +276,7 @@
                                     <th><label class="control-label form-th-span" for="ng-inspect">检查所见</label></th>
                                     <td>
                                         <textarea id="ng-inspect" class="form-control e-inspect editor-textarea"
-                                            type="text" ng-model="data.mz" cols="28" rows="6"
+                                            type="text" ng-model="data.mz" cols="28" rows="5"
                                             placeholder="请输入内容"></textarea>
                                     </td>
                                 </tr>
@@ -284,14 +284,14 @@
                                     <th><label class="control-label form-th-span" for="ng-eval">评估结论</label></th>
                                     <td>
                                         <textarea id="ng-eval" class="form-control e-eval editor-textarea" type="text"
-                                            ng-model="data.mz" cols="28" rows="6" placeholder="请输入内容"></textarea>
+                                            ng-model="data.mz" cols="28" rows="5" placeholder="请输入内容"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th><label class="control-label form-th-span" for="ng-suggest">健康建议</label></th>
                                     <td>
                                         <textarea id="ng-suggest" class="form-control e-suggest editor-textarea"
-                                            type="text" ng-model="data.mz" cols="28" rows="6"
+                                            type="text" ng-model="data.mz" cols="28" rows="5"
                                             placeholder="请输入内容"></textarea>
                                     </td>
                                 </tr>
@@ -353,7 +353,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.2/echarts.js"></script>
     <script src="./js/popper.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="https://cdn.bootcss.com/toastr.js/2.1.4/toastr.min.js"></script>

@@ -198,23 +198,48 @@ function openBox(e, isOpen) {
 }
 
 $('.titleHistoryContent').on('click', '.downloadReport', function () {
-
+	let video = "1.wmv";
+	// let frame = annotate.Nodes.image.dataset.id;
+	let params = { "video": video, "frame": "2", "清晰度": "清晰", "管袢数": ">=7", "输入枝管径": "11", "输出枝管径": "19", "输出/输入枝管径": "1.7", "袢顶直径": "28", "管袢长": "371", "交叉管袢数": "30__60%", "畸形管袢数": "<blank>", "流速": "粒流", "血管运动性": "0__1", "红细胞聚集": "轻度", "白细胞数": ">30", "白微栓": "1__2", "血色": "浅红", "渗出": "无", "出血": "无", "乳头下静脉丛": "可见1排", "乳头": "波纹状", "汗腺导管": "0__2" }
+	debounce(buildReport(params), 3000, true);
+	// if (frame) {
+	// 	console.log('x');
+	// 	debounce(buildReport(video, frame, { a: "sfdwetgfewrgwt" }), 3000, true);
+	// }
 })
 
+function debounce(func, wait, immediate) {
+	let timer;
+	return function () {
+		let context = this;
+		let args = arguments;
 
-
+		if (timer) clearTimeout(timer);
+		if (immediate) {
+			var callNow = !timer;
+			timer = setTimeout(() => {
+				timer = null;
+			}, wait)
+			if (callNow) func.apply(context, args)
+		} else {
+			timer = setTimeout(function () {
+				func.apply(context, args)
+			}, wait);
+		}
+	}
+}
 
 
 /**
  * 4. 生成诊断报告
  * @param {*} json 
  */
-function buildReport(video, frame, params) {
+function buildReport(params) {
 	$.ajax({
 		url: "http://127.0.0.1:3000/ReportGen",
 		type: "get",
 		dataType: 'JSON',
-		data: { video, frame, params },
+		data: params,
 		success: (res) => {
 			if (res.error_code === 2) {
 				$('.e-inspect').text(res.inspect);
@@ -247,7 +272,6 @@ $("#screenShot").on("click", ".anal-pic", function () {
 	$('.scaleBox').css('display', 'block');
 	$('.videoEdit').css("display", "none");
 	$('.selectOperation').css('display', "none");
-	$('.scaleParams').show();
 })
 
 // 血管分析
@@ -272,34 +296,10 @@ $("#title-analysis").on("click", ".analysis", function () {
 	}
 })
 
-$('.scaleParams').hide();
-
-let flag = false;
-$('.canvasContent').on('click', '.scaleParams', function () {
-	if (flag) {
-		$('.scaleParams').css("right", "-196px");
-		flag = false;
-	} else {
-		$('.scaleParams').css("right", "0");
-		flag = true;
-	}
-})
-
 $('.closeDiv').on('click', '.expend-quit', function () {
 	$('.resultSelectLabel').removeClass('focus')
 	$('.resultSelectLabel').addClass('blur')
 })
-
-
-function getFormData() {
-	$('#inflow')
-	$('#outflow')
-	$('#inflow-len')
-	$('#outflow-len')
-	$('#inflow-pipe')
-	$('#outflow-pipe')
-	$('#loop-pipe')
-}
 
 /**
  * 1. 血管检测
@@ -384,6 +384,7 @@ function analysis(video, frame, leftX, leftY, rightX, rightY) {
 		dataType: 'JSON',
 		data: { video, frame, xy },
 		success: (res) => {
+			console.log(res);
 			setTimeout((video, frame, xy) => {
 				getImgData(video, frame, xy)
 			}, 5000, video, frame, xy)
