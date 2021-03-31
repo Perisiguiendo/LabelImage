@@ -1,6 +1,6 @@
 let videoFrame = VideoFrame();
 let video, output;
-let scale = 1.2;
+let scale = 1;
 let isVideo = true;
 let initialize = function () {
   output = document.getElementById("screenShot");
@@ -111,7 +111,7 @@ $("#video").change(function () {
     axiosData = [];
     numberData = [];
     averageData = [];
-    dynamicDetecting(name)
+    VideoAna("1.wmv");
   }
 });
 
@@ -188,4 +188,44 @@ function drawChat() {
   };
 
   option && myChart.setOption(option);
+}
+
+/**
+ * 4. 血管动态分析
+ * @param {*} video 
+ */
+function VideoAna(video) {
+  $.ajax({
+    url: "http://ailw.xianglu-china.com/vessel/videoAna",
+    type: "get",
+    dataType: 'JSON',
+    data: { video },
+    success: (res) => {
+      console.log(res);
+      getVideoData(video);
+    },
+    error: () => {
+      console.log("失败");
+    }
+  })
+}
+
+/**
+ * 5. 获取数据的接口
+ * @param {*} video 
+ */
+function getVideoData(video) {
+  $.ajax({
+    url: "http://ailw.xianglu-china.com/vessel/getVideoData",
+    type: 'get',
+    dataType: 'json',
+    data: { video },
+    success: function (data) {
+      if (data.retCode === 0) {
+        console.log(res);
+      } else if (data.retCode === 1) {
+        setTimeout((video) => { getVideoData(video) }, 10000, video);
+      }
+    }
+  })
 }

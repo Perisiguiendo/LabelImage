@@ -201,29 +201,8 @@ $('.titleHistoryContent').on('click', '.downloadReport', function () {
 
 })
 
-/**
- * 3. 获取数据的接口
- * @param {*} video 
- * @param {*} frame 
- * @param {*} xy 
- */
-function getImgData(video, frame, xy) {
-	$.ajax({
-		url: "http://127.0.0.1:3000/test",
-		type: 'get',
-		dataType: 'json',
-		data: { video, frame, xy },
-		success: function (data) {
-			if (data.retCode == 0) {
-				console.log(res.imgInfo);
-				// annotate.Arrays.paramsArray.push(res.data);
 
-			} else {
-				setTimeout(getImgData, 5000);
-			}
-		}
-	})
-}
+
 
 
 /**
@@ -276,23 +255,19 @@ $("#title-analysis").on("click", ".analysis", function () {
 	let xyData = annotate.Arrays.imageAnnotateMemory;
 	if (xyData.length) {
 		let temp = null;
-		let video = $('.pageName').text();
-		let frame = annotate.Nodes.image.getAttribute('data-id');
+		// let video = $('.pageName').text();
+		let video = "1.wmv";
+		let frame = annotate.Nodes.image.dataset.id;
 		let xys = annotate.Arrays.imageAnnotateMemory.map(v => {
+			console.log(v.rectMask);
 			temp = Object.values(v.rectMask);
-			temp = temp.map(v => Math.floor(v));
-			return `${temp[0]}_${temp[1]}_${temp[2]}_${temp[3]}`
+			return [temp[0], temp[1], temp[0] + temp[2], temp[1] + temp[3]]
 		});
-		let xyss = annotate.Arrays.imageAnnotateMemory.map(v => {
-			temp = Object.values(v.rectMask);
-			temp = temp.map(v => Math.floor(v));
-			return `${temp[0]},${temp[1]},${temp[2]},${temp[3]}`
-		});
+		annotate.Arrays.paramsArray = [];
 		xys.forEach(v => {
-			analysis(video, frame, v);
-		})
-		xyss.forEach(v => {
-			getImgData(video, frame, v);
+			setTimeout((video, frame, v) => {
+				analysis(video, frame, v[0], v[1], v[2], v[3]);
+			}, 2000, video, frame, v)
 		})
 	}
 })
@@ -339,8 +314,8 @@ function detecting(video, frame) {
 		data: { video, frame },
 		success: (res) => {
 			$('.loading').hide();
-			let xys = res.data.xy.split("\n").filter(v => v).map(v => v.trim());
-			let datas = xys.map(v => v.split(' '));
+			let xys = res.xy.split("\n").filter(v => v).map(v => v.trim());
+			let datas = xys.map(v => v.split(' '));
 			let data = datas.map(v => {
 				return {
 					"content": [
@@ -380,12 +355,13 @@ function detecting(video, frame) {
 					"contentType": "rect"
 				}
 			})
-			annotate.SetImage(detectingImg.src, data);
+			annotate.SetImage(detectingImg, data);
 			$('#canvas').attr('data-id', detectingImg["data-id"]);
 			datas.forEach(v => {
-				analysis(video, frame, v[1], v[2], v[3], v[4]);
+				setTimeout((video, frame, v) => {
+					analysis(video, frame, v[1], v[2], v[3], v[4]);
+				}, 2000, video, frame, v)
 			})
-
 		},
 		error: () => {
 			console.log("失败");
@@ -401,78 +377,43 @@ function detecting(video, frame) {
  * @param {*} y 矩形右下角坐标
  */
 function analysis(video, frame, leftX, leftY, rightX, rightY) {
+	let xy = `${leftX}_${leftY}_${rightX}_${rightY}`;
+	$.ajax({
+		url: "http://ailw.xianglu-china.com/vessel/imgAna",
+		type: "get",
+		dataType: 'JSON',
+		data: { video, frame, xy },
+		success: (res) => {
+			setTimeout((video, frame, xy) => {
+				getImgData(video, frame, xy)
+			}, 5000, video, frame, xy)
+		},
+		error: () => {
+			console.log("失败");
+		}
+	})
+}
+
+/**
+ * 3. 获取数据的接口
+ * @param {*} video 
+ * @param {*} frame 
+ * @param {*} xy 
+ */
+function getImgData(video, frame, xy) {
 	$.ajax({
 		url: "http://ailw.xianglu-china.com/vessel/getImgData",
-		type: "get",
-		dataType: 'JSON',
-		data: {
-			video, frame, xy: `${leftX}_${leftY}_${rightX}_${rightY}`
-		},
-		success: (res) => {
-			console.log("success");
-		},
-		error: () => {
-			console.log("失败");
-		}
-	})
-}
-
-
-
-
-
-function randomNumber() {
-	const now = new Date()
-	let month = now.getMonth() + 1
-	let day = now.getDate()
-	let hour = now.getHours()
-	let minutes = now.getMinutes()
-	let seconds = now.getSeconds()
-	month = this.setTimeDateFmt(month)
-	hour = this.setTimeDateFmt(hour)
-	minutes = this.setTimeDateFmt(minutes)
-	seconds = this.setTimeDateFmt(seconds)
-	return now.getFullYear()
-		.toString() + month.toString() + day + hour + minutes + seconds + (Math.round(Math.random() * 89 + 100)).toString()
-}
-
-
-/**
- * 4. 血管动态分析
- * @param {*} video 
- */
-function dynamicAnalysis(video) {
-	$.ajax({
-		url: "http://ailw.xianglu-china.com/vessel/VideoAna",
-		type: "get",
-		dataType: 'JSON',
-		data: { video },
-		success: (res) => {
-			console.log("success");
-		},
-		error: () => {
-			console.log("失败");
-		}
-	})
-}
-
-/**
- * 5. 获取数据的接口
- * @param {*} video 
- */
-function getVideoData(video) {
-	$.ajax({
-		url: "http://127.0.0.1:3000/test",
 		type: 'get',
 		dataType: 'json',
 		data: { video, frame, xy },
 		success: function (data) {
-			if (data.retCode == 0) {
-				console.log(res.imgInfo);
-				// annotate.Arrays.paramsArray.push(res.data);
-
+			if (data.retCode === 0) {
+				let d = Object.values(data);
+				d.splice(d.length - 1, 1);
+				// console.log(d);
+				annotate.Arrays.paramsArray.push(d);
 			} else {
-				setTimeout(getVideoData, 5000);
+				setTimeout((video, frame, xy) => { getImgData(video, frame, xy) }, 5000, video, frame, xy);
 			}
 		}
 	})

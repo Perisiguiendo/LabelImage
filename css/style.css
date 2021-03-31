@@ -945,7 +945,39 @@ body, html {
     padding: 10px;
 }
 
-.selectTableRow {
+.selectTable th {
+    width: 50%;
+    text-align: left;
+    height: 25px;
+    /* border: 1px solid #ddd; */
+}
+
+.selectTable td {
+    width: 50%;
+    text-align: left;
+    height: 25px;
+}
+
+.selectTable td input {
+    width: 90%;
+    border: 1px solid #ddd;
+
+}
+
+.selectTable button {
+    width: 90%;
+    height: 30px;
+    margin-top: 10px;
+}
+
+.selectTable button:nth-of-type(1) {
+    border: 1px solid #293245;
+}
+
+.selectTable button:nth-of-type(2) {
+    border: 1px solid #8a8a8a;
+}
+/* .selectTableRow {
     display: flex;
     margin-bottom: 10px;
 }
@@ -954,9 +986,7 @@ body, html {
     width: 80px;
 }
 
-.selectTableRow input {
-    border: 1px solid #ddd;
-}
+ */
 
 @keyframes showSelectLabel {
     from {
@@ -1027,7 +1057,7 @@ body, html {
     padding: 5px 0;
     box-sizing: border-box;
     height: 73%;
-    margin-top: -28px;
+    margin-top: -7px;
 }
 
 .historyGroup::-webkit-scrollbar {
@@ -1230,49 +1260,49 @@ body, html {
 }
 
 .labelManage.focus {
-    /* -webkit-animation: showLabelManage 0.4s ease-out forwards;
+    -webkit-animation: showLabelManage 0.4s ease-out forwards;
     -o-animation: showLabelManage 0.4s ease-out forwards;
-    animation: showLabelManage 0.4s ease-out forwards; */
+    animation: showLabelManage 0.4s ease-out forwards;
     visibility: visible;
 }
 
 .labelManage.blur {
-    /* -webkit-animation: hideLabelManage 0.4s ease-out forwards;
+    -webkit-animation: hideLabelManage 0.4s ease-out forwards;
     -o-animation: hideLabelManage 0.4s ease-out forwards;
-    animation: hideLabelManage 0.4s ease-out forwards; */
+    animation: hideLabelManage 0.4s ease-out forwards;
     visibility: hidden;
 }
 
-/* @keyframes showLabelManage {
+@keyframes showLabelManage {
     from {
         opacity: 0;
-        top: 215px;
+        top: 257px;
     }
     to {
         opacity: 1;
-        top: 195px;
+        top: 242px;
     }
 }
 
 @-webkit-keyframes showLabelManage {
     from {
         opacity: 0;
-        top: 215px;
+        top: 257px;
     }
     to {
         opacity: 1;
-        top: 195px;
+        top: 242px;
     }
 }
 
 @keyframes hideLabelManage {
     from {
         opacity: 1;
-        top: 195px;
+        top: 242px;
     }
     to {
         opacity: 0;
-        top: 215px;
+        top: 257px;
         visibility: hidden;
     }
 }
@@ -1280,14 +1310,14 @@ body, html {
 @-webkit-keyframes hideLabelManage {
     from {
         opacity: 1;
-        top: 195px;
+        top: 242px;
     }
     to {
         opacity: 0;
-        top: 215px;
+        top: 257px;
         visibility: hidden;
     }
-} */
+}
 
 .LabelImage .canvasMain .labelManage::before {
     content: '';
@@ -1365,9 +1395,9 @@ body, html {
     position: fixed;
     top: 55px;
     right: 286px;
-    width: 456px;
-    height: 500px;
-    padding: 24px 6px 8px;
+    width: 372px;
+    height: 150px;
+    padding: 25px 0px 10px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -1474,7 +1504,7 @@ body, html {
 }
 
 .btn-sure {
-    margin-top: -25px;
+    margin: -1px 0 0 20px;
 }
 
 table {
@@ -1731,6 +1761,7 @@ th, td {
     font-size: 16px;
     line-height: 22px;
 }
+
 .btn-tr {
     display: flex;
     justify-content: space-between;
@@ -1740,4 +1771,18 @@ th, td {
     display: flex;
     align-items: center;
     justify-content: space-around;
+}
+
+.form-label-self {
+    width: 48px;
+    float: left;
+    display: block;
+    padding: 9px 15px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: right;
+}
+
+.th-form-label {
+    width: 27%;
 }

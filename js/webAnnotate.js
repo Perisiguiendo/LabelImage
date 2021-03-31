@@ -213,11 +213,13 @@ class LabelImage {
 
 	//----设置图片并初始化画板信息
 	// tip: point
-	SetImage = (src, memory = false) => {
+	SetImage = (img, memory = false) => {
+		let src = img.src;
 		let _nodes = this.Nodes;
 		_nodes.image = new Image();
 		_nodes.image.crossOrigin = 'anonymous';
 		_nodes.image.src = src;
+		_nodes.image.setAttribute("data-id", img.getAttribute("data-id"));
 		//监听图片加载
 		_nodes.image.addEventListener('load', () => {
 			openBox('#loading', false);
@@ -899,6 +901,7 @@ class LabelImage {
 		this.ReplaceAnnotateMemory();
 		this.RecordOperation('delete', '删除标定标签', index, JSON.stringify(this.Arrays.imageAnnotateMemory[index]));
 		this.Arrays.imageAnnotateShower.splice(index, 1);
+		this.Arrays.paramsArray.splice(index, 1);
 		this.RepaintResultList();
 	};
 
@@ -921,7 +924,6 @@ class LabelImage {
 				switch (target.classList[0]) {
 					case "deleteLabel":
 						_self.DeleteSomeResultLabel(i);
-						_self.DeleteLabelParams(i);
 						break;
 					case "editLabelName":
 						_self.getCreatedLabels(resultList[i], pageY, i);
@@ -1019,17 +1021,14 @@ class LabelImage {
 	};
 
 	getLabelParams = (index) => {
-		// console.log('====================================');
-		// console.log(this.Arrays.paramsArray, index);
-		// console.log('====================================');
-		let arr = this.Arrays.paramsArray[0][index];
+		let arr = this.Arrays.paramsArray[index];
 		$('#inflow').val(arr[0]);
-		$('#outflow').val(arr[1])
-		$('#inflow-len').val(arr[2]);
-		$('#outflow-len').val(arr[3]);
-		$('#inflow-pipe').val(arr[4]);
-		$('#outflow-pipe').val(arr[5]);
-		$('#loop-pipe').val(arr[6]);
+		$('#inflow-len').val(arr[1]);
+		$('#inflow-pipe').val(arr[2]);
+		$('#loop-pipe').val(arr[3]);
+		$('#outflow').val(arr[4])
+		$('#outflow-len').val(arr[5]);
+		$('#outflow-pipe').val(arr[6]);
 		this.changeInputVal(index);
 	}
 
@@ -1038,22 +1037,18 @@ class LabelImage {
 		$('.closeDiv').on('click', '.expend-sure', function () {
 			let arr = [
 				$('#inflow').val(),
-				$('#outflow').val(),
 				$('#inflow-len').val(),
-				$('#outflow-len').val(),
 				$('#inflow-pipe').val(),
-				$('#outflow-pipe').val(),
 				$('#loop-pipe').val(),
+				$('#outflow').val(),
+				$('#outflow-len').val(),
+				$('#outflow-pipe').val(),
 			]
 			_self.Arrays.paramsArray[index] = [...arr];
 			$('.resultSelectLabel').removeClass('focus')
 			$('.resultSelectLabel').addClass('blur')
 			console.log(_self.Arrays.paramsArray);
 		})
-	}
-
-	DeleteLabelParams = (index) => {
-		this.Arrays.paramsArray.splice(index, 1);
 	}
 
 	//----标签管理
@@ -1374,7 +1369,6 @@ class LabelImage {
 		if (value !== time) {
 			let historyRecord = localStorage.getItem('history');
 			let parseHistory = JSON.parse(historyRecord);
-			console.log(parseHistory);
 			// let isExist = false;
 			// if (parseHistory) {
 			// 	parseHistory.forEach(v => {
