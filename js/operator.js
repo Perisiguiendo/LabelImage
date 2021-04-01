@@ -236,10 +236,11 @@ function debounce(func, wait, immediate) {
  */
 function buildReport(params) {
 	$.ajax({
-		url: "http://127.0.0.1:3000/ReportGen",
+		url: "http://ailw.xianglu-china.com/vessel/ReportGen",
 		type: "get",
 		dataType: 'JSON',
 		data: params,
+		contentType: "application/json",
 		success: (res) => {
 			if (res.error_code === 2) {
 				$('.e-inspect').text(res.inspect);
@@ -257,6 +258,32 @@ function buildReport(params) {
 		}
 	})
 }
+
+function buildReport(params) {
+	$.ajax({
+		url: "http://127.0.0.1:5000/ReportGen",
+		type: "get",
+		dataType: 'JSON',
+		data: params,
+		contentType: "application/json",
+		success: (res) => {
+			if (res.error_code === 2) {
+				$('.e-inspect').text(res.inspect);
+				$('.e-eval').text(res.eval);
+				$('.e-suggest').text(res.suggest);
+			} else if (res.report_gen_code === 2) {
+				let msg = "正在处理中......";
+				$('.e-inspect').text(msg);
+				$('.e-eval').text(msg);
+				$('.e-suggest').text(msg);
+			}
+		},
+		error: () => {
+			console.log("失败");
+		}
+	})
+}
+
 
 let detectingImg;
 // 血管检测
