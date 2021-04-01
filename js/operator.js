@@ -198,7 +198,7 @@ function openBox(e, isOpen) {
 }
 
 $('.titleHistoryContent').on('click', '.downloadReport', function () {
-	let video = "1.wmv";
+	let video = "1";
 	// let frame = annotate.Nodes.image.dataset.id;
 	let params = { "video": video, "frame": "2", "清晰度": "清晰", "管袢数": ">=7", "输入枝管径": "11", "输出枝管径": "19", "输出/输入枝管径": "1.7", "袢顶直径": "28", "管袢长": "371", "交叉管袢数": "30__60%", "畸形管袢数": "<blank>", "流速": "粒流", "血管运动性": "0__1", "红细胞聚集": "轻度", "白细胞数": ">30", "白微栓": "1__2", "血色": "浅红", "渗出": "无", "出血": "无", "乳头下静脉丛": "可见1排", "乳头": "波纹状", "汗腺导管": "0__2" }
 	debounce(buildReport(params), 3000, true);
@@ -242,15 +242,22 @@ function buildReport(params) {
 		data: params,
 		contentType: "application/json",
 		success: (res) => {
-			if (res.error_code === 2) {
-				$('.e-inspect').text(res.inspect);
-				$('.e-eval').text(res.eval);
-				$('.e-suggest').text(res.suggest);
-			} else if (res.report_gen_code === 2) {
+			// if (res.error_code === 2) {
+			// 	$('.e-inspect').text(res.inspect);
+			// 	$('.e-eval').text(res.eval);
+			// 	$('.e-suggest').text(res.suggest);
+			// } else 
+			if (res.report_gen_code === 2) {
 				let msg = "正在处理中......";
 				$('.e-inspect').text(msg);
 				$('.e-eval').text(msg);
 				$('.e-suggest').text(msg);
+				setTimeout(() => {
+					getReport({
+						"video": "2",
+						"frame": "2"
+					})
+				}, 2000)
 			}
 		},
 		error: () => {
@@ -259,23 +266,32 @@ function buildReport(params) {
 	})
 }
 
-function buildReport(params) {
+function getReport(params) {
 	$.ajax({
-		url: "http://127.0.0.1:5000/ReportGen",
+		url: "http://127.0.0.1:5000/getReport",
 		type: "get",
 		dataType: 'JSON',
 		data: params,
 		contentType: "application/json",
 		success: (res) => {
-			if (res.error_code === 2) {
-				$('.e-inspect').text(res.inspect);
-				$('.e-eval').text(res.eval);
-				$('.e-suggest').text(res.suggest);
-			} else if (res.report_gen_code === 2) {
+			// if (res.error_code === 2) {
+			// 	$('.e-inspect').text(res.inspect);
+			// 	$('.e-eval').text(res.eval);
+			// 	$('.e-suggest').text(res.suggest);
+			// } else 
+			if ((res.error_code === 0) || (res.error_code === 1)) {
 				let msg = "正在处理中......";
 				$('.e-inspect').text(msg);
 				$('.e-eval').text(msg);
 				$('.e-suggest').text(msg);
+				setTimeout(() => {
+					getReport({
+						"video": "2",
+						"frame": "2"
+					})
+				}, 2000)
+			} else if (res.error_code === 2) {
+				console.log(res);
 			}
 		},
 		error: () => {
