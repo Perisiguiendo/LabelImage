@@ -1727,6 +1727,7 @@ th, td {
     font-size: 16px;
     border-radius: 5px;
     margin-bottom: 7px;
+    padding-left: 5px;
 }
 
 .btn-form-report {

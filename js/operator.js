@@ -195,11 +195,34 @@ function openBox(e, isOpen) {
 		maskBox.style.display = "none";
 		el.style.display = "none";
 	}
+}
 
 $('.titleHistoryContent').on('click', '.downloadReport', function () {
 	// let frame = annotate.Nodes.image.dataset.id;
-	let params = { "video": '2', "frame": "2", "清晰度": "清晰", "管袢数": ">=7", "输入枝管径": "11", "输出枝管径": "19", "输出/输入枝管径": "1.7", "袢顶直径": "28", "管袢长": "371", "交叉管袢数": "30__60%", "畸形管袢数": "<blank>", "流速": "粒流", "血管运动性": "0__1", "红细胞聚集": "轻度", "白细胞数": ">30", "白微栓": "1__2", "血色": "浅红", "渗出": "无", "出血": "无", "乳头下静脉丛": "可见1排", "乳头": "波纹状", "汗腺导管": "0__2" }
-	debounce(buildReport(params), 3000, true);
+	let obj = new Object();
+	obj["video"] = '2';
+	obj["frame"] = '2';
+	obj["清晰度"] = "清晰";
+	obj["管袢数"] = ">=7";
+	obj["输入枝管径"] = "11";
+	obj["输出枝管径"] = "19";
+	obj["输出/输入枝管径"] = "1.7";
+	obj["袢顶直径"] = "28";
+	obj["管袢长"] = "371";
+	obj["交叉管袢数"] = "30__60%";
+	obj["畸形管袢数"] = "<blank>";
+	obj["流速"] = "粒流";
+	obj["血管运动性"] = "0__1";
+	obj["红细胞聚集"] = "轻度";
+	obj["白细胞数"] = ">30";
+	obj["白微栓"] = "1__2";
+	obj["血色"] = "浅红";
+	obj["渗出"] = "无";
+	obj["出血"] = "无";
+	obj["乳头下静脉丛"] = "可见1排";
+	obj["乳头"] = "波纹状";
+	obj["汗腺导管"] = "0__2";
+	debounce(buildReport(obj), 3000, true);
 	// if (frame) {
 	// 	console.log('x');
 	// 	debounce(buildReport(video, frame, { a: "sfdwetgfewrgwt" }), 3000, true);
@@ -211,7 +234,6 @@ function debounce(func, wait, immediate) {
 	return function () {
 		let context = this;
 		let args = arguments;
-
 		if (timer) clearTimeout(timer);
 		if (immediate) {
 			var callNow = !timer;
@@ -232,30 +254,21 @@ function debounce(func, wait, immediate) {
  * 4. 生成诊断报告
  * @param {*} json 
  */
-function buildReport(params) {
+function buildReport(obj) {
 	$.ajax({
-		url: "http://127.0.0.1:5000/ReportGen",
-		type: "get",
+		url: "http://ailw.xianglu-china.com/vessel/ReportGen",
+		type: "post",
 		dataType: 'JSON',
-		data: params,
-		contentType: "application/json",
+		data: JSON.stringify(obj),
 		success: (res) => {
-			// if (res.error_code === 2) {
-			// 	$('.e-inspect').text(res.inspect);
-			// 	$('.e-eval').text(res.eval);
-			// 	$('.e-suggest').text(res.suggest);
-			// } else 
 			if (res.report_gen_code === 2) {
 				let msg = "正在处理中......";
 				$('.e-inspect').text(msg);
 				$('.e-eval').text(msg);
 				$('.e-suggest').text(msg);
 				setTimeout(() => {
-					getReport({
-						"video": "2",
-						"frame": "2"
-					})
-				}, 2000)
+					getReport(obj["video"], obj["frame"])
+				}, 5000)
 			}
 		},
 		error: () => {
@@ -264,32 +277,33 @@ function buildReport(params) {
 	})
 }
 
-function getReport(params) {
+/**
+ * 轮询，展示报告
+ * @param {*} param1 
+ * @param {*} param2 
+ */
+function getReport(param1, param2) {
+	let obj = new Object();
+	obj["video"] = param1;
+	obj["frame"] = param2;
 	$.ajax({
-		url: "http://127.0.0.1:5000/getReport",
-		type: "get",
+		url: "http://ailw.xianglu-china.com/vessel/getReport",
+		type: "post",
 		dataType: 'JSON',
-		data: params,
-		contentType: "application/json",
+		data: JSON.stringify(obj),
 		success: (res) => {
-			// if (res.error_code === 2) {
-			// 	$('.e-inspect').text(res.inspect);
-			// 	$('.e-eval').text(res.eval);
-			// 	$('.e-suggest').text(res.suggest);
-			// } else 
 			if ((res.error_code === 0) || (res.error_code === 1)) {
 				let msg = "正在处理中......";
 				$('.e-inspect').text(msg);
 				$('.e-eval').text(msg);
 				$('.e-suggest').text(msg);
 				setTimeout(() => {
-					getReport({
-						"video": "2",
-						"frame": "2"
-					})
-				}, 2000)
+					getReport(obj["video"], obj["frame"]);
+				}, 10000)
 			} else if (res.error_code === 2) {
-				console.log(res);
+				$('.e-inspect').text(res.inspect);
+				$('.e-eval').text(res.eval);
+				$('.e-suggest').text(res.suggest);
 			}
 		},
 		error: () => {
@@ -418,7 +432,7 @@ function detecting(video, frame) {
  * @param {*} y 矩形右下角坐标
  */
 function analysis(video, frame, leftX, leftY, rightX, rightY) {
-	let xy = `${leftX}_${leftY}_${rightX}_${rightY}`;
+	let xy = `${Math.round(leftX)}_${MAth.round(leftY)}_${Math.round(rightX)}_${Math.round(rightY)}`;
 	$.ajax({
 		url: "http://ailw.xianglu-china.com/vessel/imgAna",
 		type: "get",
@@ -452,7 +466,6 @@ function getImgData(video, frame, xy) {
 			if (data.retCode === 0) {
 				let d = Object.values(data);
 				d.splice(d.length - 1, 1);
-				// console.log(d);
 				annotate.Arrays.paramsArray.push(d);
 			} else {
 				setTimeout((video, frame, xy) => { getImgData(video, frame, xy) }, 5000, video, frame, xy);
