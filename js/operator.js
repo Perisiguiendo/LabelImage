@@ -197,7 +197,6 @@ function openBox(e, isOpen) {
 	}
 
 $('.titleHistoryContent').on('click', '.downloadReport', function () {
-	let video = "1";
 	// let frame = annotate.Nodes.image.dataset.id;
 	let params = { "video": '2', "frame": "2", "清晰度": "清晰", "管袢数": ">=7", "输入枝管径": "11", "输出枝管径": "19", "输出/输入枝管径": "1.7", "袢顶直径": "28", "管袢长": "371", "交叉管袢数": "30__60%", "畸形管袢数": "<blank>", "流速": "粒流", "血管运动性": "0__1", "红细胞聚集": "轻度", "白细胞数": ">30", "白微栓": "1__2", "血色": "浅红", "渗出": "无", "出血": "无", "乳头下静脉丛": "可见1排", "乳头": "波纹状", "汗腺导管": "0__2" }
 	debounce(buildReport(params), 3000, true);
