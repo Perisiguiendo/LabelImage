@@ -236,7 +236,7 @@ function debounce(func, wait, immediate) {
  */
 function buildReport(params) {
 	$.ajax({
-		url: "http://ailw.xianglu-china.com/vessel/ReportGen",
+		url: "http://127.0.0.1:5000/ReportGen",
 		type: "get",
 		dataType: 'JSON',
 		data: params,
