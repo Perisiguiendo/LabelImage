@@ -288,8 +288,8 @@ class LabelImage {
 				this.Arrays.imageAnnotateMemory = memory;
 				this.ReplaceAnnotateShow();
 				this.RepaintResultList();
-				this.Arrays.imageAnnotateMemory.forEach((memory, index) => {
-					this.RecordOperation('add', '绘制', index, JSON.stringify(memory));
+				this.Arrays.imageAnnotateMemory.forEach((v, index) => {
+					this.RecordOperation('add', '绘制', index, JSON.stringify(v));
 				});
 			}
 		});

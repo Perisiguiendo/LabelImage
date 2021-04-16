@@ -124,8 +124,8 @@ function getVideoData(video) {
     data: { video },
     success: function (data) {
       if (data.retCode === 0) {
-        $('.baiweishuan').val(data.baiweishuan);
-        $(".speed").val(data.speed);
+        $('#baiweishuan').text(data.baiweishuan);
+        $("#speed").text(data.speed);
       } else if (data.retCode === 1) {
         setTimeout((video) => { getVideoData(video) }, 10000, video);
       }
