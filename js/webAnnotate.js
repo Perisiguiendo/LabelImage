@@ -1021,7 +1021,7 @@ class LabelImage {
 	};
 
 	getLabelParams = (index) => {
-		let arr = this.Arrays.paramsArray[index];
+		let arr = this.Arrays.paramsArray[index] || [];
 		$('#inflow').val(arr[0]);
 		$('#inflow-len').val(arr[1]);
 		$('#inflow-pipe').val(arr[2]);

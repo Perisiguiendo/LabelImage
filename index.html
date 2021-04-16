@@ -69,30 +69,17 @@
                         </p>
                     </div>
                     <div class="historyGroupModal">
-                        <form name="form" method="post" ab-load="demo/demo/get?id={id}" ng-model="data">
-                            <table class="form-table">
-                                <tr>
-                                    <th class="th-form-label"><label class="form-label-self">日期</label></th>
-                                    <td>
-                                        <input type="text" class="layui-input" ng-model="data.mz" id="test1"
-                                            placeholder="默认为当天">
-                                    </td>
-                                    <td style="display: flex;"><button type="reset" id="test1-btn"
-                                            class="layui-btn layui-btn-primary btn-sure">确定</button></td>
-                                </tr>
-                                <tr>
-                                    <th><label class="form-label-self">关键字</label></th>
-                                    <td>
-                                        <input type="text" name="keywords" id="test2" lay-verify="required"
-                                            ng-model="data.mz" placeholder="请输入" autocomplete="off" class="layui-input">
-                                    </td>
-                                    <td>
-                                        <button type="reset" id="test2-btn"
-                                            class="layui-btn layui-btn-primary btn-sure">确定</button>
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
+                        <div class="history-date-modal">
+                            <label class="form-label-self">日期</label>
+                            <input type="text" class="layui-input" ng-model="data.mz" id="test1" placeholder="默认为当天">
+                            <button id="test1-btn" class="buttonBtm">确定</button>
+                        </div>
+                        <div class="history-date-modal">
+                            <label class="form-label-self">关键字</label>
+                            <input type="text" name="keywords" id="test2" lay-verify="required" ng-model="data.mz"
+                                placeholder="请输入" autocomplete="off" class="layui-input">
+                            <button id="test2-btn" class="buttonBtm">确定</button>
+                        </div>
                         <div class="historyGroup"></div>
                         <div class="closeLabelManage"><span class="icon-remove-sign"></span></div>
                     </div>
@@ -250,17 +237,17 @@
                     </div>
                 </div>
                 <div class="scaleParams">
-                    <div>
+                    <!-- <div>
                         <span>血管参数平均值 ：</span>
-                        <span class="average">...计算中</span>
-                    </div>
+                        <span class="average">...</span>
+                    </div> -->
                     <div>
                         <span>流速白微栓参数 ：</span>
-                        <span class="baiweishuan">...计算中</span>
+                        <span class="baiweishuan">...</span>
                     </div>
                     <div>
                         <span>流速 ：</span>
-                        <span class="speed">...计算中</span>
+                        <span class="speed">...</span>
                     </div>
                 </div>
                 <div class="historyContent">

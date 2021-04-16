@@ -104,7 +104,7 @@ function VideoAna(video) {
     data: { video },
     success: (res) => {
       console.log(res);
-      getVideoData(video);
+      setTimeout((video) => { getVideoData(video) }, 10000, video);
     },
     error: () => {
       console.log("失败");
@@ -124,7 +124,8 @@ function getVideoData(video) {
     data: { video },
     success: function (data) {
       if (data.retCode === 0) {
-        console.log(res);
+        $('.baiweishuan').val(data.baiweishuan);
+        $(".speed").val(data.speed);
       } else if (data.retCode === 1) {
         setTimeout((video) => { getVideoData(video) }, 10000, video);
       }

@@ -200,28 +200,28 @@ function openBox(e, isOpen) {
 $('.titleHistoryContent').on('click', '.downloadReport', function () {
 	// let frame = annotate.Nodes.image.dataset.id;
 	let obj = new Object();
-	obj["video"] = '2';
-	obj["frame"] = '2';
+	obj["video"] = '133';
+	obj["frame"] = '3';
 	obj["清晰度"] = "清晰";
 	obj["管袢数"] = ">=7";
-	obj["输入枝管径"] = "11";
+	obj["输入枝管径"] = "13";
 	obj["输出枝管径"] = "19";
-	obj["输出/输入枝管径"] = "1.7";
-	obj["袢顶直径"] = "28";
-	obj["管袢长"] = "371";
-	obj["交叉管袢数"] = "30__60%";
-	obj["畸形管袢数"] = "<blank>";
+	obj["输出/输入枝管径"] = "1.5";
+	obj["袢顶直径"] = "26";
+	obj["管袢长"] = "166";
+	obj["交叉管袢数"] = "<=30%";
+	obj["畸形管袢数"] = "<=10%";
 	obj["流速"] = "粒流";
-	obj["血管运动性"] = "0__1";
-	obj["红细胞聚集"] = "轻度";
-	obj["白细胞数"] = ">30";
-	obj["白微栓"] = "1__2";
-	obj["血色"] = "浅红";
-	obj["渗出"] = "无";
+	obj["血管运动性"] = "0--1";
+	obj["红细胞聚集"] = "重度";
+	obj["白细胞数"] = "1--30";
+	obj["白微栓"] = ">2";
+	obj["血色"] = "暗红";
+	obj["渗出"] = "+";
 	obj["出血"] = "无";
-	obj["乳头下静脉丛"] = "可见1排";
-	obj["乳头"] = "波纹状";
-	obj["汗腺导管"] = "0__2";
+	obj["乳头下静脉丛"] = ">2排，扩张";
+	obj["乳头"] = "平坦";
+	obj["汗腺导管"] = "0--2";
 	debounce(buildReport(obj), 3000, true);
 	// if (frame) {
 	// 	console.log('x');
@@ -256,7 +256,7 @@ function debounce(func, wait, immediate) {
  */
 function buildReport(obj) {
 	$.ajax({
-		url: "http://ailw.xianglu-china.com/vessel/ReportGen",
+		url: "http://ailw.xianglu-china.com/report/ReportGen",
 		type: "post",
 		dataType: 'JSON',
 		data: JSON.stringify(obj),
@@ -287,7 +287,7 @@ function getReport(param1, param2) {
 	obj["video"] = param1;
 	obj["frame"] = param2;
 	$.ajax({
-		url: "http://ailw.xianglu-china.com/vessel/getReport",
+		url: "http://ailw.xianglu-china.com/report/getReport",
 		type: "post",
 		dataType: 'JSON',
 		data: JSON.stringify(obj),
@@ -343,10 +343,10 @@ $("#title-analysis").on("click", ".analysis", function () {
 			return [temp[0], temp[1], temp[0] + temp[2], temp[1] + temp[3]]
 		});
 		annotate.Arrays.paramsArray = [];
-		xys.forEach(v => {
+		xys.forEach((v, index) => {
 			setTimeout((video, frame, v) => {
 				analysis(video, frame, v[0], v[1], v[2], v[3]);
-			}, 2000, video, frame, v)
+			}, 2000 * (1 + index / 5), video, frame, v)
 		})
 	}
 })
@@ -412,11 +412,11 @@ function detecting(video, frame) {
 			})
 			annotate.SetImage(detectingImg, data);
 			$('#canvas').attr('data-id', detectingImg["data-id"]);
-			datas.forEach(v => {
-				setTimeout((video, frame, v) => {
-					analysis(video, frame, v[1], v[2], v[3], v[4]);
-				}, 2000, video, frame, v)
-			})
+			// datas.forEach((v, index) => {
+			// 	setTimeout((video, frame, v) => {
+			// 		analysis(video, frame, v[1], v[2], v[3], v[4]);
+			// 	}, 3000 * (1 + index / 5), video, frame, v)
+			// })
 		},
 		error: () => {
 			console.log("失败");
@@ -432,7 +432,7 @@ function detecting(video, frame) {
  * @param {*} y 矩形右下角坐标
  */
 function analysis(video, frame, leftX, leftY, rightX, rightY) {
-	let xy = `${Math.round(leftX)}_${MAth.round(leftY)}_${Math.round(rightX)}_${Math.round(rightY)}`;
+	let xy = `${Math.round(leftX)}_${Math.round(leftY)}_${Math.round(rightX)}_${Math.round(rightY)}`;
 	$.ajax({
 		url: "http://ailw.xianglu-china.com/vessel/imgAna",
 		type: "get",
@@ -470,6 +470,9 @@ function getImgData(video, frame, xy) {
 			} else {
 				setTimeout((video, frame, xy) => { getImgData(video, frame, xy) }, 5000, video, frame, xy);
 			}
+		},
+		error: () => {
+			setTimeout((video, frame, xy) => { getImgData(video, frame, xy) }, 5000, video, frame, xy);
 		}
 	})
 }
