@@ -272,7 +272,7 @@ function buildReport(obj) {
 			}
 		},
 		error: () => {
-			console.log("失败");
+			toastr.error(`参数发送失败`);
 		}
 	})
 }
@@ -304,10 +304,11 @@ function getReport(param1, param2) {
 				$('.e-inspect').text(res.inspect);
 				$('.e-eval').text(res.eval);
 				$('.e-suggest').text(res.suggest);
+				toastr.success(`报告获取成功`);
 			}
 		},
 		error: () => {
-			console.log("失败");
+			toastr.error(`报告获取失败`);
 		}
 	})
 }
@@ -323,14 +324,18 @@ $("#screenShot").on("click", ".anal-pic", function () {
 	detecting('1.wmv', frame);
 	let ctxNode = canvas;
 	ctxNode.height = ctxNode.height;
+
 	$('#canvas').css('display', 'block');
 	$('.scaleBox').css('display', 'block');
 	$('.videoEdit').css("display", "none");
 	$('.selectOperation').css('display', "none");
+	$('.commentResult').show();
+	$('#tools').show();
 })
 
 // 血管分析
 $("#title-analysis").on("click", ".analysis", function () {
+	toastr.info(`正在分析，请稍后...`);
 	let xyData = annotate.Arrays.imageAnnotateMemory;
 	if (xyData.length) {
 		let temp = null;
@@ -345,7 +350,7 @@ $("#title-analysis").on("click", ".analysis", function () {
 		annotate.Arrays.paramsArray = [];
 		xys.forEach((v, index) => {
 			setTimeout((video, frame, v) => {
-				analysis(video, frame, v[0], v[1], v[2], v[3]);
+				analysis(video, frame, v[0], v[1], v[2], v[3], index);
 			}, 2000 * (1 + index / 5), video, frame, v)
 		})
 	}
@@ -412,14 +417,10 @@ function detecting(video, frame) {
 			})
 			annotate.SetImage(detectingImg, data);
 			$('#canvas').attr('data-id', detectingImg["data-id"]);
-			// datas.forEach((v, index) => {
-			// 	setTimeout((video, frame, v) => {
-			// 		analysis(video, frame, v[1], v[2], v[3], v[4]);
-			// 	}, 3000 * (1 + index / 5), video, frame, v)
-			// })
+			toastr.success(`图片分析成功`);
 		},
 		error: () => {
-			console.log("失败");
+			toastr.error(`图片分析失败`);
 		}
 	})
 }
@@ -431,7 +432,7 @@ function detecting(video, frame) {
  * @param {*} x 矩形左下角坐标
  * @param {*} y 矩形右下角坐标
  */
-function analysis(video, frame, leftX, leftY, rightX, rightY) {
+function analysis(video, frame, leftX, leftY, rightX, rightY, index) {
 	let xy = `${Math.round(leftX)}_${Math.round(leftY)}_${Math.round(rightX)}_${Math.round(rightY)}`;
 	$.ajax({
 		url: "http://ailw.xianglu-china.com/vessel/imgAna",
@@ -441,11 +442,11 @@ function analysis(video, frame, leftX, leftY, rightX, rightY) {
 		success: (res) => {
 			console.log(res);
 			setTimeout((video, frame, xy) => {
-				getImgData(video, frame, xy)
+				getImgData(video, frame, xy, index)
 			}, 5000, video, frame, xy)
 		},
 		error: () => {
-			console.log("失败");
+			toastr.error(`第${index}个标注结果参数发送失败`);
 		}
 	})
 }
@@ -456,7 +457,8 @@ function analysis(video, frame, leftX, leftY, rightX, rightY) {
  * @param {*} frame 
  * @param {*} xy 
  */
-function getImgData(video, frame, xy) {
+
+function getImgData(video, frame, xy, index) {
 	$.ajax({
 		url: "http://ailw.xianglu-china.com/vessel/getImgData",
 		type: 'get',
@@ -467,12 +469,18 @@ function getImgData(video, frame, xy) {
 				let d = Object.values(data);
 				d.splice(d.length - 1, 1);
 				annotate.Arrays.paramsArray.push(d);
+				let memoryLen = annotate.Arrays.imageAnnotateMemory.length;
+				let paramLen = annotate.Arrays.paramsArray.length;
+				if (memoryLen === paramLen) {
+					toastr.success(`所有参数获取成功`);
+				}
 			} else {
 				setTimeout((video, frame, xy) => { getImgData(video, frame, xy) }, 5000, video, frame, xy);
 			}
 		},
 		error: () => {
-			setTimeout((video, frame, xy) => { getImgData(video, frame, xy) }, 5000, video, frame, xy);
+
+			toastr.error(`第${index}个标注结果参数获取失败`);
 		}
 	})
 }

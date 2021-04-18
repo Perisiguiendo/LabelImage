@@ -1568,25 +1568,26 @@ th, td {
     bottom: 30px;
     display: flex;
     justify-content: space-around;
-    width: 98%;
+    width: 100%;
+    color: #fff;
 }
 
 .div-Btm>div {
     cursor: pointer;
-    width: 200px;
+    width: 33%;
     height: 30px;
     line-height: 30px;
     text-align: center;
     background: #fff;
-    color: #fff;
     background: rgba(97, 97, 97, 0.671);
     z-index: 10;
 }
 
-.div-Btm>div:hover {
+.div-Btm>div:hover:not(.frame-pic) {
     background: rgba(10, 10, 10, 0.658);
     transition: background-color 0.5s;
 }
+
 
 .returnVideo {
     cursor: pointer;
