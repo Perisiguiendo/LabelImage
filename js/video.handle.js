@@ -1,4 +1,4 @@
-let videoFrame;
+let videoFrame = VideoFrame();
 let video, output;
 let scale = 1;
 let isVideo = true;
@@ -9,7 +9,6 @@ let initialize = function () {
   video = document.getElementById("video0");
   button.addEventListener('click', captureImage);
   $('.commentResult').hide();
-  $('#tools').hide();
 };
 let captureImage = function () {
   let id = videoFrame.get();
@@ -95,12 +94,11 @@ $("#video").change(function () {
     $('.pageName').text(name);
     $("#video0").attr("src", objUrl);
     $('#screenShot').html('');
-    $('.selectOperation').css('display', "none");
     $('#data-loading').css('display', "block");
     frameArr = [];
-    videoFrame = VideoFrame();
+    
 
-    VideoAna("1.wmv");
+    // VideoAna("1.wmv");
   }
 });
 

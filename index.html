@@ -15,12 +15,10 @@
     <link rel="stylesheet" href="./css/button.css">
     <link rel="stylesheet" href="./css/popover.css">
     <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/2.1.4/toastr.css">
-    <!-- <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> -->
     <link href="assets/theme/css/base.css" rel="stylesheet">
     <link href="css/highlight.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./js/jBox/jBox.all.css">
     <link rel="stylesheet" href="layui/css/layui.css" media="all">
-    <!-- <link rel="stylesheet" href="./js/jBox/jBox.all.css"> -->
-
 </head>
 
 <body>
@@ -36,40 +34,7 @@
                     <div class="logo"></div>
                     <div class="logoTitle">微循环血管健康分析平台</div>
                 </div>
-                
-                <div class="selectOperation">
-                    <div class="pageControl">
-                        <div class="pagePrev pageSwitch inline-block" title="上一张"></div>
-                        <div class="pageInfo inline-block">
-                            <p class="pageName" title="图片名称">File Name</p>
-                            <p class="nameProcess" title="图片位置"><span class="processIndex">0</span> / <span
-                                    class="processSum">0</span></p>
-                        </div>
-                        <div class="pageNext pageSwitch inline-block" title="下一张"></div>
-                    </div>
-                </div>
                 <div class="assistTool">
-                    <div class="generalFeatures">
-                        <p class="featureList showHistory" title="查看历史记录">
-                            <button class="buttonBtm btm-default expend history" style="width: 100px;">查看历史记录</button>
-                        </p>
-                        <p class="featureList crossLine" title="十字线开关">
-                            <input class="mui-switch mui-switch-anim" type="checkbox">
-                            <span>十字线</span>
-                        </p>
-                        <p class="featureList labelShower focus" title="标注结果显示开关">
-                            <input class="mui-switch mui-switch-anim" type="checkbox">
-                            <span>标注结果</span>
-                        </p>
-                        <p class="featureList screenShot" title="标注内容截图">
-                            <i class="bg"></i>
-                            <span>快照</span>
-                        </p>
-                        <p class="featureList screenFull" title="全屏开关">
-                            <i class="bg"></i>
-                            <span>全屏</span>
-                        </p>
-                    </div>
                     <div class="historyGroupModal">
                         <div class="history-date-modal">
                             <label class="form-label-self">日期</label>
@@ -88,55 +53,41 @@
                 </div>
             </div>
         </div>
-
         <div class="canvasMain">
             <!--标注功能工具集-->
             <div class="toolFeatures">
                 <div class="assistFeatures">
-                    <p class="openFolder" title="导入图片"></p>
-                    <input class="openFolderInput" type="file" multiple onchange="changeFolder(this)" hidden>
-                    <p class="openVideo" title="导入视频"></p>
-                    <input class="openVideoInput" type="file" id="video" name="video" hidden>
-                    <!-- <input class="form-control" type="file" style="height:auto;"  /> -->
-                    <p class="saveJson" title="生出Json并保存到本地"></p>
+                    <p class="featureList screenFull" id="featureList1">
+                        <i class="bg"></i>
+                    </p>
+                    <p class="featureList openVideo" id="featureList2">
+                        <input class="openVideoInput" type="file" id="video" name="video" hidden>
+                        <i class="bg"></i>
+                    </p>
+                    <p class="featureList showHistory" id="featureList5">
+                        <i class="bg expend history"></i>
+                    </p>
+                    <p class="featureList screen-shot-tool" id="btn-picshot">
+                        <i class="bg"></i>
+                    </p>
                 </div>
                 <div class="separator"></div>
                 <div id="tools">
-                    <div class="toolSet toolDrag focus" title="图片拖拽"></div>
-                    <div class="toolSet toolTagsManager"><span class="icon-tags"></span></div>
-                    <div class="toolSet toolRect" title="矩形工具"></div>
-                    <div class="toolSet toolPolygon" title="多边形工具"></div>
-                    <div class="returnVideo" title="返回视频帧选取界面">返回</div>
-                    
-                    <!-- <div class="toolSet toolKeyPoints" title="人体关键点工具"></div> -->
+                    <div class="toolSet toolDrag focus" id="tools-toolDrag"></div>
+                    <div class="toolSet toolTagsManager" id="tools-toolTagsManager"><span class="icon-tags"></span></div>
+                    <div class="toolSet toolRect" id="tools-toolRect" title="矩形工具"></div>
+                    <div class="toolSet toolPolygon" id="tools-toolPolygon" title="多边形工具"></div>
+                    <div class="toolSet returnVideo" id="tools-returnVideo" title="返回视频帧选取界面"></div>
                 </div>
                 <div class="version">v1.0.0</div>
-                <!--            <div class="dragIcons">-->
-                <!--                <p></p>-->
-                <!--                <p></p>-->
-                <!--                <p></p>-->
-                <!--            </div>-->
             </div>
             <div class="canvasContent">
                 <div class="videoEdit" style="display: none;">
                     <div class="videoWrap">
                         <video id="video0" controls="controls">
                         </video>
-                        <div id="btn-picshot">截图</div>
                     </div>
                     <div id="picPre">
-                        <!-- <div class="loading" id="data-loading">
-                            <div class="loadEffect">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </div>
-                        </div> -->
                     </div>
                     <div id="screenShot"></div>
                 </div>
@@ -168,10 +119,14 @@
                     </div>
                     <div class="resultList_head">
                         <div class="headChildren">
-                            <p class="headName">名称</p>
-                            <p class="headEdit">修改</p>
-                            <p class="headDelete">删除</p>
-                            <p class="headDisplay">显/隐</p>
+                            <div class="headName">名称</div>
+                            <div class="headEdit">修改</div>
+                            <div class="headDelete">删除</div>
+                            <div class="headDisplay">显/隐</div>
+                            <div class="featureList labelShower focus" id="featureList4">
+                                <input class="mui-switch mui-switch-anim" type="checkbox">
+                                <i class="bg"></i>
+                            </div>
                         </div>
                     </div>
                     <div class="resultGroup">
@@ -343,20 +298,16 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-    <script src="./layui/layui.js" charset="utf-8"></script>
-    <!-- <script src="./js/jBox/jBox.all.js"></script> -->
-
-    <!-- <script src="./js/popper.min.js"></script> -->
-    <!-- <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> -->
+    <script src="layui/layui.js" charset="utf-8"></script>
     <script src="https://cdn.bootcss.com/toastr.js/2.1.4/toastr.min.js"></script>
-    <!-- <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script> -->
-    <script src="./videoFrame/VideoFrame.js"></script>
-    <script src="./js/preloader.js"></script>
-    <script src="./colorPicker/colorPicker.js"></script>
-    <script src="./js/webAnnotate.js"></script>
-    <script src="./js/operator.js"></script>
-    <script src="./js/date.js"></script>
-    <script src="./js/video.handle.js"></script>
+    <script src="js/videoFrame/VideoFrame.min.js"></script>
+    <script src="js/jBox/jBox.all.js"></script>
+    <script src="js/preloader.js"></script>
+    <script src="js/colorPicker/colorPicker.js"></script>
+    <script src="js/webAnnotate.js"></script>
+    <script src="js/operator.js"></script>
+    <script src="js/video.handle.js"></script>
+    <script src="js/jBox.operator.js"></script>
 </body>
 
 </html>

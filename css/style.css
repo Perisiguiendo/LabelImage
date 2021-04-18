@@ -234,81 +234,6 @@ body, html {
     color: #fff;
 }
 
-.toolMuster .selectOperation {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    width: 280px;
-    height: 60px;
-}
-
-.selectOperation .pageControl {
-    width: 100%;
-    height: 60px;
-    text-align: center;
-}
-
-.pageControl .pageSwitch {
-    width: 36px;
-    height: 36px;
-    margin-top: 12px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    display: inline-block;
-    cursor: pointer;
-}
-
-.pageControl .pagePrev {
-    background: url(../images/toolIcons.png) no-repeat 0 -192px;
-}
-
-.pageControl .pageNext {
-    background: url(../images/toolIcons.png) no-repeat 0 -288px;
-}
-
-.pageControl .pagePrev:hover {
-    background: url(../images/toolIcons.png) no-repeat -96px -192px;
-}
-
-.pageControl .pageNext:hover {
-    background: url(../images/toolIcons.png) no-repeat -96px -288px;
-}
-
-.pageControl .pageInfo {
-    min-width: 150px;
-    margin: 0 15px;
-    color: #fff;
-    line-height: 1.5;
-}
-
-.pageControl .pageInfo .pageName {
-    margin-top: 6px;
-    font-size: 14px;
-    width: 100%;
-    height: 20px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-.pageControl .pageInfo .nameProcess {
-    margin-top: 5px;
-    font-size: 12px;
-}
-
-.pageControl .pageInfo .annotateProgress {
-    margin-top: 3px;
-    margin-bottom: 0;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    height: 3px;
-    line-height: 3px;
-}
-
 .toolMuster .assistTool {
     line-height: 60px;
     position: absolute;
@@ -316,14 +241,20 @@ body, html {
     top: 0;
 }
 
-.toolMuster .assistTool .generalFeatures {
+/*
+      左侧工具栏
+     */
+
+.assistFeatures p {
     width: 100%;
-    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
 
-.generalFeatures .featureList {
-    display: inline-block;
-    margin-right: 30px;
+.assistFeatures .featureList {
     height: 60px;
     color: #b3b3b3;
     text-align: center;
@@ -332,90 +263,52 @@ body, html {
     cursor: pointer;
 }
 
-.generalFeatures .featureList i.bg {
+.assistFeatures .featureList i.bg {
     font-style: normal;
     width: 36px;
     height: 36px;
     display: block;
 }
 
-.generalFeatures .featureList span {
+.assistFeatures .featureList span {
     font-size: 12px;
     display: block;
 }
 
-.generalFeatures .showHistory {
-    /* padding-top: 12px; */
+.assistFeatures .screenFull i.bg {
+    background: url(../images/toolIcons2.png) no-repeat 0 -507px;
 }
 
-.generalFeatures .submitSave {
-    padding-top: 12px;
-    display: none;
+.assistFeatures .screenFull:hover i.bg {
+    background: url(../images/toolIcons2.png) no-repeat -96px -507px;
 }
 
-.generalFeatures .crossLine {
-    padding-top: 12px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+.assistFeatures .openVideo i.bg {
+    background: url(../images/toolIcons2.png) no-repeat 0 -1170px;
 }
 
-.generalFeatures .crossLine input {
-    margin: 0;
+.assistFeatures .openVideo:hover i.bg {
+    background: url(../images/toolIcons2.png) no-repeat -100px -1167px;
 }
 
-.generalFeatures .crossLine span {
-    margin-top: 8px;
+.assistFeatures .showHistory i.bg {
+    background: url(../images/toolIcons2.png) no-repeat 2px -1258px;
 }
 
-.generalFeatures .labelShower {
-    padding-top: 12px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+.assistFeatures .showHistory:hover i.bg {
+    background: url(../images/toolIcons2.png) no-repeat -102px -1257px;
 }
 
-.generalFeatures .labelShower input {
-    margin: 0;
+.assistFeatures .screen-shot-tool i.bg {
+    background: url(../images/toolIcons2.png) no-repeat 0px -1537px;
 }
 
-.generalFeatures .labelShower span {
-    margin-top: 8px;
+.assistFeatures .screen-shot-tool:hover i.bg {
+    background: url(../images/toolIcons2.png) no-repeat -99px -1534px;
 }
 
-.generalFeatures .screenShot {
-    margin-right: 20px;
-}
 
-.generalFeatures .screenShot i.bg {
-    background: url(../images/toolIcons.png) no-repeat 0 -384px;
-}
-
-.generalFeatures .screenShot:hover i.bg {
-    background: url(../images/toolIcons.png) no-repeat -96px -384px;
-}
-
-.generalFeatures .screenShot:hover span {
-    color: #fff;
-}
-
-.generalFeatures .screenFull {
-    margin-right: 20px;
-}
-
-.generalFeatures .screenFull i.bg {
-    background: url(../images/toolIcons.png) no-repeat 0 -480px;
-}
-
-.generalFeatures .screenFull:hover i.bg {
-    background: url(../images/toolIcons.png) no-repeat -96px -480px;
-}
-
-.generalFeatures .screenFull:hover span {
-    color: #fff;
-}
-
-.generalFeatures .dividingLine {
+.assistFeatures .dividingLine {
     width: 1px;
     height: 28px;
     background: #ff0000;
@@ -424,35 +317,35 @@ body, html {
     display: inline-block;
 }
 
-.generalFeatures .clientHelp {
+.assistFeatures .clientHelp {
     margin-right: 20px;
 }
 
-.generalFeatures .clientHelp i.bg {
-    background: url(../images/toolIcons.png) no-repeat 0 -576px;
+.assistFeatures .clientHelp i.bg {
+    background: url(../images/toolIcons2.png) no-repeat 0 -576px;
 }
 
-.generalFeatures .clientHelp:hover i.bg {
-    background: url(../images/toolIcons.png) no-repeat -96px -576px;
+.assistFeatures .clientHelp:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
 
-.generalFeatures .clientHelp:hover span {
+.assistFeatures .clientHelp:hover span {
     color: #fff;
 }
 
-.generalFeatures .clientExit {
+.assistFeatures .clientExit {
     margin-right: 20px;
 }
 
-.generalFeatures .clientExit i.bg {
-    background: url(../images/toolIcons.png) no-repeat 0 -672px;
+.assistFeatures .clientExit i.bg {
+    background: url(../images/toolIcons2.png) no-repeat 0 -672px;
 }
 
-.generalFeatures .clientExit:hover i.bg {
-    background: url(../images/toolIcons.png) no-repeat -96px -672px;
+.assistFeatures .clientExit:hover i.bg {
+    background: url(../images/toolIcons2.png) no-repeat -96px -672px;
 }
 
-.generalFeatures .clientExit:hover span {
+.assistFeatures .clientExit:hover span {
     color: #fff;
 }
 
@@ -488,39 +381,7 @@ body, html {
     text-align: center;
 }
 
-.toolFeatures .openFolder {
-    width: 30px;
-    height: 30px;
-    margin: 20px auto 0;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    background: url(../images/img.png) no-repeat 0 0;
-    cursor: pointer;
-}
 
-.toolFeatures .openVideo {
-    width: 30px;
-    height: 30px;
-    margin: 20px auto 0;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    background: url(../images/video.png) no-repeat 0 0;
-    cursor: pointer;
-}
-
-.toolFeatures .saveJson {
-    width: 24px;
-    height: 24px;
-    margin: 30px auto 20px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    background: url(../images/saveJson.png) no-repeat 0 0;
-    background-size: 100%;
-    cursor: pointer;
-}
 
 .toolFeatures .separator {
     width: 50px;
@@ -530,6 +391,10 @@ body, html {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+}
+
+#tools {
+    visibility: hidden;
 }
 
 .toolFeatures .toolSet {
@@ -557,63 +422,63 @@ body, html {
 }
 
 .toolFeatures .toolDrag {
-    background: url(../images/toolIcons.png) no-repeat 0 -768px;
+    background: url(../images/toolIcons2.png) no-repeat 0 -793px;
 }
 
 .toolFeatures .toolDrag.focus {
-    background: #757a84 url(../images/toolIcons.png) no-repeat -96px -768px;
+    background: #757a84 url(../images/toolIcons2.png) no-repeat -96px -793px;
 }
 
 .toolFeatures .toolDrag:hover {
-    background: #757a84 url(../images/toolIcons.png) no-repeat -96px -768px;
+    background: #757a84 url(../images/toolIcons2.png) no-repeat -96px -793px;
 }
 
 .toolFeatures .toolSegment {
-    background: url(../images/toolIcons.png) no-repeat 0 -864px;
+    background: url(../images/toolIcons2.png) no-repeat 0 -864px;
 }
 
 .toolFeatures .toolSegment.focus {
-    background: #757a84 url(../images/toolIcons.png) no-repeat -96px -864px;
+    background: #757a84 url(../images/toolIcons2.png) no-repeat -96px -864px;
 }
 
 .toolFeatures .toolSegment:hover {
-    background: #757a84 url(../images/toolIcons.png) no-repeat -96px -864px;
+    background: #757a84 url(../images/toolIcons2.png) no-repeat -96px -864px;
 }
 
 .toolFeatures .toolRect {
-    background: url(../images/toolIcons.png) no-repeat 0 -960px;
+    background: url(../images/toolIcons2.png) no-repeat 0 -985px;
 }
 
 .toolFeatures .toolRect.focus {
-    background: #757a84 url(../images/toolIcons.png) no-repeat -96px -960px;
+    background: #757a84 url(../images/toolIcons2.png) no-repeat -96px -985px;
 }
 
 .toolFeatures .toolRect:hover {
-    background: #757a84 url(../images/toolIcons.png) no-repeat -96px -960px;
+    background: #757a84 url(../images/toolIcons2.png) no-repeat -96px -985px;
 }
 
 .toolFeatures .toolPolygon {
-    background: url(../images/toolIcons.png) no-repeat 0 -1056px;
+    background: url(../images/toolIcons2.png) no-repeat 0 -1082px;
 }
 
 .toolFeatures .toolPolygon.focus {
-    background: #757a84 url(../images/toolIcons.png) no-repeat -96px -1056px;
+    background: #757a84 url(../images/toolIcons2.png) no-repeat -96px -1082px;
 }
 
 .toolFeatures .toolPolygon:hover {
-    background: #757a84 url(../images/toolIcons.png) no-repeat -96px -1056px;
+    background: #757a84 url(../images/toolIcons2.png) no-repeat -96px -1082px;
 }
 
-.toolFeatures .toolKeyPoints {
-    background: url(../images/toolIcons.png) no-repeat 0 -1056px;
+.toolFeatures .returnVideo {
+    background: url(../images/toolIcons2.png) no-repeat 0 -1569px;
 }
 
-.toolFeatures .toolKeyPoints.focus {
-    background: #757a84 url(../images/toolIcons.png) no-repeat -96px -1056px;
+.toolFeatures .returnVideo.focus {
+    background: #757a84 url(../images/toolIcons2.png) no-repeat -100px -1570px;
 }
 
-.toolFeatures .toolKeyPoints:hover {
-    background: #757a84 url(../images/toolIcons.png) no-repeat -96px -1056px;
+.toolFeatures .returnVideo:hover {
+    background: #757a84 url(../images/toolIcons2.png) no-repeat -100px -1570px;
 }
 
 .canvasMain .canvasContent {
@@ -723,9 +588,17 @@ body, html {
     width: 100%;
     height: 30px;
     border-bottom: 1px solid #3c5167;
+    display: flex;
 }
 
-.resultList_head .headChildren .headName {
+.resultList_head .headChildren>div {
+
+    width: 100%;
+    /* height: 30px; */
+    border-bottom: 1px solid #3c5167;
+}
+
+/* .resultList_head .headChildren .headName {
     display: inherit;
     position: absolute;
     left: 50px;
@@ -747,7 +620,7 @@ body, html {
     position: absolute;
     display: inherit;
     right: 90px;
-}
+} */
 
 .commentResult .resultArea .resultGroup {
     flex: auto;
@@ -1370,11 +1243,6 @@ body, html {
     border: 1px solid #333;
 }
 
-.history {
-    padding: 0 10px;
-    margin-top: 17px;
-}
-
 .assistTool .historyGroupModal {
     position: fixed;
     top: 55px;
@@ -1588,7 +1456,6 @@ th, td {
     transition: background-color 0.5s;
 }
 
-
 .returnVideo {
     cursor: pointer;
     border-radius: 8px;
@@ -1755,25 +1622,6 @@ th, td {
     font-weight: 400;
     line-height: 20px;
     text-align: right;
-}
-
-#btn-picshot {
-    position: absolute;
-    cursor: pointer;
-    width: 200px;
-    height: 30px;
-    color: #fff;
-    line-height: 30px;
-    text-align: center;
-    font-size: 14px;
-    background-color: #6e6e6e;
-    transition: all 0.5s;
-}
-
-#btn-picshot:hover {
-    background: rgb(255, 255, 255);
-    color: #212b3e;
-    transition: all 0.5s;
 }
 
 .history-date-modal {

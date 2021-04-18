@@ -20,6 +20,14 @@ const mapType = {
 	}
 }
 
+layui.use('laydate', function () {
+	var laydate = layui.laydate;
+	//常规用法
+	laydate.render({
+		elem: '#test1'
+	});
+});
+
 // 设置画布宽高背景色
 canvas.width = canvas.clientWidth;
 canvas.height = canvas.clientHeight;
@@ -32,13 +40,13 @@ const annotate = new LabelImage({
 	annotateState: document.querySelector('.annotateState'),
 	canvasMain: canvasMain,
 	resultGroup: resultGroup,
-	crossLine: document.querySelector('.crossLine'),
-	labelShower: document.querySelector('.labelShower'),
-	screenShot: document.querySelector('.screenShot'),
+	// crossLine: document.querySelector('.crossLine'),
+	// labelShower: document.querySelector('.labelShower'),
+	// screenShot: document.querySelector('.screenShot'),
 	screenFull: document.querySelector('.screenFull'),
 	colorHex: document.querySelector('#colorHex'),
 	toolTagsManager: document.querySelector('.toolTagsManager'),
-	historyGroup: document.querySelector('.historyGroup'),
+	// historyGroup: document.querySelector('.historyGroup'),
 	showHistory: document.querySelector('.showHistory'),
 	history: document.querySelector('.history'),
 	historyGroupModal: document.querySelector('.historyGroupModal'),
@@ -48,17 +56,17 @@ const annotate = new LabelImage({
 });
 
 // 初始化交互操作节点
-const prevBtn = document.querySelector('.pagePrev');                    // 上一张
-const nextBtn = document.querySelector('.pageNext');                    // 下一张
-const taskName = document.querySelector('.pageName');                   // 标注任务名称
+// const prevBtn = document.querySelector('.pagePrev');                    // 上一张
+// const nextBtn = document.querySelector('.pageNext');                    // 下一张
+// const taskName = document.querySelector('.pageName');                   // 标注任务名称
 const processIndex = document.querySelector('.processIndex');           // 当前标注进度
 const processSum = document.querySelector('.processSum');               // 当前标注任务总数
 
-let imgFiles = ['./images/example/football.jpg', './images/example/person.jpg', './images/example/band.jpg',
-	'./images/example/street.jpg', './images/example/dog.jpeg', './images/example/cat.jpg', './images/example/dogs.jpg',
-	'./images/example/furniture.jpg', './images/example/basketball.jpg', './images/example/alley.jpg'];    //选择上传的文件数据集
-let imgIndex = 1;       //标定图片默认下标;
-let imgSum = 10;        // 选择图片总数;
+// let imgFiles = ['./images/example/football.jpg', './images/example/person.jpg', './images/example/band.jpg',
+// 	'./images/example/street.jpg', './images/example/dog.jpeg', './images/example/cat.jpg', './images/example/dogs.jpg',
+// 	'./images/example/furniture.jpg', './images/example/basketball.jpg', './images/example/alley.jpg'];    //选择上传的文件数据集
+// let imgIndex = 1;       //标定图片默认下标;
+// let imgSum = 10;        // 选择图片总数;
 
 initImage();
 // 初始化图片状态
@@ -67,9 +75,8 @@ function initImage() {
 	// initEditor();
 	$('#canvas').css('display', 'none');
 	$('.scaleBox').css('display', 'none');
-	$('.selectOperation').css("display", "none");
 	$('.videoEdit').css("display", "block");
-	processSum.innerText = imgSum;
+	// processSum.innerText = imgSum;
 }
 
 function initEditor() {
@@ -105,83 +112,83 @@ tool.addEventListener('click', function (e) {
 	}
 });
 
-// 获取下一张图片
-nextBtn.onclick = function () {
-	annotate.Arrays.imageAnnotateMemory.length > 0 && localStorage.setItem(taskName.textContent, JSON.stringify(annotate.Arrays.imageAnnotateMemory));  // 保存已标定的图片信息
-	if (imgIndex >= imgSum) {
-		imgIndex = 1;
-		selectImage(0);
-	}
-	else {
-		imgIndex++;
-		selectImage(imgIndex - 1);
-	}
-};
+// // 获取下一张图片
+// nextBtn.onclick = function () {
+// 	annotate.Arrays.imageAnnotateMemory.length > 0 && localStorage.setItem(taskName.textContent, JSON.stringify(annotate.Arrays.imageAnnotateMemory));  // 保存已标定的图片信息
+// 	if (imgIndex >= imgSum) {
+// 		imgIndex = 1;
+// 		selectImage(0);
+// 	}
+// 	else {
+// 		imgIndex++;
+// 		selectImage(imgIndex - 1);
+// 	}
+// };
 
-// 获取上一张图片
-prevBtn.onclick = function () {
-	annotate.Arrays.imageAnnotateMemory.length > 0 && localStorage.setItem(taskName.textContent, JSON.stringify(annotate.Arrays.imageAnnotateMemory));  // 保存已标定的图片信息
-	if (imgIndex === 1) {
-		imgIndex = imgSum;
-		selectImage(imgSum - 1);
-	}
-	else {
-		imgIndex--;
-		selectImage(imgIndex - 1);
-	}
-};
+// // 获取上一张图片
+// prevBtn.onclick = function () {
+// 	annotate.Arrays.imageAnnotateMemory.length > 0 && localStorage.setItem(taskName.textContent, JSON.stringify(annotate.Arrays.imageAnnotateMemory));  // 保存已标定的图片信息
+// 	if (imgIndex === 1) {
+// 		imgIndex = imgSum;
+// 		selectImage(imgSum - 1);
+// 	}
+// 	else {
+// 		imgIndex--;
+// 		selectImage(imgIndex - 1);
+// 	}
+// };
 
-document.querySelector('.openFolder').addEventListener('click', function () {
-	document.querySelector('.openFolderInput').click()
-});
+// document.querySelector('.openFolder').addEventListener('click', function () {
+// 	document.querySelector('.openFolderInput').click()
+// });
 
 document.querySelector('.openVideo').addEventListener('click', function () {
 	document.querySelector('.openVideoInput').click()
 });
 
-function changeFolder(e) {
-	imgFiles = e.files;
-	imgSum = imgFiles.length;
-	processSum.innerText = imgSum;
-	imgIndex = 1;
-	selectImage(0);
-}
+// function changeFolder(e) {
+// 	imgFiles = e.files;
+// 	imgSum = imgFiles.length;
+// 	processSum.innerText = imgSum;
+// 	imgIndex = 1;
+// 	selectImage(0);
+// }
 
-function selectImage(index) {
-	openBox('#loading', true);
-	$('.selectOperation').css('display', "block");
-	processIndex.innerText = imgIndex;
-	taskName.innerText = imgFiles[index].name || imgFiles[index].split('/')[3];
-	let content = localStorage.getItem(taskName.textContent);
-	let img = imgFiles[index].name ? window.URL.createObjectURL(imgFiles[index]) : imgFiles[index];
-	content ? annotate.SetImage(img, JSON.parse(content)) : annotate.SetImage(img);
-}
+// function selectImage(index) {
+// 	openBox('#loading', true);
+// 	$('.selectOperation').css('display', "block");
+// 	processIndex.innerText = imgIndex;
+// 	taskName.innerText = imgFiles[index].name || imgFiles[index].split('/')[3];
+// 	let content = localStorage.getItem(taskName.textContent);
+// 	let img = imgFiles[index].name ? window.URL.createObjectURL(imgFiles[index]) : imgFiles[index];
+// 	content ? annotate.SetImage(img, JSON.parse(content)) : annotate.SetImage(img);
+// }
 
-document.querySelector('.saveJson').addEventListener('click', function () {
-	let filename = taskName.textContent.split('.')[0] + '.json';
-	annotate.Arrays.imageAnnotateMemory.length > 0 ? saveJson(annotate.Arrays.imageAnnotateMemory, filename) : alert('当前图片未有有效的标定数据');
-});
+// document.querySelector('.saveJson').addEventListener('click', function () {
+// 	let filename = taskName.textContent.split('.')[0] + '.json';
+// 	annotate.Arrays.imageAnnotateMemory.length > 0 ? saveJson(annotate.Arrays.imageAnnotateMemory, filename) : alert('当前图片未有有效的标定数据');
+// });
 
-function saveJson(data, filename) {
-	if (!data) {
-		alert('保存的数据为空');
-		return false;
-	}
-	if (!filename) {
-		filename = 'json.json';
-	}
-	if (typeof data === 'object') {
-		data = JSON.stringify(data, undefined, 4);
-	}
-	let blob = new Blob([data], { type: 'text/json' }),
-		e = document.createEvent('MouseEvent'),
-		a = document.createElement('a');
-	a.download = filename;
-	a.href = window.URL.createObjectURL(blob);
-	a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
-	e.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-	a.dispatchEvent(e)
-}
+// function saveJson(data, filename) {
+// 	if (!data) {
+// 		alert('保存的数据为空');
+// 		return false;
+// 	}
+// 	if (!filename) {
+// 		filename = 'json.json';
+// 	}
+// 	if (typeof data === 'object') {
+// 		data = JSON.stringify(data, undefined, 4);
+// 	}
+// 	let blob = new Blob([data], { type: 'text/json' }),
+// 		e = document.createEvent('MouseEvent'),
+// 		a = document.createElement('a');
+// 	a.download = filename;
+// 	a.href = window.URL.createObjectURL(blob);
+// 	a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
+// 	e.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+// 	a.dispatchEvent(e)
+// }
 
 //弹出框
 function openBox(e, isOpen) {
@@ -196,6 +203,8 @@ function openBox(e, isOpen) {
 		el.style.display = "none";
 	}
 }
+
+// openBox('#loading', true);
 
 $('.titleHistoryContent').on('click', '.downloadReport', function () {
 	// let frame = annotate.Nodes.image.dataset.id;
@@ -328,9 +337,8 @@ $("#screenShot").on("click", ".anal-pic", function () {
 	$('#canvas').css('display', 'block');
 	$('.scaleBox').css('display', 'block');
 	$('.videoEdit').css("display", "none");
-	$('.selectOperation').css('display', "none");
 	$('.commentResult').show();
-	$('#tools').show();
+	$('#tools').css('visibility', 'visible');
 })
 
 // 血管分析
