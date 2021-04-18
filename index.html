@@ -34,23 +34,6 @@
                     <div class="logo"></div>
                     <div class="logoTitle">微循环血管健康分析平台</div>
                 </div>
-                <div class="assistTool">
-                    <div class="historyGroupModal">
-                        <div class="history-date-modal">
-                            <label class="form-label-self">日期</label>
-                            <input type="text" class="layui-input" ng-model="data.mz" id="test1" placeholder="默认为当天">
-                            <button id="test1-btn" class="buttonBtm">确定</button>
-                        </div>
-                        <div class="history-date-modal">
-                            <label class="form-label-self">关键字</label>
-                            <input type="text" name="keywords" id="test2" lay-verify="required" ng-model="data.mz"
-                                placeholder="请输入" autocomplete="off" class="layui-input">
-                            <button id="test2-btn" class="buttonBtm">确定</button>
-                        </div>
-                        <div class="historyGroup"></div>
-                        <div class="closeLabelManage"><span class="icon-remove-sign"></span></div>
-                    </div>
-                </div>
             </div>
         </div>
         <div class="canvasMain">
@@ -58,33 +41,54 @@
             <div class="toolFeatures">
                 <div class="assistFeatures">
                     <p class="featureList screenFull" id="featureList1">
-                        <i class="bg"></i>
-                    </p>
-                    <p class="featureList openVideo" id="featureList2">
-                        <input class="openVideoInput" type="file" id="video" name="video" hidden>
-                        <i class="bg"></i>
+                        <i class="bg hbg"></i>
                     </p>
                     <p class="featureList showHistory" id="featureList5">
-                        <i class="bg expend history"></i>
+                        <i class="bg hbg history"></i>
                     </p>
-                    <p class="featureList screen-shot-tool" id="btn-picshot">
-                        <i class="bg"></i>
-                    </p>
+                    <div class="featureList-video">
+                        <p class="featureList openVideo" id="featureList2">
+                            <input class="openVideoInput" type="file" id="video" name="video" hidden>
+                            <i class="bg hbg"></i>
+                        </p>
+                        <p class="featureList screen-shot-tool" id="btn-picshot">
+                            <i class="bg hbg"></i>
+                        </p>
+                    </div>
                 </div>
                 <div class="separator"></div>
                 <div id="tools">
-                    <div class="toolSet toolDrag focus" id="tools-toolDrag"></div>
-                    <div class="toolSet toolTagsManager" id="tools-toolTagsManager"><span class="icon-tags"></span></div>
-                    <div class="toolSet toolRect" id="tools-toolRect" title="矩形工具"></div>
-                    <div class="toolSet toolPolygon" id="tools-toolPolygon" title="多边形工具"></div>
-                    <div class="toolSet returnVideo" id="tools-returnVideo" title="返回视频帧选取界面"></div>
+                    <div class="tools-up">
+                        <div class="toolSet-wrapper">
+                            <div class="toolSet toolDrag focus" id="tools-toolDrag"></div>
+                        </div>
+                        <div class="toolSet-wrapper">
+                            <div class="toolSet toolTagsManager" id="tools-toolTagsManager">
+                                <span class="icon-tags"></span>
+                            </div>
+                        </div>
+                        <div class="toolSet-wrapper">
+                            <div class="toolSet toolRect" id="tools-toolRect"></div>
+                        </div>
+                        <div class="toolSet-wrapper">
+                            <div class="toolSet toolPolygon" id="tools-toolPolygon"></div>
+                        </div>
+                        <div class="separator"></div>
+                    </div>
+                    <div class="toolSet-wrapper">
+                        <div class="toolSet returnVideo" id="tools-returnVideo"></div>
+                    </div>
                 </div>
                 <div class="version">v1.0.0</div>
             </div>
             <div class="canvasContent">
-                <div class="videoEdit" style="display: none;">
+                <div class="videoEdit">
                     <div class="videoWrap">
-                        <video id="video0" controls="controls">
+                        <div class="ins-arrow">
+                            <div class="arrow"></div>
+                            <div>点击该按钮导入视频</div>
+                        </div>
+                        <video id="video0" controls="controls" controlsList="nodownload" disablePictureInPicture>
                         </video>
                     </div>
                     <div id="picPre">

@@ -119,32 +119,18 @@ class LabelImage {
 			canvasMain: options.canvasMain,
 			// 标记结果数据集
 			resultGroup: options.resultGroup,
-			// 查看历史记录
-			showHistory: options.showHistory,
-			// 十字线开关按钮
-			// crossLine: options.crossLine,
-			// 标注结果开关按钮
-			// labelShower: options.labelShower,
-			// 屏幕快照按钮
-			// screenShot: options.screenShot,
 			// 全屏按钮
 			screenFull: options.screenFull,
 			// 颜色选取器节点数据
 			colorHex: options.colorHex,
 			// 清空标注内容
 			// clearScreen: options.clearScreen,
-			// 撤销，返回上一步
-			// returnUp: options.returnUp,
 			// 标签管理
 			toolTagsManager: options.toolTagsManager,
-			// 历史记录列表
-			// historyGroup: options.historyGroup,
 			// 历史按钮
 			history: options.history,
-			historyGroupModal: options.historyGroupModal,
 			dateInput: options.dateInput,
 			keyWordInput: options.keyWordInput,
-			closeModalLabel: options.closeModalLabel,
 		};
 		this.Features = {
 			// 拖动开关
@@ -152,11 +138,9 @@ class LabelImage {
 			// 矩形标注开关
 			rectOn: false,
 			// 多边形标注开关
-			// polygonOn: false,
+			polygonOn: false,
 			// 标签管理工具
 			tagsOn: false,
-			// 十字线开关
-			// crossOn: false,
 			// 标注结果显示
 			labelOn: true,
 		};
@@ -175,12 +159,7 @@ class LabelImage {
 		_nodes.canvas.addEventListener("DOMMouseScroll", this.MouseWheel); // 兼容Firefox 滚动条事件
 		_nodes.canvas.addEventListener('contextmenu', LabelImage.NoRightMenu.bind(this));
 		_nodes.scaleCanvas.addEventListener('click', this.ScaleCanvasClick);
-		// _nodes.crossLine.addEventListener('click', this.CrossHairSwitch);
-		// _nodes.labelShower.addEventListener('click', this.IsShowLabels);
-		// _nodes.screenShot.addEventListener('click', this.ScreenShot);
-		_nodes.showHistory.addEventListener('click', this.showHistory);
 		_nodes.screenFull.addEventListener('click', this.IsScreenFull);
-		// _nodes.historyGroup.addEventListener('click', this.HistoryClick);
 		document.addEventListener('fullscreenchange', this.ScreenViewChange);
 		document.addEventListener('webkitfullscreenchange', this.ScreenViewChange);
 		document.addEventListener('mozfullscreenchange', this.ScreenViewChange);
@@ -188,27 +167,7 @@ class LabelImage {
 		_nodes.canvas.addEventListener('mousemove', this.CanvasMouseMove);
 		_nodes.resultGroup.addEventListener('mouseover', this.ResultListOperation);
 		_nodes.toolTagsManager.addEventListener('click', this.ManageLabels);
-		_nodes.history.addEventListener('click', this.showHistoryModal);
-		_nodes.dateInput.addEventListener('click', this.RenderHistoryRecord);
-		_nodes.keyWordInput.addEventListener('click', this.RenderHistoryRecord2);
-		_nodes.closeModalLabel.addEventListener('click', this.closeModalHistory);
-		// this.initHistory();
 	};
-
-	showHistoryModal = () => {
-		let _nodes = this.Nodes;
-		_nodes.historyGroupModal.style.visibility = "visible";
-		$('.layui-form-item').show();
-	}
-
-	closeModalHistory = () => {
-		let _nodes = this.Nodes;
-		let timer = setTimeout(() => {
-			_nodes.historyGroupModal.style.visibility = "hidden";
-			clearTimeout(timer);
-		}, 40)
-		$('.layui-form-item').hide();
-	}
 
 	//----设置图片并初始化画板信息
 	// tip: point
@@ -287,9 +246,6 @@ class LabelImage {
 				this.Arrays.imageAnnotateMemory = memory;
 				this.ReplaceAnnotateShow();
 				this.RepaintResultList();
-				// this.Arrays.imageAnnotateMemory.forEach((v, index) => {
-				// 	this.RecordOperation('add', '绘制', index, JSON.stringify(v));
-				// });
 			}
 		});
 	};
@@ -369,50 +325,6 @@ class LabelImage {
 
 		_nodes.scalePanel.innerText = (this.scale * 100).toFixed(2) + "%";
 	};
-
-	//----画板跟随鼠标十字线绘制函数
-	// MouseMoveCrossHair = () => {
-	// 	let _nodes = this.Nodes;
-	// 	_nodes.ctx.setLineDash([6, 3]);
-	// 	_nodes.ctx.lineWidth = 1;
-	// 	_nodes.ctx.strokeStyle = "#333";
-	// 	_nodes.ctx.beginPath();
-	// 	// 横线
-	// 	_nodes.ctx.moveTo(0, this.mouseY);
-	// 	_nodes.ctx.lineTo(this.cWidth, this.mouseY);
-	// 	_nodes.ctx.stroke();
-	// 	// 纵线
-	// 	_nodes.ctx.moveTo(this.mouseX, 0);
-	// 	_nodes.ctx.lineTo(this.mouseX, this.cHeight);
-	// 	_nodes.ctx.stroke();
-	// 	_nodes.ctx.closePath();
-	// };
-
-	//----鼠标跟随十字线开关按钮操作函数
-	// CrossHairSwitch = () => {
-	// 	let _nodes = this.Nodes;
-	// 	if (_nodes.crossLine.className.indexOf('focus') > -1) {
-	// 		_nodes.crossLine.childNodes[1].checked = false;
-	// 		_nodes.crossLine.classList.remove('focus');
-	// 		this.SetFeatures('crossOn', false);
-	// 		_nodes.canvas.removeEventListener('mousemove', this.MouseMoveCrossHairLocation);
-	// 	}
-	// 	else {
-	// 		_nodes.crossLine.childNodes[1].checked = true;
-	// 		_nodes.crossLine.classList.add('focus');
-	// 		this.SetFeatures('crossOn', true);
-	// 		_nodes.canvas.addEventListener('mousemove', this.MouseMoveCrossHairLocation);
-	// 	}
-	// };
-
-	//----鼠标移动十字线定位函数
-	// MouseMoveCrossHairLocation = () => {
-	// 	// 更新鼠标当前位置十字线
-	// 	if (this.Features.crossOn) {
-	// 		this.DrawSavedAnnotateInfoToShow();
-	// 		this.MouseMoveCrossHair();
-	// 	}
-	// };
 
 	//----监听画板鼠标移动
 	CanvasMouseMove = (e) => {
@@ -1217,212 +1129,12 @@ class LabelImage {
 		}
 	};
 
-	//----历史记录点击事件
-	// HistoryClick = (e) => {
-	// 	let index = e.target.dataset.index;
-	// 	if (index) {
-	// 		this.historyIndex = parseInt(index);
-	// 		this.RenderHistoryState(this.historyIndex);
-	// 	}
-	// };
-
-	//----渲染至指定历史记录状态
-	// RenderHistoryState = (index) => {
-	// 	let history = this.Arrays.history;
-	// 	let historyNodes = this.Nodes.historyGroup.children;
-	// 	let prevIndex = -1;
-	// 	for (let i = 0; i < historyNodes.length; i++) {
-	// 		if (historyNodes[i].classList.value.indexOf('active') > -1) {
-	// 			prevIndex = i;
-	// 			break;
-	// 		}
-	// 	}
-	// 	// 移除上一个历史记录列表焦点
-	// 	prevIndex !== -1 && historyNodes[prevIndex].classList.remove('active');
-	// 	this.Arrays.imageAnnotateMemory.splice(0, this.Arrays.imageAnnotateMemory.length);
-	// 	for (let i = history.length - 1; i > index; i--) {
-	// 		historyNodes[i].classList.add('record');
-	// 	}
-	// 	for (let i = 0; i <= index; i++) {
-	// 		historyNodes[i].classList.remove('record');
-	// 		this.HistoryTypeOperation(history[i].type, history[i].index, history[i].content);
-	// 	}
-	// 	historyNodes[index].classList.add('active');
-	// 	this.ReplaceAnnotateShow();
-	// 	this.RepaintResultList();
-	// };
-
-	//----历史记录类型判断处理
-	// HistoryTypeOperation = (type, index, content) => {
-	// 	switch (type) {
-	// 		case "add":
-	// 			this.Arrays.imageAnnotateMemory.splice(index, 0, JSON.parse(content));
-	// 			break;
-	// 		case "addPoint":
-	// 			this.Arrays.imageAnnotateMemory[index] = JSON.parse(content);
-	// 			break;
-	// 		case "delete":
-	// 			this.Arrays.imageAnnotateMemory.splice(index, 1);
-	// 			break;
-	// 		default:
-	// 			this.Arrays.imageAnnotateMemory[index] = JSON.parse(content);
-	// 			break;
-	// 	}
-	// };
-
-	//----记录每步操作存储在内存中
-	// RecordOperation = (type, desc, index, content) => {
-	// 	// 渲染到页面上
-	// 	if (this.historyIndex < this.Arrays.history.length) {
-	// 		this.RenderHistory(type, desc, this.historyIndex + 1);
-	// 		this.Arrays.history.splice(this.historyIndex + 1, this.Arrays.history.length);
-	// 	}
-	// 	else {
-	// 		this.RenderHistory(type, desc, this.historyIndex);
-	// 		this.Arrays.history.splice(this.historyIndex, this.Arrays.history.length);
-	// 	}
-	// 	let historyData = {
-	// 		type: type,
-	// 		desc: desc,
-	// 		index: index,
-	// 		content: content,
-	// 	};
-	// 	this.Arrays.history.push(historyData);
-	// 	this.historyIndex++;
-	// };
-
-	// initHistory = () => {
-	// 	let history = localStorage.getItem('history');
-	// 	// let _nodes = document.querySelector('.historyGroup');
-	// 	let time = this.getTime();
-	// 	if (history) {
-	// 		let parseHistory = JSON.parse(history);
-	// 		let nowHistory = parseHistory.filter(v => v.date === time);
-	// 		if (nowHistory.length > 0) {
-	// 			_nodes.innerHTML = nowHistory[0]["history"];
-	// 		}
-	// 	}
-	// }
-
-	//----将历史记录渲染到页面上
-	// RenderHistory = (type, desc, index) => {
-	// 	let children = this.Nodes.historyGroup.children;
-	// 	let time = this.getTime();
-	// 	children.length > 0 && children[index - 1].classList.remove('active');
-	// 	for (let i = children.length - 1; i >= 0; i--) {
-	// 		children[i].classList.value.indexOf('record') > -1 && this.Nodes.historyGroup.removeChild(children[i]);
-	// 	}
-	// 	let history = document.createElement('p');
-	// 	history.setAttribute("data-type", type);
-	// 	history.setAttribute("data-index", index);
-	// 	history.innerText = desc;
-	// 	history.classList.add('active');
-	// 	this.Nodes.historyGroup.appendChild(history);
-	// 	let historyRecord = localStorage.getItem('history');
-	// 	let item = this.Nodes.historyGroup.innerHTML.replace(/\"/g, "'");
-	// 	if (historyRecord) {
-	// 		let parseHistory = JSON.parse(historyRecord);
-	// 		let item = this.Nodes.historyGroup.innerHTML.replace(/\"/g, "'");
-	// 		let isExist = false;
-	// 		parseHistory.forEach(v => {
-	// 			if (v.date === time) {
-	// 				v.history = item;
-	// 				isExist = true;
-	// 			}
-	// 		})
-	// 		!isExist && parseHistory.push({ "date": `"${time}"`, "history": `"${item}"` });
-	// 		localStorage.setItem('history', JSON.stringify(parseHistory));
-	// 	} else {
-	// 		localStorage.setItem('history', `[{"date":"${time}","history":"${item}"}]`);
-	// 	}
-	// };
-
-	// RenderHistoryRecord = () => {
-	// 	let _nodes = this.Nodes;
-	// 	let historyTime = document.querySelector('#test1');
-	// 	let value = historyTime.value ? historyTime.value : this.getTime();
-	// 	let nodes = null;
-	// 	if (value) {
-	// 		let historyRecord = localStorage.getItem('history');
-	// 		let parseHistory = JSON.parse(historyRecord);
-	// 		let isExist = false;
-	// 		if (parseHistory) {
-	// 			parseHistory.forEach(v => {
-	// 				if (v.date === value) {
-	// 					nodes = v.history;
-	// 					isExist = true;
-	// 				}
-	// 			})
-	// 		}
-	// 		!isExist && (nodes = "<p style='color:red'>该时间内不存在记录</p>");
-	// 		_nodes.historyGroup.innerHTML = nodes;
-	// 	}
-	// }
-
-	// RenderHistoryRecord2 = () => {
-	// 	let _nodes = this.Nodes;
-	// 	let historyTime = document.querySelector('#test2');
-	// 	let time = this.getTime();
-	// 	let value = historyTime.value ? historyTime.value : time;
-	// 	let nodes = null;
-	// 	if (value !== time) {
-	// 		let historyRecord = localStorage.getItem('history');
-	// 		let parseHistory = JSON.parse(historyRecord);
-	// 		// let isExist = false;
-	// 		// if (parseHistory) {
-	// 		// 	parseHistory.forEach(v => {
-	// 		// 		if (v.date === value) {
-	// 		// 			nodes = v.history;
-	// 		// 			isExist = true;
-	// 		// 		}
-	// 		// 	})
-	// 		// }
-	// 		// !isExist && (nodes = "<p style='color:red'>该时间内不存在记录</p>");
-	// 		// _nodes.historyGroup.innerHTML = nodes;
-	// 	}
-	// }
-
 	getTime = () => {
 		let date = new Date();
 		let month = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : (`0${date.getMonth() + 1}`);
 		let day = date.getDate() > 9 ? date.getDate() : (`0${date.getDate}`);
 		return `${date.getFullYear()}-${month}-${day}`
 	}
-
-	//----控制是否显示标签
-	// IsShowLabels = () => {
-	// 	let _nodes = this.Nodes;
-	// 	let annotates = this.Arrays.imageAnnotateShower;
-	// 	let resultList = document.querySelectorAll('.result_list');
-	// 	if (resultList.length > 0) {
-	// 		if (_nodes.labelShower.className.indexOf('focus') > -1) {
-	// 			// 隐藏标注结果
-	// 			_nodes.labelShower.children[0].checked = false;
-	// 			_nodes.labelShower.classList.remove('focus');
-	// 			resultList.forEach((item, index) => {
-	// 				item.childNodes[5].className = "isShowLabel icon-eye-close";
-	// 				annotates[index].labels.visibility = false;
-	// 			});
-	// 		}
-	// 		else {
-	// 			// 显示标注结果
-	// 			_nodes.labelShower.children[0].checked = true;
-	// 			_nodes.labelShower.classList.add('focus');
-	// 			resultList.forEach((item, index) => {
-	// 				item.childNodes[5].className = "isShowLabel icon-eye-open";
-	// 				annotates[index].labels.visibility = true;
-	// 			});
-	// 		}
-	// 	}
-	// 	this.DrawSavedAnnotateInfoToShow();
-	// };
-
-	//----屏幕快照事件
-	// ScreenShot = () => {
-	// 	let imgData = this.Nodes.bCanvas.toDataURL('image/jpeg');
-	// 	let windowOpen = window.open('about:blank', 'image from canvas');
-	// 	windowOpen.document.write("<img alt='' src='" + imgData + "'>");
-	// };
 
 	//----全屏显示事件
 	IsScreenFull = () => {
@@ -1440,8 +1152,6 @@ class LabelImage {
 					wScript.SendKeys("{F11}");
 				}
 			}
-			this.Nodes.screenFull.childNodes[2].innerText = "全屏";
-			this.Nodes.screenFull.childNodes[1].style.backgroundPosition = "0 -480px";
 		}
 		else {
 			let el = document.documentElement;
@@ -1456,8 +1166,6 @@ class LabelImage {
 					wScript.SendKeys("{F11}");
 				}
 			}
-			// this.Nodes.screenFull.childNodes[3].innerText = "退出全屏";
-			this.Nodes.screenFull.childNodes[1].style.backgroundPosition = "5px -480px";
 		}
 	};
 
@@ -1469,7 +1177,7 @@ class LabelImage {
 			this.Nodes.canvasMain.style.height = sFullHeight - 60 + "px";
 			this.Nodes.canvas.height = this.Nodes.canvasMain.offsetHeight;
 			this.cHeight = this.Nodes.canvasMain.offsetHeight;
-			this.UpdateCanvas();
+			// this.UpdateCanvas();=======================
 			this.isFullScreen = true;
 		}
 		else {
@@ -1478,7 +1186,7 @@ class LabelImage {
 			this.Nodes.canvasMain.style.height = sNormalHeight - 60 + "px";
 			this.Nodes.canvas.height = this.Nodes.canvasMain.offsetHeight;
 			this.cHeight = this.Nodes.canvasMain.offsetHeight;
-			this.UpdateCanvas();
+			// this.UpdateCanvas(); ================================
 			this.isFullScreen = false;
 		}
 	};

@@ -8,7 +8,6 @@ let initialize = function () {
   output = document.getElementById("screenShot");
   video = document.getElementById("video0");
   button.addEventListener('click', captureImage);
-  $('.commentResult').hide();
 };
 let captureImage = function () {
   let id = videoFrame.get();
@@ -57,25 +56,29 @@ let getObjectURL = (file) => {
 let returnVideo = () => {
   $('#canvas').css('display', 'none');
   $('.scaleBox').css('display', 'none');
+  $('.featureList-video').css("display", "block");
   $('.videoEdit').css("display", "block");
   $('.commentResult').hide();
+  $('.loading').hide();
+	$('.tools-up').css('display', 'none');
 };
 
 let returnPic = () => {
   $('#canvas').css('display', 'block');
   $('.scaleBox').css('display', 'block');
+  $('.featureList-video').css("display", "none");
   $('.videoEdit').css("display", "none");
   $('.commentResult').show();
+	$('.tools-up').css('display', 'block');
 }
 
 $('#tools').on("click", ".returnVideo", function () {
   if (isVideo) {
     returnVideo();
-    isVideo = false;
   } else {
     returnPic();
-    isVideo = true;
   }
+  isVideo = !isVideo;
 })
 
 initialize();
@@ -89,15 +92,14 @@ $("#video").change(function () {
   objUrl = getObjectURL(this.files[0]);
   let name = this.files[0].name.split('.')[0];
   if (objUrl) {
-    $('.returnVideo').css('display', 'block');
-    returnVideo();
     $('.pageName').text(name);
     $("#video0").attr("src", objUrl);
     $('#screenShot').html('');
     $('#data-loading').css('display', "block");
+    $('.ins-arrow').hide();
+    $('#video0').show();
     frameArr = [];
     
-
     // VideoAna("1.wmv");
   }
 });

@@ -234,13 +234,6 @@ body, html {
     color: #fff;
 }
 
-.toolMuster .assistTool {
-    line-height: 60px;
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
 /*
       左侧工具栏
      */
@@ -268,6 +261,7 @@ body, html {
     width: 36px;
     height: 36px;
     display: block;
+    border-radius: 5px;
 }
 
 .assistFeatures .featureList span {
@@ -276,7 +270,7 @@ body, html {
 }
 
 .assistFeatures .screenFull i.bg {
-    background: url(../images/toolIcons2.png) no-repeat 0 -507px;
+    background:  url(../images/toolIcons2.png) no-repeat 0 -507px;
 }
 
 .assistFeatures .screenFull:hover i.bg {
@@ -284,11 +278,11 @@ body, html {
 }
 
 .assistFeatures .openVideo i.bg {
-    background: url(../images/toolIcons2.png) no-repeat 0 -1170px;
+    background: url(../images/toolIcons2.png) no-repeat 0 -1171px;
 }
 
 .assistFeatures .openVideo:hover i.bg {
-    background: url(../images/toolIcons2.png) no-repeat -100px -1167px;
+    background: url(../images/toolIcons2.png) no-repeat -100px -1168px;
 }
 
 .assistFeatures .showHistory i.bg {
@@ -300,11 +294,11 @@ body, html {
 }
 
 .assistFeatures .screen-shot-tool i.bg {
-    background: url(../images/toolIcons2.png) no-repeat 0px -1537px;
+    background: url(../images/toolIcons2.png) no-repeat 0px -1533px;
 }
 
 .assistFeatures .screen-shot-tool:hover i.bg {
-    background: url(../images/toolIcons2.png) no-repeat -99px -1534px;
+    background: url(../images/toolIcons2.png) no-repeat -99px -1530px;
 }
 
 
@@ -350,8 +344,52 @@ body, html {
 }
 
 /*
-  canvasMain 标注画板主体内容
- */
+
+    history弹窗
+        */
+.history-modal {
+    padding-top: 10px;
+}
+
+.history-modal .history-query {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #293b558a;
+    color: #fff;
+    margin-bottom: 20px;
+    text-align: center;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.history-query .history-label {
+    width: 100px;
+}
+
+.history-modal .history-btn {
+    cursor: pointer;
+    border: 1px solid #e6e6e6;
+    padding: 8px 0;
+    width: 200px;
+    text-align: center;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.history-modal .history-btn-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.history-modal .history-btn:hover {
+    background-color: #293b558a;
+    color: #fff;
+}
+
+/*
+     canvasMain 标注画板主体内容
+    */
 
 .canvasMain {
     width: 100%;
@@ -381,8 +419,6 @@ body, html {
     text-align: center;
 }
 
-
-
 .toolFeatures .separator {
     width: 50px;
     height: 2px;
@@ -393,14 +429,22 @@ body, html {
     border-radius: 5px;
 }
 
-#tools {
-    visibility: hidden;
+#tools-up{
+    display: none;
+}
+
+.toolFeatures .toolSet-wrapper {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .toolFeatures .toolSet {
     width: 36px;
     height: 36px;
-    margin: 20px auto 0;
     cursor: pointer;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -594,33 +638,8 @@ body, html {
 .resultList_head .headChildren>div {
 
     width: 100%;
-    /* height: 30px; */
     border-bottom: 1px solid #3c5167;
 }
-
-/* .resultList_head .headChildren .headName {
-    display: inherit;
-    position: absolute;
-    left: 50px;
-}
-
-.resultList_head .headChildren .headDisplay {
-    position: absolute;
-    display: inherit;
-    right: 10px;
-}
-
-.resultList_head .headChildren .headDelete {
-    position: absolute;
-    display: inherit;
-    right: 50px;
-}
-
-.resultList_head .headChildren .headEdit {
-    position: absolute;
-    display: inherit;
-    right: 90px;
-} */
 
 .commentResult .resultArea .resultGroup {
     flex: auto;
@@ -743,7 +762,6 @@ body, html {
 }
 
 .commentResult .resultArea .resultSelectLabel .selectLabel-ul {
-    /* height: 90%; */
     overflow-y: auto;
 }
 
@@ -1243,110 +1261,6 @@ body, html {
     border: 1px solid #333;
 }
 
-.assistTool .historyGroupModal {
-    position: fixed;
-    top: 55px;
-    right: 286px;
-    width: 372px;
-    height: 150px;
-    padding: 25px 1px 0 10px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    background: #fff;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    -webkit-box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.3);
-    -moz-box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.3);
-    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.3);
-    z-index: 999999;
-    visibility: hidden;
-    font-size: 12px;
-}
-
-.historyGroupModal .selectLabelTip {
-    font-size: 14px;
-    text-align: center;
-}
-
-.historyGroupModal .selectLabel-ul {
-    height: 90%;
-    overflow-y: auto;
-}
-
-.historyGroupModal .selectLabel-ul li {
-    display: inline-block;
-    position: relative;
-    vertical-align: top;
-    -webkit-border-radius: 50px;
-    -moz-border-radius: 50px;
-    border-radius: 50px;
-    border: 1px solid #999;
-    padding: 3px 6px;
-    margin: 4px 4px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    font-size: 12px;
-    cursor: pointer;
-    -webkit-transition: 0.3s;
-    -moz-transition: 0.3s;
-    -ms-transition: 0.3s;
-    -o-transition: 0.3s;
-    transition: 0.3s;
-}
-
-.historyGroupModal .closeLabelManage {
-    position: absolute;
-    top: -18px;
-    right: 4px;
-    font-size: 18px;
-    cursor: pointer;
-}
-
-.historyGroupModal .bottomBtn {
-    height: 10%;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-}
-
-.historyGroupModal::before {
-    content: '';
-    display: block;
-    position: absolute;
-    top: -10px;
-    right: 50px;
-    border-right: 10px solid transparent;
-    border-left: 10px solid transparent;
-    border-bottom: 10px solid #f1f1f1;
-}
-
-.assistTool .historyGroupModal::after {
-    content: '';
-    display: block;
-    position: absolute;
-    top: -9px;
-    right: 50px;
-    border-right: 10px solid transparent;
-    border-left: 10px solid transparent;
-    border-bottom: 10px solid #fff;
-}
-
-.assistTool .historyGroupModal.focus {
-    -webkit-animation: showSelectLabel 0.4s ease-out forwards;
-    -o-animation: showSelectLabel 0.4s ease-out forwards;
-    animation: showSelectLabel 0.4s ease-out forwards;
-    visibility: visible;
-}
-
-.assistTool .historyGroupModal.blur {
-    -webkit-animation: hideSelectLabel 0.4s ease-out forwards;
-    -o-animation: hideSelectLabel 0.4s ease-out forwards;
-    animation: hideSelectLabel 0.4s ease-in forwards;
-}
-
 .ql-container.ql-snow {
     height: 335px;
 }
@@ -1391,6 +1305,20 @@ th, td {
 .videoEdit .videoWrap #video0 {
     height: 100%;
     width: 100%;
+}
+
+.videoWrap .ins-arrow {
+    position: absolute;
+    margin-top: 7%;
+    display: flex;
+    color: #fff;
+    font-size: 18px;           
+}
+
+.videoWrap .ins-arrow .arrow {
+    width: 90px;
+    height: 40px;
+    background: url("../images/arrow.png") no-repeat;
 }
 
 .videoEdit #screenShot {
@@ -1456,19 +1384,6 @@ th, td {
     transition: background-color 0.5s;
 }
 
-.returnVideo {
-    cursor: pointer;
-    border-radius: 8px;
-    width: 40px;
-    height: 40px;
-    color: #ffffff;
-    text-align: center;
-    line-height: 40px;
-    margin: 20px 0 0 10px;
-    background-color: #9c9c9ca6;
-    display: none;
-}
-
 .loading {
     display: none;
     position: absolute;
@@ -1484,7 +1399,7 @@ th, td {
     width: 100px;
     height: 100px;
     position: relative;
-    margin: 26% auto;
+    margin: 23% auto;
 }
 
 .loadEffect span {
@@ -1616,22 +1531,5 @@ th, td {
     justify-content: space-between;
 }
 
-.form-label-self {
-    width: 48px;
-    padding: 9px 10px;
-    font-weight: 400;
-    line-height: 20px;
-    text-align: right;
-}
 
-.history-date-modal {
-    display: flex;
-    margin-bottom: 10px;
-    justify-content: space-around;
-}
 
-.history-date-modal>button {
-    border: 1px solid #ddd;
-    height: 36px;
-    margin-left: 10px;
-}
