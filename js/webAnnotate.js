@@ -1177,7 +1177,7 @@ class LabelImage {
 			this.Nodes.canvasMain.style.height = sFullHeight - 60 + "px";
 			this.Nodes.canvas.height = this.Nodes.canvasMain.offsetHeight;
 			this.cHeight = this.Nodes.canvasMain.offsetHeight;
-			// this.UpdateCanvas();=======================
+			// isVideo && this.UpdateCanvas();
 			this.isFullScreen = true;
 		}
 		else {
@@ -1186,7 +1186,7 @@ class LabelImage {
 			this.Nodes.canvasMain.style.height = sNormalHeight - 60 + "px";
 			this.Nodes.canvas.height = this.Nodes.canvasMain.offsetHeight;
 			this.cHeight = this.Nodes.canvasMain.offsetHeight;
-			// this.UpdateCanvas(); ================================
+			// this.UpdateCanvas();
 			this.isFullScreen = false;
 		}
 	};

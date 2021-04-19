@@ -80,15 +80,15 @@ new jBox('Modal', {
   closeButton: true,
   content: `
     <div class="history-modal">
-      <div class="history-query">
-        <label class="history-label">日期</label>
-        <input type="text" class="layui-input" id="test1" placeholder="默认为当天">
-      </div>
-      <div class="history-query">
-        <label class="history-label">关键字</label>
-        <input type="text" name="keywords" id="test2" placeholder="请输入" class="layui-input">
-      </div>
-      <div class="history-btn-wrapper"><div id="test1-btn" class="history-btn">确定</div></div>
+    <div class="history-query">
+      <label class="history-label">日期</label>
+      
+    </div>
+    <div class="history-query">
+      <label class="history-label">关键字</label>
+      <input type="text" name="keywords" id="test2" placeholder="请输入" class="layui-input">
+    </div>
+    <div class="history-btn-wrapper"><div id="test1-btn" class="history-btn">确定</div></div>
     </div>
     `,
   title: '历史记录查询',
@@ -98,10 +98,12 @@ new jBox('Modal', {
 });
 
 
+
+
 layui.use('laydate', function () {
-	var laydate = layui.laydate;
-	//常规用法
-	laydate.render({
-		elem: '#test1'
-	});
+  var laydate = layui.laydate;
+  //常规用法
+  laydate.render({
+    elem: '#test1'
+  });
 });
