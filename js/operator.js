@@ -51,7 +51,8 @@ function initState() {
 	$('.scaleBox').css('display', 'none');
 	$('.videoEdit').css("display", "block");
 	$('#tools').hide();
-	$('#video0').hide();
+	// $('#video0').hide();
+	$('ins-arrow').hide();
 	$('.commentResult').hide();
 }
 
