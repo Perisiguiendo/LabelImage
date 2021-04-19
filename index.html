@@ -86,7 +86,8 @@
                             <div class="arrow"></div>
                             <div>点击该按钮导入视频</div>
                         </div>
-                        <video id="video0" src="./video/1.mp4" controls="controls" controlsList="nodownload" disablePictureInPicture>
+                        <video id="video0" src="./video/1.mp4" controls="controls" controlsList="nodownload"
+                            disablePictureInPicture>
                         </video>
                     </div>
                     <div id="picPre">
@@ -139,59 +140,41 @@
                         <ul class="selectLabel-ul">
                         </ul>
                         <div class="selectTable">
-                            <form name="form" method="post" ab-load="demo/demo/get?id={id}" ng-model="data">
-                                <table class="form-table">
-                                    <tr>
-                                        <th><label for="inflow">流入长度</label></th>
-                                        <td>
-                                            <input type="text" id="inflow" ng-model="data.mz">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th><label for="inflow-len">流入直线长度</label></th>
-                                        <td>
-                                            <input type="text" id="inflow-len" ng-model="data.mz">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th><label for="inflow-pipe">流入端管径</label></th>
-                                        <td>
-                                            <input type="text" id="inflow-pipe" ng-model="data.mz">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th><label for="loop-pipe">袢顶管径</label></th>
-                                        <td>
-                                            <input type="text" id="loop-pipe" ng-model="data.mz">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th><label for="outflow">流出长度</label></th>
-                                        <td>
-                                            <input type="text" id="outflow" ng-model="data.mz">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th><label for="outflow-len">流出直线长度</label></th>
-                                        <td>
-                                            <input type="text" id="outflow-len" ng-model="data.mz">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th> <label for="outflow-pipe">流出端管径</label></th>
-                                        <td>
-                                            <input type="text" id="outflow-pipe" ng-model="data.mz">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <strong>单位是um</strong>
-                                    </tr>
-                                    <tr>
-                                        <th><button class="closeBtn btm-primary expend expend-sure">确定</button></th>
-                                        <td><button class="closeBtn btm-default expend expend-quit">取消</button></td>
-                                    </tr>
-                                </table>
-                            </form>
+                            <div>
+                                <label for="inflow">流入长度</label>
+                                <input type="text" id="inflow" autocomplete="off">
+                            </div>
+                            <div>
+                                <label for="inflow-len">流入直线长度</label>
+                                <input type="text" id="inflow-len" autocomplete="off">
+                            </div>
+                            <div>
+                                <label for="inflow-pipe">流入端管径</label>
+                                <input type="text" id="inflow-pipe" autocomplete="off">
+                            </div>
+                            <div>
+                                <label for="loop-pipe">袢顶管径</label>
+                                <input type="text" id="loop-pipe" autocomplete="off">
+                            </div>
+                            <div>
+                                <label for="outflow">流出长度</label>
+                                <input type="text" id="outflow" autocomplete="off">
+                            </div>
+                            <div>
+                                <label for="outflow-len">流出直线长度</label>
+                                <input type="text" id="outflow-len" autocomplete="off">
+                            </div>
+                            <div>
+                                <label for="outflow-pipe">流出端管径</label>
+                                <input type="text" id="outflow-pipe" autocomplete="off">
+                            </div>
+                            <div>
+                                <div><strong>单位是um</strong></div>
+                                <div class="select-btm">
+                                    <div class="closeBtn btm-primary expend expend-sure">确定</div>
+                                    <div class="closeBtn btm-default expend expend-quit">取消</div>
+                                </div>
+                            </div>
                         </div>
                         <div class="closeLabelManage"><span class="icon-remove-sign"></span></div>
                     </div>
@@ -217,34 +200,21 @@
                         <button class="buttonBtm btm-primary saveReport">保存结果</button>
                     </div>
                     <div id="editor">
-                        <form name="form" method="post" ab-load="demo/demo/get?id={id}" ng-model="data">
-                            <table class="form-table">
-                                <tr>
-                                    <th><label class="control-label form-th-span" for="ng-inspect">检查所见</label></th>
-                                    <td>
-                                        <textarea id="ng-inspect" class="form-control e-inspect editor-textarea"
-                                            type="text" ng-model="data.mz" cols="28" rows="5"
-                                            placeholder="请输入内容"></textarea>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th><label class="control-label form-th-span" for="ng-eval">评估结论</label></th>
-                                    <td>
-                                        <textarea id="ng-eval" class="form-control e-eval editor-textarea" type="text"
-                                            ng-model="data.mz" cols="28" rows="5" placeholder="请输入内容"></textarea>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th><label class="control-label form-th-span" for="ng-suggest">健康建议</label></th>
-                                    <td>
-                                        <textarea id="ng-suggest" class="form-control e-suggest editor-textarea"
-                                            type="text" ng-model="data.mz" cols="28" rows="5"
-                                            placeholder="请输入内容"></textarea>
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
-
+                        <div class="btn-form-report">
+                            <label class="control-label form-th-span" for="ng-inspect">检查所见</label>
+                            <textarea id="ng-inspect" class="form-control e-inspect editor-textarea"
+                                      type="text" cols="10" rows="5" placeholder="请输入内容"></textarea>
+                        </div>
+                        <div class="btn-form-report">
+                            <label class="control-label form-th-span" for="ng-eval">评估结论</label>
+                            <textarea id="ng-eval" class="form-control e-eval editor-textarea" type="text"
+                                      cols="10" rows="5" placeholder="请输入内容"></textarea>
+                        </div>
+                        <div class="btn-form-report">
+                            <label class="control-label form-th-span" for="ng-suggest">健康建议</label>
+                            <textarea id="ng-suggest" class="form-control e-suggest editor-textarea"
+                                      type="text" cols="10" rows="5" placeholder="请输入内容"></textarea>
+                        </div>
                     </div>
                 </div>
 
