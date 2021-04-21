@@ -41,8 +41,6 @@ const annotate = new LabelImage({
 	colorHex: document.querySelector('#colorHex'),
 	toolTagsManager: document.querySelector('.toolTagsManager'),
 	history: document.querySelector('.history'),
-	// dateInput: document.querySelector('#test1-btn'),
-	// keyWordInput: document.querySelector('#test2-btn'),
 	labelsNode: document.querySelector('.headDisplay'),
 	// selectBtm: document.querySelector('.selectBtm')
 });
@@ -54,8 +52,8 @@ function initState() {
 	jQuery('#canvas').css('display', 'none');
 	jQuery('.scaleBox').css('display', 'none');
 	jQuery('.videoEdit').css("display", "block");
-	jQuery('#tools').hide();
-	// jQuery('#video0').hide();
+	jQuery('.toolSet-return').css('display', 'none')
+	jQuery('.tools-up').css('display', 'none');
 	jQuery('ins-arrow').hide();
 	jQuery('.commentResult').hide();
 }
@@ -224,6 +222,7 @@ jQuery("#screenShot").on("click", ".anal-pic", function () {
 	jQuery('.videoEdit').css("display", "none");
 	jQuery('.featureList-video').css("display", "none");
 	jQuery('.commentResult').show();
+	jQuery('.toolSet-return').css('display', 'flex')
 })
 
 // 血管分析
@@ -315,7 +314,7 @@ function detecting(video, frame) {
 			annotate.SetImage(detectingImg, data);
 			jQuery('#canvas').attr('data-id', detectingImg["data-id"]);
 			toastr.success(`图片分析成功`);
-			jQuery('#tools').css('display', 'block');
+			jQuery('.tools-up').css('display', 'block');
 		},
 		error: () => {
 			toastr.error(`图片分析失败`);

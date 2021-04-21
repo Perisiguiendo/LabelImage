@@ -38,6 +38,8 @@ let captureImage = function () {
     } else {
       toastr.warning(`第${id}帧已存在`);
     }
+  } else {
+    toastr.warning("请导入视频");
   }
 };
 

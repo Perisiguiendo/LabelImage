@@ -132,10 +132,10 @@ class LabelImage {
 			toolTagsManager: options.toolTagsManager,
 			// 历史按钮
 			history: options.history,
-			// 编辑框的按钮
-			// selectBtm: options.selectBtm,
 
 			labelsNode: options.labelsNode,
+			// 当前点击修改的index
+			resultListIndex: 0,
 		};
 		this.Features = {
 			// 拖动开关
@@ -171,7 +171,7 @@ class LabelImage {
 		_nodes.resultGroup.addEventListener('mouseover', this.ResultListOperation);
 		_nodes.toolTagsManager.addEventListener('click', this.ManageLabels);
 		_nodes.labelsNode.addEventListener('click', this.showAllLabels);
-		// _nodes.selectBtm.addEventListener('click', this.selectBtmClick)
+		this.changeInputVal();
 	};
 
 	showAllLabels = () => {
@@ -793,6 +793,7 @@ class LabelImage {
 					case "editLabelName":
 						_self.getCreatedLabels(resultList[i], pageY, i);
 						_self.getLabelParams(i);
+						_self.Nodes.resultListIndex = i;
 						break;
 					case "result_Name":
 						for (let j = 0; j < resultList.length; j++) {
@@ -893,12 +894,15 @@ class LabelImage {
 		jQuery('#outflow').val(arr[4])
 		jQuery('#outflow-len').val(arr[5]);
 		jQuery('#outflow-pipe').val(arr[6]);
-		this.changeInputVal(index);
 	}
 
-	changeInputVal = (index) => {
+	changeInputVal = () => {
 		let _self = this;
-		jQuery('.selectBtm').on('click', '.expend-sure', function () {
+		let resultSelectLabel = document.querySelector('.resultSelectLabel');
+		let resultListIndex = this.Nodes.resultListIndex;
+		let expendSure = document.getElementsByClassName('expend-sure')[0];
+		let expendQuit = document.getElementsByClassName('expend-quit')[0];
+		expendSure.onclick = function () {
 			let arr = [
 				jQuery('#inflow').val(),
 				jQuery('#inflow-len').val(),
@@ -908,15 +912,14 @@ class LabelImage {
 				jQuery('#outflow-len').val(),
 				jQuery('#outflow-pipe').val(),
 			]
-			_self.Arrays.paramsArray[index] = [...arr];
-			jQuery('.resultSelectLabel').removeClass('focus')
-			jQuery('.resultSelectLabel').addClass('blur')
-			console.log(_self.Arrays.paramsArray);
-		})
-		jQuery('.selectBtm').on('click', 'expend-quit', function () {
-			labelManage.classList.remove("focus");
-			labelManage.classList.add("blur");
-		})
+			_self.Arrays.paramsArray[resultListIndex] = [...arr];
+			resultSelectLabel.classList.remove("focus");
+			resultSelectLabel.classList.add("blur");
+		}
+		expendQuit.onclick = function () {
+			resultSelectLabel.classList.remove("focus");
+			resultSelectLabel.classList.add("blur");
+		}
 	}
 
 	//----标签管理
