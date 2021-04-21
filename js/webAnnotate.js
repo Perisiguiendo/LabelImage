@@ -93,10 +93,13 @@ class LabelImage {
 			// 标注集操作 result list index
 			resultIndex: 0,
 
+			// 参数集合
 			paramsArray: [],
 
 		};
 		this.Nodes = {
+			// 视频节点
+			video: null,
 			// 图片节点
 			image: null,
 			// 画布节点
@@ -129,20 +132,20 @@ class LabelImage {
 			toolTagsManager: options.toolTagsManager,
 			// 历史按钮
 			history: options.history,
-			dateInput: options.dateInput,
-			keyWordInput: options.keyWordInput,
+			// 编辑框的按钮
+			// selectBtm: options.selectBtm,
+
+			labelsNode: options.labelsNode,
 		};
 		this.Features = {
 			// 拖动开关
 			dragOn: true,
 			// 矩形标注开关
 			rectOn: false,
-			// 多边形标注开关
-			polygonOn: false,
 			// 标签管理工具
 			tagsOn: false,
 			// 标注结果显示
-			labelOn: true,
+			labelOn: false,
 		};
 		this.Initial();
 	}
@@ -167,10 +170,40 @@ class LabelImage {
 		_nodes.canvas.addEventListener('mousemove', this.CanvasMouseMove);
 		_nodes.resultGroup.addEventListener('mouseover', this.ResultListOperation);
 		_nodes.toolTagsManager.addEventListener('click', this.ManageLabels);
+		_nodes.labelsNode.addEventListener('click', this.showAllLabels);
+		// _nodes.selectBtm.addEventListener('click', this.selectBtmClick)
 	};
 
+	showAllLabels = () => {
+		this.SetFeatures('labelOn', !this.Features.labelOn);
+		if (this.Features.labelOn) {
+			jQuery('.isShowLabel').addClass('icon-eye-open').removeClass('icon-eye-close');
+			this.Arrays.imageAnnotateShower.forEach(v => {
+				v.labels.visibility = true;
+			})
+		} else {
+			jQuery('.isShowLabel').addClass('icon-eye-close').removeClass('icon-eye-open');
+			this.Arrays.imageAnnotateShower.forEach(v => {
+				v.labels.visibility = false;
+			})
+		}
+		this.DrawSavedAnnotateInfoToShow();
+	}
+
+	openBox = (e, isOpen) => {
+		let el = document.querySelector(e);
+		let maskBox = document.querySelector('.mask_box');
+		if (isOpen) {
+			maskBox.style.display = "block";
+			el.style.display = "block";
+		}
+		else {
+			maskBox.style.display = "none";
+			el.style.display = "none";
+		}
+	}
+
 	//----设置图片并初始化画板信息
-	// tip: point
 	SetImage = (img, memory = false) => {
 		let src = img.src;
 		let _nodes = this.Nodes;
@@ -180,7 +213,7 @@ class LabelImage {
 		_nodes.image.setAttribute("data-id", img.getAttribute("data-id"));
 		//监听图片加载
 		_nodes.image.addEventListener('load', () => {
-			openBox('#loading', false);
+			this.openBox('#loading', false);
 			this.iWidth = _nodes.image.width;
 			this.iHeight = _nodes.image.height;
 			//获取原有节点
@@ -403,34 +436,6 @@ class LabelImage {
 						this.Nodes.canvas.addEventListener('mouseup', this.MouseUpRemoveDrawRect);
 					}
 				}
-				else if (this.Features.polygonOn) {
-					// 是否开启绘制多边形功能
-					let resultList = _nodes.resultGroup.getElementsByClassName("result_list");
-					let isActive = false;
-					for (let i = 0; i < resultList.length; i++) {
-						// 循环结果列表判断是否点击某一个结果，若是，则改变焦点
-						if (resultList[i].className.indexOf("active") > -1) {
-							_arrays.resultIndex = resultList[i].id;
-							isActive = true;
-						}
-					}
-					if (!isActive) {
-						_arrays.resultIndex = 0;
-					}
-					if (_arrays.resultIndex === 0) {
-						// 未选定标签结果，创建新标签
-						this.CreateNewResultList(this.mouseX, this.mouseY, "polygon");
-					}
-					if (!this.isDrogCircle) {
-						let index = _arrays.resultIndex - 1;
-						// 保存坐标点
-						_arrays.imageAnnotateShower[index].content.push({ x: this.mouseX, y: this.mouseY });
-						this.CalcRectMask(_arrays.imageAnnotateShower[index].content);
-						this.ReplaceAnnotateMemory();
-						this.DrawSavedAnnotateInfoToShow();
-						// this.RecordOperation('addPoint', '添加坐标点', index, JSON.stringify(_arrays.imageAnnotateMemory[index]));
-					}
-				}
 			}
 		}
 		else if (e.button === 2) {
@@ -510,20 +515,7 @@ class LabelImage {
 		_nodes.ctx.drawImage(_nodes.bCanvas, -this.x / this.scale, -this.y / this.scale, this.cWidth / this.scale, this.cHeight / this.scale, 0, 0, this.cWidth, this.cHeight);
 		_nodes.ctx.setLineDash([0, 0]);
 		_arrays.imageAnnotateShower.forEach((item, index) => {
-			if (item.contentType === "polygon") {
-				// 绘制闭合线条
-				_nodes.ctx.beginPath();
-				_nodes.ctx.lineWidth = this.lineWidth;
-				_nodes.ctx.moveTo(item.content[0].x, item.content[0].y);
-				item.content.forEach((line) => {
-					_nodes.ctx.lineTo(line.x, line.y);
-				});
-				_nodes.ctx.fillStyle = "rgba(" + item.labels.labelColorRGB + "," + this.opacity + ")";
-				_nodes.ctx.fill();
-				_nodes.ctx.strokeStyle = "rgba(" + item.labels.labelColorRGB + "," + this.opacity + ")";
-				_nodes.ctx.stroke();
-			}
-			else if (item.contentType === "rect") {
+			if (item.contentType === "rect") {
 				this.DrawRect(_nodes.ctx, item.rectMask.xMin, item.rectMask.yMin, item.rectMask.width, item.rectMask.height, item.labels.labelColor, item.labels.labelColorRGB);
 			}
 			if (_arrays.resultIndex !== 0 && _arrays.resultIndex - 1 === index) {
@@ -557,20 +549,7 @@ class LabelImage {
 		_nodes.bCtx.drawImage(_nodes.image, 0, 0, this.iWidth, this.iHeight);
 		if (isRender) {
 			_arrays.imageAnnotateMemory.forEach((item, index) => {
-				if (item.contentType === "polygon") {
-					// 绘制闭合线条
-					_nodes.bCtx.beginPath();
-					_nodes.bCtx.lineWidth = this.lineWidth;
-					_nodes.bCtx.moveTo(item.content[0].x, item.content[0].y);
-					item.content.forEach((line) => {
-						_nodes.bCtx.lineTo(line.x, line.y);
-					});
-					_nodes.bCtx.fillStyle = "rgba(" + item.labels.labelColorRGB + "," + this.opacity + ")";
-					_nodes.bCtx.fill();
-					_nodes.bCtx.strokeStyle = "rgba(" + item.labels.labelColorRGB + "," + this.opacity + ")";
-					_nodes.bCtx.stroke();
-				}
-				else if (item.contentType === "rect") {
+				if (item.contentType === "rect") {
 					this.DrawRect(_nodes.bCtx, item.rectMask.xMin, item.rectMask.yMin, item.rectMask.width, item.rectMask.height, item.labels.labelColor, item.labels.labelColorRGB);
 				}
 				if (_arrays.resultIndex !== 0 && _arrays.resultIndex - 1 === index) {
@@ -608,7 +587,6 @@ class LabelImage {
 		this.CalcRectMask(this.Arrays.imageAnnotateShower[index].content);
 		this.DrawSavedAnnotateInfoToShow();
 		this.ReplaceAnnotateMemory();
-		// this.RecordOperation('modify', '拖拽更新多边形边缘点', index, JSON.stringify(this.Arrays.imageAnnotateMemory[index]));
 	};
 
 	//----图片拖拽事件函数
@@ -652,8 +630,6 @@ class LabelImage {
 			this.CreateNewResultList(this.mouseX, this.mouseY, "rect");
 			this.DrawSavedAnnotateInfoToShow();
 			this.ReplaceAnnotateMemory();
-			let index = this.Arrays.resultIndex - 1;
-			// this.RecordOperation('add', '绘制矩形框', index, JSON.stringify(this.Arrays.imageAnnotateMemory[index]));
 		}
 		this.Nodes.canvas.removeEventListener('mousemove', this.MouseMoveDrawRect);
 		this.Nodes.canvas.removeEventListener('mouseup', this.MouseUpRemoveDrawRect);
@@ -703,7 +679,6 @@ class LabelImage {
 		this.Nodes.canvas.removeEventListener('mousemove', this.DragRectCircleRepaintRect);
 		this.Nodes.canvas.removeEventListener('mouseup', this.RemoveDragRectCircle);
 		let index = this.Arrays.resultIndex - 1;
-		// this.RecordOperation('modify', '拖拽更新矩形框', index, JSON.stringify(this.Arrays.imageAnnotateMemory[index]));
 	};
 
 	//----重新绘制已保存的图像标注记录与标签（删除修改之后重新渲染整体模块）
@@ -738,7 +713,6 @@ class LabelImage {
 	CreateNewResultList = (lx, ly, contentType) => {
 		let _nodes = this.Nodes;
 		let _arrays = this.Arrays;
-		// let eyeIconClass = _nodes.labelShower.children[0].checked ? "icon-eye-open" : "icon-eye-close";
 		let resultLength = document.querySelectorAll('.result_list').length + 1;
 		let resultListBody = document.createElement('div');
 		resultListBody.className = "result_list active";
@@ -748,7 +722,7 @@ class LabelImage {
 			'<input class="result_Name" value="未命名" disabled>' +
 			'<i class="editLabelName icon-pencil"></i>' +
 			'<i class="deleteLabel icon-trash"></i>' +
-			'<i class="isShowLabel ' + false + '"></i>';
+			'<i class="isShowLabel icon-eye-close"></i>';
 		_nodes.resultGroup.appendChild(resultListBody);
 
 		// 轮询获取当前ResultIndex;
@@ -777,7 +751,7 @@ class LabelImage {
 					labelName: "未命名",
 					labelColor: "red",
 					labelColorRGB: "255,0,0",
-					// visibility: _nodes.labelShower.children[0].checked,
+					visibility: false,
 				},
 				labelLocation: this.ComputerLabelLocation(rectMask),
 				rectMask,
@@ -785,32 +759,12 @@ class LabelImage {
 			});
 			this.ReplaceAnnotateMemory();
 		}
-		else if (contentType === "polygon") {
-			this.Arrays.imageAnnotateShower.push(
-				{
-					"labels": {
-						labelName: "未命名",
-						labelColor: "red",
-						labelColorRGB: "255,0,0",
-						// visibility: _nodes.labelShower.children[0].checked,
-					},
-					"labelLocation": {
-						x: lx,
-						y: ly
-					},
-					"contentType": contentType,
-					"content": [],
-					"rectMask": {},
-				}
-			);
-		}
 		document.querySelector('.resultLength').innerHTML = resultLength;
 	};
 
 	//----删除某个已标定结果标签
 	DeleteSomeResultLabel = (index) => {
 		this.ReplaceAnnotateMemory();
-		// this.RecordOperation('delete', '删除标定标签', index, JSON.stringify(this.Arrays.imageAnnotateMemory[index]));
 		this.Arrays.imageAnnotateShower.splice(index, 1);
 		this.Arrays.paramsArray.splice(index, 1);
 		this.RepaintResultList();
@@ -906,7 +860,6 @@ class LabelImage {
 					resultSelectLabel.classList.add("blur");
 					_self.Arrays.resultIndex = 0;
 					_self.RepaintResultList();
-					// _self.RecordOperation('modify', '修改标签', resultIndex, JSON.stringify(_self.Arrays.imageAnnotateMemory[resultIndex]));
 				};
 			});
 			selectLabelUL.appendChild(fragment);
@@ -933,32 +886,36 @@ class LabelImage {
 
 	getLabelParams = (index) => {
 		let arr = this.Arrays.paramsArray[index] || [];
-		$('#inflow').val(arr[0]);
-		$('#inflow-len').val(arr[1]);
-		$('#inflow-pipe').val(arr[2]);
-		$('#loop-pipe').val(arr[3]);
-		$('#outflow').val(arr[4])
-		$('#outflow-len').val(arr[5]);
-		$('#outflow-pipe').val(arr[6]);
+		jQuery('#inflow').val(arr[0]);
+		jQuery('#inflow-len').val(arr[1]);
+		jQuery('#inflow-pipe').val(arr[2]);
+		jQuery('#loop-pipe').val(arr[3]);
+		jQuery('#outflow').val(arr[4])
+		jQuery('#outflow-len').val(arr[5]);
+		jQuery('#outflow-pipe').val(arr[6]);
 		this.changeInputVal(index);
 	}
 
 	changeInputVal = (index) => {
 		let _self = this;
-		$('.closeDiv').on('click', '.expend-sure', function () {
+		jQuery('.selectBtm').on('click', '.expend-sure', function () {
 			let arr = [
-				$('#inflow').val(),
-				$('#inflow-len').val(),
-				$('#inflow-pipe').val(),
-				$('#loop-pipe').val(),
-				$('#outflow').val(),
-				$('#outflow-len').val(),
-				$('#outflow-pipe').val(),
+				jQuery('#inflow').val(),
+				jQuery('#inflow-len').val(),
+				jQuery('#inflow-pipe').val(),
+				jQuery('#loop-pipe').val(),
+				jQuery('#outflow').val(),
+				jQuery('#outflow-len').val(),
+				jQuery('#outflow-pipe').val(),
 			]
 			_self.Arrays.paramsArray[index] = [...arr];
-			$('.resultSelectLabel').removeClass('focus')
-			$('.resultSelectLabel').addClass('blur')
+			jQuery('.resultSelectLabel').removeClass('focus')
+			jQuery('.resultSelectLabel').addClass('blur')
 			console.log(_self.Arrays.paramsArray);
+		})
+		jQuery('.selectBtm').on('click', 'expend-quit', function () {
+			labelManage.classList.remove("focus");
+			labelManage.classList.add("blur");
 		})
 	}
 

@@ -1,286 +1,458 @@
 <!doctype html>
-<html lang="en">
+<html ng-app="app">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>微循环血管健康分析平台</title>
-    <link rel="Shortcut Icon" type="image/x-icon" href="favicon.ico">
-    <link rel="stylesheet" href="css/preloader.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/switch.css">
-    <link rel="stylesheet" href="css/button.css">
-    <link rel="stylesheet" href="css/toastr.css">
-    <link rel="stylesheet" href="js/jBox/jBox.all.css">
-    <!-- <link rel="stylesheet" href="css/calendar.css"> -->
-    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<!-- <link href="../../build/common/base.css" rel="stylesheet"> -->
+	<!-- <script type="text/javascript" src="../../build/common/base.js"></script> -->
+	<!-- <script type="text/javascript" src="../../build/common/ngEdit.js"></script> -->
+	<link rel="Shortcut Icon" type="image/x-icon" href="favicon.ico">
+	<link rel="stylesheet" href="css/preloader.css">
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/switch.css">
+	<link rel="stylesheet" href="css/button.css">
+	<link rel="stylesheet" href="css/toastr.css">
+	<link rel="stylesheet" href="js/jBox/jBox.all.css">
+	<link rel="stylesheet" href="layui/css/layui.css" media="all">
 </head>
+<!-- <script type="text/javascript">
+		var app = angular.module('app', ['baseDirective']);
+		app.controller("ctrl", [ '$scope', 'baseService' ,function($scope, baseService) {
+			 
+		}]);
+		
+		/* 获取URL表单的 JSON 数据  必须以 getData为方法名*/
+		function getData(){
+			let spwjid = document.getElementById("spwjid");
+			let jcsj = document.getElementById("jcsj");
+			let dtcs = document.getElementById("dtcs");
+			let dftpfx = document.getElementById("spwjid01");
+			let jcsjian = document.getElementById("jcsjian");
+			let pgjl = document.getElementById("alias");
+			let jkjy = document.getElementById("description");
+			return {
+				dcdtfx: {
+					dtcs: dtcs.value
+				},
+				dftpfx: dftpfx.value,
+				zdbg: {
+					zdbgDetail: {
+						jcsj: jcsjian.value,
+						jkjy: jkjy.value,
+						pgjl: pgjl.value
+					}
+				},
+				zdxx: {
+					spwjid: spwjid.value,
+					jcsj: jcsj.value
+				}
+			}
+		}
+		/* 获取URL表单的校验情况，必须以isValid 为方法名 */
+		function isValid(){
+			//校验表单 ab-validate的 校验
+			if(!ngUtil.getScope().form.$valid){
+				$.Dialog.error("表单校验不通过！");
+				return false;
+			}
 
-<body>
-    <div id='preloader'>
-        <div class='loader' hidden>
-            <img src='images/loader.gif' alt>
-        </div>
-    </div>
-    <div class="LabelImage">
-        <div class="toolHead">
-            <div class="toolMuster">
-                <div class="logoGroup">
-                    <div class="logo"></div>
-                    <div class="logoTitle">微循环血管健康分析平台</div>
-                </div>
-            </div>
-        </div>
-        <div class="canvasMain">
-            <!--标注功能工具集-->
-            <div class="toolFeatures">
-                <div class="assistFeatures">
-                    <p class="featureList screenFull" id="featureList1">
-                        <i class="bg hbg"></i>
-                    </p>
-                    <p class="featureList showHistory" id="featureList5">
-                        <i class="bg hbg history"></i>
-                    </p>
-                    <div class="featureList-video">
-                        <p class="featureList openVideo" id="featureList2">
-                            <input class="openVideoInput" type="file" id="video" name="video" hidden>
-                            <i class="bg hbg"></i>
-                        </p>
-                        <p class="featureList screen-shot-tool" id="btn-picshot">
-                            <i class="bg hbg"></i>
-                        </p>
-                    </div>
-                </div>
-                <div class="separator"></div>
-                <div id="tools">
-                    <div class="tools-up">
-                        <div class="toolSet-wrapper">
-                            <div class="toolSet toolDrag focus" id="tools-toolDrag"></div>
-                        </div>
-                        <div class="toolSet-wrapper">
-                            <div class="toolSet toolTagsManager" id="tools-toolTagsManager">
-                                <span class="icon-tags"></span>
-                            </div>
-                        </div>
-                        <div class="toolSet-wrapper">
-                            <div class="toolSet toolRect" id="tools-toolRect"></div>
-                        </div>
-                        <div class="toolSet-wrapper">
-                            <div class="toolSet toolPolygon" id="tools-toolPolygon"></div>
-                        </div>
-                        <div class="separator"></div>
-                    </div>
-                    <div class="toolSet-wrapper">
-                        <div class="toolSet returnVideo" id="tools-returnVideo"></div>
-                    </div>
-                </div>
-                <div class="version">v1.0.0</div>
-            </div>
-            <div class="canvasContent">
-                <div class="videoEdit">
-                    <div class="videoWrap">
-                        <div class="ins-arrow">
-                            <div class="arrow"></div>
-                            <div>点击该按钮导入视频</div>
-                        </div>
-                        <video id="video0" src="./video/1.mp4" controls="controls" controlsList="nodownload"
-                            disablePictureInPicture>
-                        </video>
-                    </div>
-                    <div id="picPre">
-                    </div>
-                    <div id="screenShot"></div>
-                </div>
-                <canvas id="canvas"></canvas>
-                <div class="scaleBox">
-                    <div class="scaleCanvas"></div>
-                    <div class="scalePanel"></div>
-                </div>
-                <div class="loading">
-                    <div class="loadEffect">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </div>
-            </div>
-            <div class="commentResult">
-                <div class="resultArea">
-                    <div class="title" id="title-analysis">
-                        <div>
-                            标注结果 (<span class="resultLength">0</span>)
-                        </div>
-                        <button class="analysis buttonBtm">血管分析</button>
-                    </div>
-                    <div class="resultList_head">
-                        <div class="headChildren">
-                            <div class="headName">名称</div>
-                            <div class="headEdit">修改</div>
-                            <div class="headDelete">删除</div>
-                            <div class="headDisplay">显/隐</div>
-                            <div class="featureList labelShower focus" id="featureList4">
-                                <input class="mui-switch mui-switch-anim" type="checkbox">
-                                <i class="bg"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="resultGroup">
-                    </div>
-                    <!--    选择标签操作    -->
-                    <div class="resultSelectLabel">
-                        <p class="selectLabelTip" hidden>请先创建标签</p>
-                        <ul class="selectLabel-ul">
-                        </ul>
-                        <div class="selectTable">
-                            <div>
-                                <label for="inflow">流入长度</label>
-                                <input type="text" id="inflow" autocomplete="off">
-                            </div>
-                            <div>
-                                <label for="inflow-len">流入直线长度</label>
-                                <input type="text" id="inflow-len" autocomplete="off">
-                            </div>
-                            <div>
-                                <label for="inflow-pipe">流入端管径</label>
-                                <input type="text" id="inflow-pipe" autocomplete="off">
-                            </div>
-                            <div>
-                                <label for="loop-pipe">袢顶管径</label>
-                                <input type="text" id="loop-pipe" autocomplete="off">
-                            </div>
-                            <div>
-                                <label for="outflow">流出长度</label>
-                                <input type="text" id="outflow" autocomplete="off">
-                            </div>
-                            <div>
-                                <label for="outflow-len">流出直线长度</label>
-                                <input type="text" id="outflow-len" autocomplete="off">
-                            </div>
-                            <div>
-                                <label for="outflow-pipe">流出端管径</label>
-                                <input type="text" id="outflow-pipe" autocomplete="off">
-                            </div>
-                            <div>
-                                <div><strong>单位是um</strong></div>
-                                <div class="select-btm">
-                                    <div class="closeBtn btm-primary expend expend-sure">确定</div>
-                                    <div class="closeBtn btm-default expend expend-quit">取消</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="closeLabelManage"><span class="icon-remove-sign"></span></div>
-                    </div>
-                </div>
-                <div class="scaleParams">
-                    <!-- <div>
-                        <span>血管参数平均值 ：</span>
-                        <span class="average">...</span>
-                    </div> -->
-                    <div>
-                        <span>流速白微栓参数 ：</span>
-                        <span id="baiweishuan">...</span>
-                    </div>
-                    <div>
-                        <span>流速 ：</span>
-                        <span id="speed">...</span>
-                    </div>
-                </div>
-                <div class="historyContent">
-                    <div class="title titleHistoryContent">
-                        <div>健康报告</div>
-                        <button class="buttonBtm btm-primary downloadReport">生成健康报告</button>
-                        <button class="buttonBtm btm-primary saveReport">保存结果</button>
-                    </div>
-                    <div id="editor">
-                        <div class="btn-form-report">
-                            <label class="control-label form-th-span" for="ng-inspect">检查所见</label>
-                            <textarea id="ng-inspect" class="form-control e-inspect editor-textarea"
-                                      type="text" cols="10" rows="5" placeholder="请输入内容"></textarea>
-                        </div>
-                        <div class="btn-form-report">
-                            <label class="control-label form-th-span" for="ng-eval">评估结论</label>
-                            <textarea id="ng-eval" class="form-control e-eval editor-textarea" type="text"
-                                      cols="10" rows="5" placeholder="请输入内容"></textarea>
-                        </div>
-                        <div class="btn-form-report">
-                            <label class="control-label form-th-span" for="ng-suggest">健康建议</label>
-                            <textarea id="ng-suggest" class="form-control e-suggest editor-textarea"
-                                      type="text" cols="10" rows="5" placeholder="请输入内容"></textarea>
-                        </div>
-                    </div>
-                </div>
+		}
+	</script> -->
 
-            </div>
+<body class="panel success" ng-controller="ctrl">
 
-            <!--  标签管理  -->
-            <div class="labelManage">
-                <div class="labelManage-Info">
-                    <div class="labelManage-menu">
-                        <div class="labelManage-search"><input type="text" class="labelSearch-input"
-                                placeholder="按回车搜索" /></div>
-                        <div class="labelManage-createLabel"><button
-                                class="button btn-primary labelManage-createButton">创建</button></div>
-                    </div>
-                    <div class="labelManage-subList">标签列表：</div>
-                    <div class="labelManage-group">
-                        <p class="labelTip" hidden>请先创建标签</p>
-                        <ul class="labelManage-ul">
-                        </ul>
-                    </div>
-                </div>
-                <div class="labelManage-create">
-                    <div class="labelManage-Title">创建标签</div>
-                    <div class="labelCreate labelCreate-name">
-                        <label>标签名称：</label>
-                        <input type="text" class="labelCreate-nameInput">
-                    </div>
-                    <div class="labelCreate labelCreate-color">
-                        <label>标签颜色：</label>
-                        <span class="colorPicker" id="colorPicker"></span>
-                        <input class="colorHex" id="colorHex" value="#ff0000" data-r="255" data-g="0" data-b="0"
-                            readonly>
-                    </div>
-                    <div class="labelCreate">
-                        <button class="button btn-error removeLabel" title="删除标签">删除</button>
-                    </div>
-                    <div class="labelCreateButtons">
-                        <button class="button btn-success addLabel">确定</button>
-                        <button class="button btn-default closeAdd">取消</button>
-                    </div>
-                </div>
-                <div class="closeLabelManage"><span class="icon-remove-sign"></span></div>
-            </div>
-        </div>
+	<div id='preloader'>
+		<div class='loader' hidden>
+			<img src='images/loader.gif' alt>
+		</div>
+	</div>
+	<div class="LabelImage">
+		<div class="toolHead">
+			<div class="toolMuster">
+				<div class="logoGroup">
+					<div class="logo"></div>
+					<div class="logoTitle">微循环血管健康分析平台</div>
+				</div>
+			</div>
+		</div>
+		<div class="canvasMain">
+			<!--标注功能工具集-->
+			<div class="toolFeatures">
+				<div class="assistFeatures">
+					<p class="featureList screenFull" id="featureList1">
+						<i class="bg hbg"></i>
+					</p>
+					<p class="featureList showHistory" id="featureList5">
+						<i class="bg hbg history"></i>
+					</p>
+					<div class="featureList-video">
+						<p class="featureList openVideo" id="featureList2">
+							<input class="openVideoInput" type="file" id="video" name="video" hidden>
+							<i class="bg hbg"></i>
+						</p>
+						<p class="featureList screen-shot-tool" id="btn-picshot">
+							<i class="bg hbg"></i>
+						</p>
+					</div>
+				</div>
+				<div class="separator"></div>
+				<div id="tools">
+					<div class="tools-up">
+						<div class="toolSet-wrapper">
+							<div class="toolSet toolDrag focus" id="tools-toolDrag"></div>
+						</div>
+						<div class="toolSet-wrapper">
+							<div class="toolSet toolTagsManager" id="tools-toolTagsManager">
+								<span class="icon-tags"></span>
+							</div>
+						</div>
+						<div class="toolSet-wrapper">
+							<div class="toolSet toolRect" id="tools-toolRect"></div>
+						</div>
+						<div class="separator"></div>
+					</div>
+					<div class="toolSet-wrapper toolSet-return">
+						<div class="toolSet returnVideo" id="tools-returnVideo"></div>
+					</div>
+				</div>
+				<div class="version">v1.0.0</div>
+			</div>
+			<div class="canvasContent">
+				<div class="videoEdit">
+					<div class="videoWrap">
+						<div class="ins-arrow">
+							<div class="arrow"></div>
+							<div>点击该按钮导入视频</div>
+						</div>
+						<video id="video0" src="./video/1.mp4" controls="controls" controlsList="nodownload"
+							disablePictureInPicture>
+						</video>
+					</div>
+					<div id="picPre">
 
-        <div class="mask_box" hidden></div>
-        <div class="loading_box" hidden id="loading">
-            <div class="loaderSpinner">
-                <span class="icon-spinner"></span>
-            </div>
-            <b class="closes"></b>
-        </div>
-    </div>
+						<!--  ab-load 去controller 层获取业务数据  -->
+						<!--						<form name="form" method="post" ng-model="data">-->
+						<!--							<table class="form-table">-->
+						<!--								<tr>-->
+						<!--									<th colspan="2">诊断信息部分</th>-->
+						<!--								</tr>-->
+						<!--								<tr>-->
+						<!--									<th><span>视频id：</span><span class="required">*</span></th>-->
+						<!--									<td>-->
+						<!--										<input class="form-control" id="spwjid"  type="text"  ng-model="data.zdxx.spwjid"  ab-validate="{required:true,maxlength:192}" />-->
+						<!--									</td>-->
+						<!--								</tr>-->
+						<!--								<tr>-->
+						<!--									<th><span>检查时间：</span><span class="required">*</span></th>-->
+						<!--									<td>-->
+						<!--										<input class="form-control" id="jcsj" type="text" ng-model="data.zdxx.jcsj"  ab-validate="{required:true,maxlength:192}"  />-->
+						<!--										2021-01-21 12:22:22-->
+						<!--									</td>-->
+						<!--								</tr>-->
+						<!--								<tr>-->
+						<!--									<th colspan="2">诊断报告部分</th>-->
+						<!--								</tr>-->
+						<!--								<tr>-->
+						<!--									<th><span>检查所见：</span></th>-->
+						<!--									<td>-->
+						<!--										<input class="form-control" type="text" id="jcsjian" ng-model="data.zdbg.zdbgDetail.jcsj" />-->
+						<!--									</td>-->
+						<!--								</tr>-->
+						<!--								<tr>-->
+						<!--									<th><span>评估结论：</span></th>-->
+						<!--									<td>-->
+						<!--										<input class="form-control" id="alias" type="text" ng-model="data.zdbg.zdbgDetail.pgjl"   />-->
+						<!--									</td>-->
+						<!--								</tr>-->
+						<!--								<tr>-->
+						<!--									<th><span>健康建议：</span></th>-->
+						<!--									<td>-->
+						<!--										<input class="form-control" id="description"  type="text"   ng-model="data.zdbg.zdbgDetail.jkjy" />-->
+						<!--									</td>-->
+						<!--								</tr>-->
+						<!--								<tr>-->
+						<!--									<th colspan="2">单次动态分析部分</th>-->
+						<!--								</tr>-->
+						<!--								<tr>-->
+						<!--									<th><span>动态参数：</span></th>-->
+						<!--									<td>-->
+						<!--										<input class="form-control" id="dtcs"  type="text"   ng-model="data.dcdtfx.dtcs" />-->
+						<!--									</td>-->
+						<!--								</tr>-->
+						<!--								<tr>-->
+						<!--									<th><span>单图片：</span></th>-->
+						<!--									<td>-->
+						<!--										<input class="form-control" id="spwjid01"  type="text"   ng-model="data.dftpfx"/>-->
+						<!--										输入值为json数组类型：[{"tpid":"121", "xgcspjz":"血管参数平均值", "dtpzdbg":"诊断报告","dftpdxgfxList":[{"xgwzzsj":"xgwzzsj", "xgwzyxjzb":"xgwzyxjzb", "cszfc":"cszfc"}]}]-->
+						<!--									</td>-->
+						<!--								</tr>-->
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-    <script src="layui/layui.js" charset="utf-8"></script>
-    <script src="js/toastr.min.js"></script>
-    <script src="js/VideoFrame.min.js"></script>
-    <script src="js/jBox/jBox.all.js"></script>
-    <!-- <script src="js/calendar.js"></script> -->
-    <script src="js/preloader.js"></script>
-    <script src="js/colorPicker/colorPicker.js"></script>
-    <script src="js/video.handle.js"></script>
-    <script src="js/webAnnotate.js"></script>
-    <script src="js/operator.js"></script>
-    <script src="js/jBox.operator.js"></script>
+						<!--								<tr>-->
+						<!--									<td colspan="2">-->
+						<!--										请参考  demoEdit.html , DemoManagerImpl <br>-->
+						<!--										关于流程 URL 表单帮助文档 https://agile-bpm.gitee.io/website/zh-cn/docs/flowConf.html-->
+						<!--									</td>-->
+						<!--								</tr>-->
+						<!--							</table>-->
+						<!--						</form>-->
+
+					</div>
+					<div id="screenShot"></div>
+				</div>
+				<canvas id="canvas"></canvas>
+				<div class="scaleBox">
+					<div class="scaleCanvas"></div>
+					<div class="scalePanel"></div>
+				</div>
+				<div class="loading">
+					<div class="loadEffect">
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+					</div>
+				</div>
+			</div>
+			<div class="commentResult">
+				<div class="resultArea">
+					<div class="title" id="title-analysis">
+						<div>
+							标注结果 (<span class="resultLength">0</span>)
+						</div>
+						<div class="analysis buttonBtm">血管分析</div>
+					</div>
+					<div class="resultList_head">
+						<div class="headChildren">
+							<div class="headName">名称</div>
+							<div class="headEdit">修改</div>
+							<div class="headDelete">删除</div>
+							<div class="headDisplay" id="showAllLabels">显/隐&nbsp;<i class="isShowLabel icon-eye-close"></i></div>
+						</div>
+					</div>
+					<div class="resultGroup">
+					</div>
+					<!--    选择标签操作    -->
+					<div class="resultSelectLabel">
+						<p class="selectLabelTip" hidden>请先创建标签</p>
+						<ul class="selectLabel-ul">
+						</ul>
+						<div class="selectTable">
+							<div>
+								<label for="inflow">流入长度</label>
+								<input type="text" id="inflow" autocomplete="off">
+							</div>
+							<div>
+								<label for="inflow-len">流入直线长度</label>
+								<input type="text" id="inflow-len" autocomplete="off">
+							</div>
+							<div>
+								<label for="inflow-pipe">流入端管径</label>
+								<input type="text" id="inflow-pipe" autocomplete="off">
+							</div>
+							<div>
+								<label for="loop-pipe">袢顶管径</label>
+								<input type="text" id="loop-pipe" autocomplete="off">
+							</div>
+							<div>
+								<label for="outflow">流出长度</label>
+								<input type="text" id="outflow" autocomplete="off">
+							</div>
+							<div>
+								<label for="outflow-len">流出直线长度</label>
+								<input type="text" id="outflow-len" autocomplete="off">
+							</div>
+							<div>
+								<label for="outflow-pipe">流出端管径</label>
+								<input type="text" id="outflow-pipe" autocomplete="off">
+							</div>
+							<div>
+								<div><strong>单位是um</strong></div>
+								<div class="select-btm">
+									<div class="closeBtn btm-primary expend expend-sure">确定</div>
+									<div class="closeBtn btm-default expend expend-quit">取消</div>
+								</div>
+							</div>
+						</div>
+						<div class="closeLabelManage"><span class="icon-remove-sign"></span></div>
+					</div>
+				</div>
+
+				<div id="article-parent">
+					<article class="scaleParams">
+						<header class="params-header">
+							<div>参数</div>
+						</header>
+						<div class="two_div first_ul params-content">
+							<div>
+								<span>血管参数平均值 ：</span>
+								<span class="average">...</span>
+							</div>
+							<div>
+								<span>流速白微栓参数 ：</span>
+								<span id="baiweishuan">...</span>
+							</div>
+							<div>
+								<span>流速 ：</span>
+								<span id="speed">...</span>
+							</div>
+						</div>
+					</article>
+
+					<article class="historyContent">
+						<header class="title titleHistoryContent">
+							<div>健康报告</div>
+							<div class="buttonBtm btm-primary downloadReport">生成健康报告</div>
+						</header>
+						<div id="editor" class="two_div two_ul">
+							<div class="btn-form-report">
+								<label class="control-label form-th-span" for="ng-inspect">检查所见</label>
+								<textarea id="ng-inspect" class="form-control e-inspect editor-textarea" type="text" cols="28" rows="5"
+									placeholder="请输入内容"></textarea>
+							</div>
+							<div class="btn-form-report">
+								<label class="control-label form-th-span" for="ng-eval">评估结论</label>
+								<textarea id="ng-eval" class="form-control e-eval editor-textarea" type="text" cols="28" rows="5"
+									placeholder="请输入内容"></textarea>
+							</div>
+							<div class="btn-form-report">
+								<label class="control-label form-th-span" for="ng-suggest">健康建议</label>
+								<textarea id="ng-suggest" class="form-control e-suggest editor-textarea" type="text" cols="28" rows="5"
+									placeholder="请输入内容"></textarea>
+							</div>
+						</div>
+					</article>
+
+					<article>
+						<header class="form-params">表单</header>
+						<div class="two_div last_ul">
+							<form name="form" method="post" ng-model="data">
+								<table class="form-table">
+									<tr>
+										<th class="th-header" colspan="2">诊断信息部分</th>
+									</tr>
+									<tr>
+										<th><span>视频id：</span><span class="required">*</span></th>
+										<td>
+											<input class="form-control" id="spwjid" type="text" ng-model="data.zdxx.spwjid" disabled="disabled"
+												ab-validate="{required:true,maxlength:192}" />
+										</td>
+									</tr>
+									<tr>
+										<th><span>检查时间：</span><span class="required">*</span></th>
+										<td>
+											<input class="form-control" id="jcsj" type="text" ng-model="data.zdxx.jcsj" disabled="disabled"
+												ab-validate="{required:true,maxlength:192}" />
+										</td>
+									</tr>
+									<tr>
+										<th class="th-header" colspan="2">诊断报告部分</th>
+									</tr>
+									<tr>
+										<th><span>检查所见：</span></th>
+										<td>
+											<input class="form-control" type="text" id="jcsjian" ng-model="data.zdbg.zdbgDetail.jcsj"
+											disabled="disabled" />
+										</td>
+									</tr>
+									<tr>
+										<th><span>评估结论：</span></th>
+										<td>
+											<input class="form-control" id="alias" type="text" ng-model="data.zdbg.zdbgDetail.pgjl"
+											disabled="disabled" />
+										</td>
+									</tr>
+									<tr>
+										<th><span>健康建议：</span></th>
+										<td>
+											<input class="form-control" id="description" type="text" ng-model="data.zdbg.zdbgDetail.jkjy"
+											disabled="disabled" />
+										</td>
+									</tr>
+									<tr>
+										<th class="th-header" colspan="2">单次动态分析部分</th>
+									</tr>
+									<tr>
+										<th><span>动态参数：</span></th>
+										<td>
+											<input class="form-control" id="dtcs" type="text" ng-model="data.dcdtfx.dtcs" disabled="disabled" />
+										</td>
+									</tr>
+									<tr>
+										<th><span>单图片参数：</span></th>
+										<td>
+											<input class="form-control" id="spwjid01" type="text" ng-model="data.dftpfx" disabled="disabled" />
+										</td>
+									</tr>
+								</table>
+							</form>
+						</div>
+					</article>
+				</div>
+			</div>
+
+			<!--  标签管理  -->
+			<div class="labelManage">
+				<div class="labelManage-Info">
+					<div class="labelManage-menu">
+						<div class="labelManage-search"><input type="text" class="labelSearch-input" placeholder="按回车搜索" /></div>
+						<div class="labelManage-createLabel"><button class="button btn-primary labelManage-createButton">创建</button>
+						</div>
+					</div>
+					<div class="labelManage-subList">标签列表：</div>
+					<div class="labelManage-group">
+						<p class="labelTip" hidden>请先创建标签</p>
+						<ul class="labelManage-ul">
+						</ul>
+					</div>
+				</div>
+				<div class="labelManage-create">
+					<div class="labelManage-Title">创建标签</div>
+					<div class="labelCreate labelCreate-name">
+						<label>标签名称：</label>
+						<input type="text" class="labelCreate-nameInput">
+					</div>
+					<div class="labelCreate labelCreate-color">
+						<label>标签颜色：</label>
+						<span class="colorPicker" id="colorPicker"></span>
+						<input class="colorHex" id="colorHex" value="#ff0000" data-r="255" data-g="0" data-b="0" readonly>
+					</div>
+					<div class="labelCreate">
+						<button class="button btn-error removeLabel" title="删除标签">删除</button>
+					</div>
+					<div class="labelCreateButtons">
+						<button class="button btn-success addLabel">确定</button>
+						<button class="button btn-default closeAdd">取消</button>
+					</div>
+				</div>
+				<div class="closeLabelManage"><span class="icon-remove-sign"></span></div>
+			</div>
+		</div>
+
+		<div class="mask_box" hidden></div>
+		<div class="loading_box" hidden id="loading">
+			<div class="loaderSpinner">
+				<span class="icon-spinner"></span>
+			</div>
+			<b class="closes"></b>
+		</div>
+	</div>
+
 </body>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="layui/layui.js" charset="utf-8"></script>
+<script src="js/toastr.min.js"></script>
+<script src="js/VideoFrame.min.js"></script>
+<script src="js/jBox/jBox.all.js"></script>
+<script src="js/preloader.js"></script>
+<script src="js/colorPicker/colorPicker.js"></script>
+<script src="js/webAnnotate.js"></script>
+<script src="js/operator.js"></script>
+<script src="js/video.handle.js"></script>
+<script src="js/jBox.operator.js"></script>
 
 </html>

@@ -20,6 +20,11 @@ const mapType = {
 	}
 }
 
+let labelsInit = `[{"labelName":"正常","labelColor":"#1cd622","labelColorR":"255","labelColorG":"0","labelColorB":"0"},{"labelName":"交叉一次","labelColor":"#2798e8","labelColorR":"255","labelColorG":"0","labelColorB":"0"},{"labelName":"畸形血管","labelColor":"#ff0000","labelColorR":"255","labelColorG":"0","labelColorB":"0"}]`;
+if (!localStorage.getItem("labels")) {
+	localStorage.setItem("labels", labelsInit);
+}
+
 // 设置画布宽高背景色
 canvas.width = canvas.clientWidth;
 canvas.height = canvas.clientHeight;
@@ -36,32 +41,23 @@ const annotate = new LabelImage({
 	colorHex: document.querySelector('#colorHex'),
 	toolTagsManager: document.querySelector('.toolTagsManager'),
 	history: document.querySelector('.history'),
-	dateInput: document.querySelector('#test1-btn'),
-	keyWordInput: document.querySelector('#test2-btn'),
+	// dateInput: document.querySelector('#test1-btn'),
+	// keyWordInput: document.querySelector('#test2-btn'),
+	labelsNode: document.querySelector('.headDisplay'),
+	// selectBtm: document.querySelector('.selectBtm')
 });
 
-const processIndex = document.querySelector('.processIndex');           // 当前标注进度
-const processSum = document.querySelector('.processSum');               // 当前标注任务总数
-
+let detectingImg = null;
 
 initState();
-// 初始化状态
 function initState() {
-	$('#canvas').css('display', 'none');
-	$('.scaleBox').css('display', 'none');
-	$('.videoEdit').css("display", "block");
-	$('#tools').hide();
-	// $('#video0').hide();
-	$('ins-arrow').hide();
-	$('.commentResult').hide();
-}
-
-function initEditor() {
-	let qlEditorContent = document.querySelector('.ql-editor');
-	let task = localStorage.getItem(taskName.innerText.split('.')[0]);
-	if (task) {
-		qlEditorContent.innerHTML = task;
-	}
+	jQuery('#canvas').css('display', 'none');
+	jQuery('.scaleBox').css('display', 'none');
+	jQuery('.videoEdit').css("display", "block");
+	jQuery('#tools').hide();
+	// jQuery('#video0').hide();
+	jQuery('ins-arrow').hide();
+	jQuery('.commentResult').hide();
 }
 
 //切换操作选项卡
@@ -78,9 +74,6 @@ tool.addEventListener('click', function (e) {
 		case e.target.className.indexOf('toolRect') > -1:  // 矩形
 			annotate.SetFeatures('rectOn', true);
 			break;
-		case e.target.className.indexOf('toolPolygon') > -1:  // 多边形
-			annotate.SetFeatures('polygonOn', true);
-			break;
 		case e.target.className.indexOf('toolTagsManager') > -1:  // 标签管理工具
 			annotate.SetFeatures('tagsOn', true);
 			break;
@@ -93,24 +86,32 @@ document.querySelector('.openVideo').addEventListener('click', function () {
 	document.querySelector('.openVideoInput').click()
 });
 
-//弹出框
-function openBox(e, isOpen) {
-	let el = document.querySelector(e);
-	let maskBox = document.querySelector('.mask_box');
-	if (isOpen) {
-		maskBox.style.display = "block";
-		el.style.display = "block";
-	}
-	else {
-		maskBox.style.display = "none";
-		el.style.display = "none";
+function debounce(func, wait, immediate) {
+	let timer;
+	return function () {
+		let context = this;
+		let args = arguments;
+		if (timer) clearTimeout(timer);
+		if (immediate) {
+			var callNow = !timer;
+			timer = setTimeout(() => {
+				timer = null;
+			}, wait)
+			if (callNow) func.apply(context, args)
+		} else {
+			timer = setTimeout(function () {
+				func.apply(context, args)
+			}, wait);
+		}
 	}
 }
 
-// openBox('#loading', true);
-
-$('.titleHistoryContent').on('click', '.downloadReport', function () {
+/**
+ * 生成健康报告
+ */
+jQuery('.titleHistoryContent').on('click', '.downloadReport', function () {
 	// let frame = annotate.Nodes.image.dataset.id;
+	let video = annotate.Nodes.video;
 	let obj = new Object();
 	obj["video"] = '133';
 	obj["frame"] = '3';
@@ -141,33 +142,13 @@ $('.titleHistoryContent').on('click', '.downloadReport', function () {
 	// }
 })
 
-function debounce(func, wait, immediate) {
-	let timer;
-	return function () {
-		let context = this;
-		let args = arguments;
-		if (timer) clearTimeout(timer);
-		if (immediate) {
-			var callNow = !timer;
-			timer = setTimeout(() => {
-				timer = null;
-			}, wait)
-			if (callNow) func.apply(context, args)
-		} else {
-			timer = setTimeout(function () {
-				func.apply(context, args)
-			}, wait);
-		}
-	}
-}
-
 
 /**
  * 4. 生成诊断报告
  * @param {*} json 
  */
 function buildReport(obj) {
-	$.ajax({
+	jQuery.ajax({
 		url: "http://ailw.xianglu-china.com/report/ReportGen",
 		type: "post",
 		dataType: 'JSON',
@@ -175,9 +156,9 @@ function buildReport(obj) {
 		success: (res) => {
 			if (res.report_gen_code === 2) {
 				let msg = "正在处理中......";
-				$('.e-inspect').text(msg);
-				$('.e-eval').text(msg);
-				$('.e-suggest').text(msg);
+				jQuery('.e-inspect').text(msg);
+				jQuery('.e-eval').text(msg);
+				jQuery('.e-suggest').text(msg);
 				setTimeout(() => {
 					getReport(obj["video"], obj["frame"])
 				}, 5000)
@@ -198,7 +179,7 @@ function getReport(param1, param2) {
 	let obj = new Object();
 	obj["video"] = param1;
 	obj["frame"] = param2;
-	$.ajax({
+	jQuery.ajax({
 		url: "http://ailw.xianglu-china.com/report/getReport",
 		type: "post",
 		dataType: 'JSON',
@@ -206,16 +187,19 @@ function getReport(param1, param2) {
 		success: (res) => {
 			if ((res.error_code === 0) || (res.error_code === 1)) {
 				let msg = "正在处理中......";
-				$('.e-inspect').text(msg);
-				$('.e-eval').text(msg);
-				$('.e-suggest').text(msg);
+				jQuery('.e-inspect').text(msg);
+				jQuery('.e-eval').text(msg);
+				jQuery('.e-suggest').text(msg);
 				setTimeout(() => {
 					getReport(obj["video"], obj["frame"]);
 				}, 10000)
 			} else if (res.error_code === 2) {
-				$('.e-inspect').text(res.inspect);
-				$('.e-eval').text(res.eval);
-				$('.e-suggest').text(res.suggest);
+				jQuery('.e-inspect').text(res.inspect);
+				jQuery('.e-eval').text(res.eval);
+				jQuery('.e-suggest').text(res.suggest);
+				jQuery("#jcsjian").val(res.inspect);  // 检查所见
+				jQuery("#alias").val(res.eval);   // 评估结论
+				jQuery("#description").val(res.suggest);  // 健康建议
 				toastr.success(`报告获取成功`);
 			}
 		},
@@ -225,33 +209,32 @@ function getReport(param1, param2) {
 	})
 }
 
-
-let detectingImg;
 // 血管检测
-$("#screenShot").on("click", ".anal-pic", function () {
-	let video = $('.pageName').text();
-	detectingImg = $($(this)[0].parentElement.parentElement.childNodes[0])[0];
+jQuery("#screenShot").on("click", ".anal-pic", function () {
+	let video = annotate.Nodes.video;
+	detectingImg = jQuery(jQuery(this)[0].parentElement.parentElement.childNodes[0])[0];
 	let frame = detectingImg.getAttribute('data-id');
-	$('.loading').show();
+	jQuery('.loading').show();
 	detecting('1.wmv', frame);
 	let ctxNode = canvas;
 	ctxNode.height = ctxNode.height;
 
-	$('#canvas').css('display', 'block');
-	$('.scaleBox').css('display', 'block');
-	$('.videoEdit').css("display", "none");
-	$('#tools').css('display', 'block');
-	$('.featureList-video').css("display", "none");
-	$('.commentResult').show();
+	jQuery('#canvas').css('display', 'block');
+	jQuery('.scaleBox').css('display', 'block');
+	jQuery('.videoEdit').css("display", "none");
+	jQuery('.featureList-video').css("display", "none");
+	jQuery('.commentResult').show();
 })
 
 // 血管分析
-$("#title-analysis").on("click", ".analysis", function () {
-	toastr.info(`正在分析，请稍后...`);
+jQuery("#title-analysis").on("click", ".analysis", debounce(analysisTitle))
+
+function analysisTitle() {
 	let xyData = annotate.Arrays.imageAnnotateMemory;
 	if (xyData.length) {
+		toastr.info("正在分析，请稍候...");
 		let temp = null;
-		// let video = $('.pageName').text();
+		// let video = annotate.Nodes.video;
 		let video = "1.wmv";
 		let frame = annotate.Nodes.image.dataset.id;
 		let xys = annotate.Arrays.imageAnnotateMemory.map(v => {
@@ -265,12 +248,14 @@ $("#title-analysis").on("click", ".analysis", function () {
 				analysis(video, frame, v[0], v[1], v[2], v[3], index);
 			}, 2000 * (1 + index / 5), video, frame, v)
 		})
+	} else {
+		toastr.warning("标注参数为0，无法分析，请先添加图片标注");
 	}
-})
+}
 
-$('.closeDiv').on('click', '.expend-quit', function () {
-	$('.resultSelectLabel').removeClass('focus')
-	$('.resultSelectLabel').addClass('blur')
+jQuery('.closeDiv').on('click', '.expend-quit', function () {
+	jQuery('.resultSelectLabel').removeClass('focus')
+	jQuery('.resultSelectLabel').addClass('blur')
 })
 
 /**
@@ -279,13 +264,13 @@ $('.closeDiv').on('click', '.expend-quit', function () {
  * @param {*} frame 
  */
 function detecting(video, frame) {
-	$.ajax({
+	jQuery.ajax({
 		url: "http://ailw.xianglu-china.com/vessel/vesselDet",
 		type: "get",
 		dataType: 'JSON',
 		data: { video, frame },
 		success: (res) => {
-			$('.loading').hide();
+			jQuery('.loading').hide();
 			let xys = res.xy.split("\n").filter(v => v).map(v => v.trim());
 			let datas = xys.map(v => v.split(' '));
 			let data = datas.map(v => {
@@ -328,8 +313,9 @@ function detecting(video, frame) {
 				}
 			})
 			annotate.SetImage(detectingImg, data);
-			$('#canvas').attr('data-id', detectingImg["data-id"]);
+			jQuery('#canvas').attr('data-id', detectingImg["data-id"]);
 			toastr.success(`图片分析成功`);
+			jQuery('#tools').css('display', 'block');
 		},
 		error: () => {
 			toastr.error(`图片分析失败`);
@@ -346,7 +332,7 @@ function detecting(video, frame) {
  */
 function analysis(video, frame, leftX, leftY, rightX, rightY, index) {
 	let xy = `${Math.round(leftX)}_${Math.round(leftY)}_${Math.round(rightX)}_${Math.round(rightY)}`;
-	$.ajax({
+	jQuery.ajax({
 		url: "http://ailw.xianglu-china.com/vessel/imgAna",
 		type: "get",
 		dataType: 'JSON',
@@ -371,7 +357,7 @@ function analysis(video, frame, leftX, leftY, rightX, rightY, index) {
  */
 
 function getImgData(video, frame, xy, index) {
-	$.ajax({
+	jQuery.ajax({
 		url: "http://ailw.xianglu-china.com/vessel/getImgData",
 		type: 'get',
 		dataType: 'json',
@@ -391,7 +377,6 @@ function getImgData(video, frame, xy, index) {
 			}
 		},
 		error: () => {
-
 			toastr.error(`第${index}个标注结果参数获取失败`);
 		}
 	})

@@ -21,48 +21,63 @@ new jBox('Mouse', {
 new jBox('Mouse', {
   attach: '#featureList2',
   position: { x: 'right', y: 'bottom' },
-  content: '导入视频'
-});
-
-new jBox('Mouse', {
-  attach: '#featureList4',
-  position: { x: 'right', y: 'bottom' },
-  content: '标注结果显示开关'
+  content: `
+            <strong>导入视频</strong>
+            <div>导入血管视频进行分析</div>
+          `
 });
 
 new jBox('Mouse', {
   attach: '#featureList5',
   position: { x: 'right', y: 'bottom' },
-  content: '查看历史记录'
+  content: `
+            <strong>查看历史记录</strong>
+            <div>通过搜索历史记录，重现当时的标注结果（结果不可编辑）</div>
+          `
 });
 
 new jBox('Mouse', {
   attach: '#btn-picshot',
   position: { x: 'right', y: 'bottom' },
-  content: '截图'
+  content: `
+            <strong>截图</strong>
+            <div>截图图片，进行检测</div>
+          `
 });
 
 
 new jBox('Mouse', {
   attach: '#tools-toolDrag',
   position: { x: 'right', y: 'bottom' },
-  content: '图片拖拽'
+  content: `
+            <strong>图片拖拽</strong>
+            <div>调整图片位置，滚动鼠标滑轮进行图片的放大与缩小</div>
+          `
 });
+
 new jBox('Mouse', {
   attach: '#tools-toolTagsManager',
   position: { x: 'right', y: 'bottom' },
-  content: '标签管理'
+  content: `
+            <strong>标签管理</strong>
+            <div>管理标签，进行标签的编辑</div>
+          `
 });
+
 new jBox('Mouse', {
   attach: '#tools-toolRect',
   position: { x: 'right', y: 'bottom' },
-  content: '矩形工具'
+  content: `
+            <strong>矩形工具</strong>
+            <div>点击矩形工具，对图片进行矩阵标注</div>
+          `
 });
+
 new jBox('Mouse', {
-  attach: '#tools-toolPolygon',
-  position: { x: 'right', y: 'bottom' },
-  content: '多边形工具'
-});
+  attach: '#showAllLabels',
+  position: { x: 'left', y: 'bottom' },
+  content: "控制所有的标注结果显示/隐藏标签"
+})
 
 new jBox('Mouse', {
   attach: '#tools-returnVideo',
@@ -96,9 +111,6 @@ new jBox('Modal', {
   reposition: false,
   repositionOnOpen: false
 });
-
-
-
 
 layui.use('laydate', function () {
   var laydate = layui.laydate;
