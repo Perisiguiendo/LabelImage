@@ -102,11 +102,11 @@
 						<div class="toolSet-wrapper">
 							<div class="toolSet toolDrag focus" id="tools-toolDrag"></div>
 						</div>
-						<div class="toolSet-wrapper">
+						<!-- <div class="toolSet-wrapper">
 							<div class="toolSet toolTagsManager" id="tools-toolTagsManager">
 								<span class="icon-tags"></span>
 							</div>
-						</div>
+						</div> -->
 						<div class="toolSet-wrapper">
 							<div class="toolSet toolRect" id="tools-toolRect"></div>
 						</div>
@@ -238,7 +238,6 @@
 					</div>
 					<!--    选择标签操作    -->
 					<div class="resultSelectLabel">
-						<p class="selectLabelTip" hidden>请先创建标签</p>
 						<ul class="selectLabel-ul">
 						</ul>
 						<div class="selectTable">
@@ -257,14 +256,6 @@
 							<div>
 								<label for="loop-pipe">袢顶管径</label>
 								<input type="text" id="loop-pipe" autocomplete="off">
-							</div>
-							<div>
-								<label for="outflow">流出长度</label>
-								<input type="text" id="outflow" autocomplete="off">
-							</div>
-							<div>
-								<label for="outflow-len">流出直线长度</label>
-								<input type="text" id="outflow-len" autocomplete="off">
 							</div>
 							<div>
 								<label for="outflow-pipe">流出端管径</label>
@@ -327,7 +318,7 @@
 						</div>
 					</article>
 
-					<article>
+					<!-- <article>
 						<header class="form-params">表单</header>
 						<div class="two_div last_ul">
 							<form name="form" method="post" ng-model="data">
@@ -391,47 +382,9 @@
 								</table>
 							</form>
 						</div>
-					</article>
+					</article> -->
 				</div>
 			</div>
-
-			<!--  标签管理  -->
-			<div class="labelManage">
-				<div class="labelManage-Info">
-					<div class="labelManage-menu">
-						<div class="labelManage-search"><input type="text" class="labelSearch-input" placeholder="按回车搜索" /></div>
-						<div class="labelManage-createLabel"><button class="button btn-primary labelManage-createButton">创建</button>
-						</div>
-					</div>
-					<div class="labelManage-subList">标签列表：</div>
-					<div class="labelManage-group">
-						<p class="labelTip" hidden>请先创建标签</p>
-						<ul class="labelManage-ul">
-						</ul>
-					</div>
-				</div>
-				<div class="labelManage-create">
-					<div class="labelManage-Title">创建标签</div>
-					<div class="labelCreate labelCreate-name">
-						<label>标签名称：</label>
-						<input type="text" class="labelCreate-nameInput">
-					</div>
-					<div class="labelCreate labelCreate-color">
-						<label>标签颜色：</label>
-						<span class="colorPicker" id="colorPicker"></span>
-						<input class="colorHex" id="colorHex" value="#ff0000" data-r="255" data-g="0" data-b="0" readonly>
-					</div>
-					<div class="labelCreate">
-						<button class="button btn-error removeLabel" title="删除标签">删除</button>
-					</div>
-					<div class="labelCreateButtons">
-						<button class="button btn-success addLabel">确定</button>
-						<button class="button btn-default closeAdd">取消</button>
-					</div>
-				</div>
-				<div class="closeLabelManage"><span class="icon-remove-sign"></span></div>
-			</div>
-		</div>
 
 		<div class="mask_box" hidden></div>
 		<div class="loading_box" hidden id="loading">
@@ -444,7 +397,6 @@
 
 </body>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-<script src="layui/layui.js" charset="utf-8"></script>
 <script src="js/toastr.min.js"></script>
 <script src="js/VideoFrame.min.js"></script>
 <script src="js/jBox/jBox.all.js"></script>
@@ -453,6 +405,8 @@
 <script src="js/webAnnotate.js"></script>
 <script src="js/operator.js"></script>
 <script src="js/video.handle.js"></script>
+<script src="js/laydate/laydate.js"></script>
 <script src="js/jBox.operator.js"></script>
+
 
 </html>

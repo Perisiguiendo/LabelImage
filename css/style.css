@@ -515,7 +515,7 @@ body, html {
 
 .toolSet-return {
     position: absolute;
-    bottom: 500px
+    margin-top: 30%;
 }
 
 .canvasMain .canvasContent {
@@ -574,7 +574,7 @@ body, html {
     position: relative;
     width: 100%;
     flex: 1;
-    height: 0;
+    height: 50%;
     display: flex;
     flex-direction: column;
 }
@@ -636,7 +636,7 @@ body, html {
     cursor: pointer;
 }
 
-.resultList_head .headDelete .commentResult .resultArea .resultGroup {
+.commentResult .resultArea .resultGroup {
     flex: auto;
     height: 0;
     overflow-y: auto;
@@ -733,7 +733,7 @@ body, html {
     top: 80px;
     right: 70px;
     width: 270px;
-    height: 334px;
+    height: 280px;
     padding: 18px 6px 8px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -749,11 +749,6 @@ body, html {
     opacity: 0;
     visibility: hidden;
     font-size: 12px;
-}
-
-.commentResult .resultArea .resultSelectLabel .selectLabelTip {
-    font-size: 14px;
-    text-align: center;
 }
 
 .commentResult .resultArea .resultSelectLabel .selectLabel-ul {
@@ -951,257 +946,6 @@ body, html {
     color: rgb(148, 148, 148);
 }
 
-.labelManage {
-    position: absolute;
-    top: 195px;
-    left: 75px;
-    width: 300px;
-    height: 340px;
-    padding: 24px 6px 8px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    background: #fff;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    -webkit-box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.3);
-    -moz-box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.3);
-    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.3);
-    z-index: 999999;
-    opacity: 0;
-    visibility: hidden;
-}
-
-.labelManage .labelManage-Info {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.labelManage .labelManage-Info .labelManage-menu {
-    width: 100%;
-    display: flex;
-}
-
-.labelManage-menu .labelManage-search {
-    flex: 9;
-}
-
-.labelManage-menu .labelManage-search .labelSearch-input {
-    width: 100%;
-    height: 30px;
-    text-indent: 8px;
-    border: 1px solid #e1e1e1;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-.labelManage-menu .labelManage-createLabel {
-    flex: 3;
-    text-align: center;
-    line-height: 30px;
-}
-
-.labelManage-Info .labelManage-subList {
-    font-size: 12px;
-    margin-top: 10px;
-}
-
-.labelManage-Info .labelManage-group {
-    width: 100%;
-    margin-top: 10px;
-    flex: auto;
-}
-
-.labelManage-Info .labelManage-group .labelTip {
-    text-align: center;
-    font-size: 14px;
-}
-
-.labelManage-Info .labelManage-group .labelManage-ul {
-    height: 100%;
-    overflow-y: auto;
-}
-
-.labelManage-Info .labelManage-group .labelManage-ul li {
-    display: inline-block;
-    position: relative;
-    vertical-align: top;
-    -webkit-border-radius: 50px;
-    -moz-border-radius: 50px;
-    border-radius: 50px;
-    border: 1px solid #999;
-    padding: 3px 6px;
-    margin: 4px 4px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    font-size: 12px;
-    cursor: pointer;
-    -webkit-transition: 0.3s;
-    -moz-transition: 0.3s;
-    -ms-transition: 0.3s;
-    -o-transition: 0.3s;
-    transition: 0.3s;
-}
-
-.labelManage .labelManage-create {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    display: none;
-}
-
-.labelManage .labelManage-create .labelManage-Title {
-    font-size: 1.875rem;
-}
-
-.labelManage .labelManage-create .labelCreate {
-    margin-top: 1.25rem;
-}
-
-.labelManage .labelManage-create .labelCreate label {
-    width: 80px;
-    text-align: right;
-    font-size: 14px;
-    line-height: 30px;
-    font-weight: normal;
-}
-
-.labelManage .labelManage-create .labelCreate .labelCreate-nameInput {
-    width: 195px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    border: 1px solid #e1e1e1;
-    font-size: 14px;
-    height: 30px;
-    text-indent: 8px;
-}
-
-.labelManage .labelManage-create .labelCreate .colorPicker {
-    display: inline-block;
-    vertical-align: top;
-    width: 20px;
-    height: 20px;
-    background: #ff0000;
-    cursor: pointer;
-    margin-top: 5px;
-}
-
-.labelManage .labelManage-create .labelCreate .colorHex {
-    height: 26px;
-    width: 60px;
-    font-size: 12px;
-    margin-left: 8px;
-    outline: none;
-}
-
-.labelManage .labelManage-create .labelCreateButtons {
-    margin-top: 50px;
-    text-align: center;
-}
-
-.labelManage .labelManage-create .labelCreateButtons button {
-    margin: 0 10px;
-}
-
-.labelManage .closeLabelManage {
-    position: absolute;
-    top: 0;
-    right: 4px;
-    font-size: 18px;
-    cursor: pointer;
-    transition: visibility 1s;
-}
-
-.labelManage.focus {
-    -webkit-animation: showLabelManage 0.4s ease-out forwards;
-    -o-animation: showLabelManage 0.4s ease-out forwards;
-    animation: showLabelManage 0.4s ease-out forwards;
-    visibility: visible;
-}
-
-.labelManage.blur {
-    -webkit-animation: hideLabelManage 0.4s ease-out forwards;
-    -o-animation: hideLabelManage 0.4s ease-out forwards;
-    animation: hideLabelManage 0.4s ease-out forwards;
-    visibility: hidden;
-}
-
-@keyframes showLabelManage {
-    from {
-        opacity: 0;
-        top: 257px;
-    }
-    to {
-        opacity: 1;
-        top: 242px;
-    }
-}
-
-@-webkit-keyframes showLabelManage {
-    from {
-        opacity: 0;
-        top: 257px;
-    }
-    to {
-        opacity: 1;
-        top: 242px;
-    }
-}
-
-@keyframes hideLabelManage {
-    from {
-        opacity: 1;
-        top: 242px;
-    }
-    to {
-        opacity: 0;
-        top: 257px;
-        visibility: hidden;
-    }
-}
-
-@-webkit-keyframes hideLabelManage {
-    from {
-        opacity: 1;
-        top: 242px;
-    }
-    to {
-        opacity: 0;
-        top: 257px;
-        visibility: hidden;
-    }
-}
-
-.LabelImage .canvasMain .labelManage::before {
-    content: '';
-    display: block;
-    position: absolute;
-    top: 15px;
-    left: -10px;
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-    border-right: 10px solid #f1f1f1;
-}
-
-.LabelImage .canvasMain .labelManage::after {
-    content: '';
-    display: block;
-    position: absolute;
-    top: 15px;
-    left: -9px;
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-    border-right: 10px solid #fff;
-}
-
 .buttonBtm {
     height: 98%;
     line-height: 35px;
@@ -1301,10 +1045,10 @@ body, html {
     height: 50%;
     background: rgba(0, 0, 0, 0.5);
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    overflow-x: auto;
-    padding: 10px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    overflow-y: scroll;
+    padding: 40px 0 0 40px;
     flex-shrink: 0;
     box-sizing: border-box;
 }
@@ -1320,14 +1064,14 @@ body, html {
 }
 
 .screenShotPic {
-    width: 510px;
-    height: 280px;
+    width: 340px;
+    height: 200px;
     object-fit: cover;
 }
 
 .pic-item {
     position: relative;
-    margin-right: 10px;
+    margin: 0 20px 20px 0;
 }
 
 .pic-item button {
@@ -1462,6 +1206,10 @@ input[type=file] {
     手风琴
     */
 
+#article-parent {
+    height: 50%;
+}
+
 #article-parent article {
     overflow: hidden;
 }
@@ -1491,15 +1239,11 @@ input[type=file] {
 }
 
 .two_div {
-    height: 300px;
+    /* height: 320px; */
     background-color: #293245;
 }
 
 .two_ul {
-    display: none;
-}
-
-.last_ul {
     display: none;
 }
 
@@ -1552,10 +1296,6 @@ input[type=file] {
     text-align: center;
 }
 
-.last_ul {
-    overflow-y: scroll;
-}
-
 .form-table th {
     color: #fff;
     font-weight: 400;
@@ -1585,12 +1325,12 @@ input[type=file] {
     display: inline-block;
 }
 
-.last_ul::-webkit-scrollbar, #editor::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-}
-
-.last_ul::-webkit-scrollbar-thumb, #editor::-webkit-scrollbar-thumb {
-    background-color: #a1a3a9;
-    border-radius: 10px;
+#test1 {
+    padding-left: 10px;
+    height: 38px;
+    min-width: 262px;
+    line-height: 38px;
+    border: 1px solid #e6e6e6;
+    background-color: #fff;
+    border-radius: 2px;
 }

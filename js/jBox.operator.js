@@ -45,22 +45,12 @@ new jBox('Mouse', {
           `
 });
 
-
 new jBox('Mouse', {
   attach: '#tools-toolDrag',
   position: { x: 'right', y: 'bottom' },
   content: `
             <strong>图片拖拽</strong>
             <div>调整图片位置，滚动鼠标滑轮进行图片的放大与缩小</div>
-          `
-});
-
-new jBox('Mouse', {
-  attach: '#tools-toolTagsManager',
-  position: { x: 'right', y: 'bottom' },
-  content: `
-            <strong>标签管理</strong>
-            <div>管理标签，进行标签的编辑</div>
           `
 });
 
@@ -97,7 +87,7 @@ new jBox('Modal', {
     <div class="history-modal">
     <div class="history-query">
       <label class="history-label">日期</label>
-      
+      <input type="text" class="demo-input" placeholder="请选择日期" id="test1">
     </div>
     <div class="history-query">
       <label class="history-label">关键字</label>
@@ -112,10 +102,7 @@ new jBox('Modal', {
   repositionOnOpen: false
 });
 
-layui.use('laydate', function () {
-  var laydate = layui.laydate;
-  //常规用法
-  laydate.render({
-    elem: '#test1'
-  });
+
+laydate.render({
+  elem: '#test1' //指定元素
 });

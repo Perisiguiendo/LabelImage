@@ -20,11 +20,6 @@ const mapType = {
 	}
 }
 
-let labelsInit = `[{"labelName":"正常","labelColor":"#1cd622","labelColorR":"255","labelColorG":"0","labelColorB":"0"},{"labelName":"交叉一次","labelColor":"#2798e8","labelColorR":"255","labelColorG":"0","labelColorB":"0"},{"labelName":"畸形血管","labelColor":"#ff0000","labelColorR":"255","labelColorG":"0","labelColorB":"0"}]`;
-if (!localStorage.getItem("labels")) {
-	localStorage.setItem("labels", labelsInit);
-}
-
 // 设置画布宽高背景色
 canvas.width = canvas.clientWidth;
 canvas.height = canvas.clientHeight;
@@ -39,10 +34,8 @@ const annotate = new LabelImage({
 	resultGroup: resultGroup,
 	screenFull: document.querySelector('.screenFull'),
 	colorHex: document.querySelector('#colorHex'),
-	toolTagsManager: document.querySelector('.toolTagsManager'),
 	history: document.querySelector('.history'),
 	labelsNode: document.querySelector('.headDisplay'),
-	// selectBtm: document.querySelector('.selectBtm')
 });
 
 let detectingImg = null;
@@ -71,9 +64,6 @@ tool.addEventListener('click', function (e) {
 			break;
 		case e.target.className.indexOf('toolRect') > -1:  // 矩形
 			annotate.SetFeatures('rectOn', true);
-			break;
-		case e.target.className.indexOf('toolTagsManager') > -1:  // 标签管理工具
-			annotate.SetFeatures('tagsOn', true);
 			break;
 		default:
 			break;

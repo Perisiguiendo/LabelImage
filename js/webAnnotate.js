@@ -1,7 +1,6 @@
 /*
 		Canvas handle 主函数
  */
-
 class LabelImage {
 	constructor(options) {
 		// 画布宽度
@@ -48,54 +47,36 @@ class LabelImage {
 		this.rectY = 0;
 		// 绘制多边形的圆点半径
 		this.radius = 6;
-
 		// 绘制线段宽度
 		this.lineWidth = 1;
-
 		//绘制区域模块透明度
 		this.opacity = 0.1;
-
 		// 定时器
 		this.timer = null;
-
 		// 结果是否被修改
 		this.isModify = false;
-
 		// 是否全屏
 		this.isFullScreen = false;
-
 		// 是否移动图像标注圆点
 		this.isDrogCircle = false;
-
 		// 当前点击圆点index
 		this.snapCircleIndex = 0;
-
 		// 用于在拖拽或者缩放时，让绘制至存储面板的数据，只绘制一次
 		this.drawFlag = true;
-
 		// 监听滚动条缩放是否结束的定时器
 		this.mousewheelTimer = null;
 
-		// 历史记录下标
-		// this.historyIndex = 0;
-
 		this.Arrays = {
-
 			// 标定历史保存标签记录
 			history: [],
-
 			// 图片标注展示数据集
 			imageAnnotateShower: [],
-
 			// 图片标注存储数据集
 			imageAnnotateMemory: [],
-
 			// 标注集操作 result list index
 			resultIndex: 0,
-
 			// 参数集合
 			paramsArray: [],
-
 		};
 		this.Nodes = {
 			// 视频节点
@@ -128,11 +109,9 @@ class LabelImage {
 			colorHex: options.colorHex,
 			// 清空标注内容
 			// clearScreen: options.clearScreen,
-			// 标签管理
-			toolTagsManager: options.toolTagsManager,
 			// 历史按钮
 			history: options.history,
-
+			// 参数编辑框
 			labelsNode: options.labelsNode,
 			// 当前点击修改的index
 			resultListIndex: 0,
@@ -142,8 +121,6 @@ class LabelImage {
 			dragOn: true,
 			// 矩形标注开关
 			rectOn: false,
-			// 标签管理工具
-			tagsOn: false,
 			// 标注结果显示
 			labelOn: false,
 		};
@@ -169,7 +146,6 @@ class LabelImage {
 		document.addEventListener('msfullscreenchange', this.ScreenViewChange);
 		_nodes.canvas.addEventListener('mousemove', this.CanvasMouseMove);
 		_nodes.resultGroup.addEventListener('mouseover', this.ResultListOperation);
-		_nodes.toolTagsManager.addEventListener('click', this.ManageLabels);
 		_nodes.labelsNode.addEventListener('click', this.showAllLabels);
 		this.changeInputVal();
 	};
@@ -566,7 +542,6 @@ class LabelImage {
 		}
 		this.UpdateCanvas();
 		!isRender && this.DrawSavedAnnotateInfoToShow();
-
 	};
 
 	//----圆点拖拽事件，并且重新绘制边缘轨迹点
@@ -827,47 +802,62 @@ class LabelImage {
 		let resultSelectLabel = document.querySelector('.resultSelectLabel');
 		let selectLabelUL = resultSelectLabel.querySelector('.selectLabel-ul');  //标签选择UL
 		let closeLabel = resultSelectLabel.querySelector('.closeLabelManage');
-		let selectLabelTip = resultSelectLabel.querySelector('.selectLabelTip');
 		//加载标签数据
 		selectLabelUL.innerHTML = "";
-		let labels = !localStorage.getItem("labels") ? [] : JSON.parse(localStorage.getItem("labels"));
-		if (labels.length > 0) {
-			selectLabelTip.style.display = "none";
-			let fragment = document.createDocumentFragment();
-			labels.forEach((item, index) => {
-				let labelLi = document.createElement("li");
-				labelLi.innerText = item.labelName;
-				labelLi.value = item.labelColor;
-				labelLi.setAttribute("data-index", index);
-				labelLi.setAttribute("data-r", item.labelColorR);
-				labelLi.setAttribute("data-g", item.labelColorG);
-				labelLi.setAttribute("data-b", item.labelColorB);
+		let labels = [
+			{
+				labelName: "正常",
+				labelColor: "#1cd622",
+				labelColorR: "255",
+				labelColorG: "0",
+				labelColorB: "0"
+			}, {
+				labelName: "交叉一次",
+				labelColor: "#2798e8",
+				labelColorR: "255",
+				labelColorG: "0",
+				labelColorB: "0"
+			}, {
+				labelName: "畸形血管",
+				labelColor: "#ff0000",
+				labelColorR: "255",
+				labelColorG: "0",
+				labelColorB: "0"
+			}
+		];
+
+		let fragment = document.createDocumentFragment();
+		labels.forEach((item, index) => {
+			let labelLi = document.createElement("li");
+			labelLi.innerText = item.labelName;
+			labelLi.value = item.labelColor;
+			labelLi.setAttribute("data-index", index);
+			labelLi.setAttribute("data-r", item.labelColorR);
+			labelLi.setAttribute("data-g", item.labelColorG);
+			labelLi.setAttribute("data-b", item.labelColorB);
+			labelLi.style.color = item.labelColor;
+			labelLi.style.borderColor = item.labelColor;
+			fragment.appendChild(labelLi);
+			labelLi.onmouseover = function () {
+				labelLi.style.color = "#fff";
+				labelLi.style.background = item.labelColor;
+			};
+			labelLi.onmouseleave = function () {
 				labelLi.style.color = item.labelColor;
-				labelLi.style.borderColor = item.labelColor;
-				fragment.appendChild(labelLi);
-				labelLi.onmouseover = function () {
-					labelLi.style.color = "#fff";
-					labelLi.style.background = item.labelColor;
-				};
-				labelLi.onmouseleave = function () {
-					labelLi.style.color = item.labelColor;
-					labelLi.style.background = "transparent";
-				};
-				labelLi.onclick = function () {
-					_self.Arrays.imageAnnotateShower[resultIndex].labels.labelName = item.labelName;
-					_self.Arrays.imageAnnotateShower[resultIndex].labels.labelColor = item.labelColor;
-					_self.Arrays.imageAnnotateShower[resultIndex].labels.labelColorRGB = item.labelColorR + "," + item.labelColorG + "," + item.labelColorB;
-					resultSelectLabel.classList.remove("focus");
-					resultSelectLabel.classList.add("blur");
-					_self.Arrays.resultIndex = 0;
-					_self.RepaintResultList();
-				};
-			});
-			selectLabelUL.appendChild(fragment);
-		}
-		else {
-			selectLabelTip.style.display = "block";
-		}
+				labelLi.style.background = "transparent";
+			};
+			labelLi.onclick = function () {
+				_self.Arrays.imageAnnotateShower[resultIndex].labels.labelName = item.labelName;
+				_self.Arrays.imageAnnotateShower[resultIndex].labels.labelColor = item.labelColor;
+				_self.Arrays.imageAnnotateShower[resultIndex].labels.labelColorRGB = item.labelColorR + "," + item.labelColorG + "," + item.labelColorB;
+				resultSelectLabel.classList.remove("focus");
+				resultSelectLabel.classList.add("blur");
+				_self.Arrays.resultIndex = 0;
+				_self.RepaintResultList();
+			};
+		});
+		selectLabelUL.appendChild(fragment);
+
 		// 判断是否显示标签管理
 		if (resultSelectLabel.className.indexOf("focus") === -1) {
 			resultSelectLabel.classList.remove("blur");
@@ -891,8 +881,6 @@ class LabelImage {
 		jQuery('#inflow-len').val(arr[1]);
 		jQuery('#inflow-pipe').val(arr[2]);
 		jQuery('#loop-pipe').val(arr[3]);
-		jQuery('#outflow').val(arr[4])
-		jQuery('#outflow-len').val(arr[5]);
 		jQuery('#outflow-pipe').val(arr[6]);
 	}
 
@@ -908,192 +896,17 @@ class LabelImage {
 				jQuery('#inflow-len').val(),
 				jQuery('#inflow-pipe').val(),
 				jQuery('#loop-pipe').val(),
-				jQuery('#outflow').val(),
-				jQuery('#outflow-len').val(),
 				jQuery('#outflow-pipe').val(),
 			]
 			_self.Arrays.paramsArray[resultListIndex] = [...arr];
 			resultSelectLabel.classList.remove("focus");
 			resultSelectLabel.classList.add("blur");
+			toastr.success("参数修改成功");
 		}
 		expendQuit.onclick = function () {
 			resultSelectLabel.classList.remove("focus");
 			resultSelectLabel.classList.add("blur");
 		}
-	}
-
-	//----标签管理
-	ManageLabels = () => {
-		let labelSearch = document.querySelector('.labelSearch-input');  // 标签搜索
-		let labelManage = document.querySelector('.labelManage');   // 标签管理父节点
-		let closeLabel = labelManage.querySelector('.closeLabelManage');  // 关闭标签管理窗口节点
-		let labelManegeUL = labelManage.querySelector(".labelManage-ul");  // 标签管理列表父节点
-		let labelManageInfo = labelManage.querySelector(".labelManage-Info");  // 标签列表模块
-		let labelManageCreateInfo = labelManage.querySelector(".labelManage-create");   // 标签编辑模块
-		let addLabel = labelManage.querySelector('.addLabel'); // 添加标签按钮
-		let addLabelName = labelManage.querySelector('.labelCreate-nameInput');
-		let addLabelColor = labelManage.querySelector('#colorHex');
-		let labelManageCreate = labelManage.querySelector('.labelManage-createButton');  // 添加标签节点
-		let closeAdd = labelManage.querySelector('.closeAdd'); // 取消添加标签
-		let removeLabel = labelManage.querySelector('.removeLabel'); // 删除标签
-		let colorPicker = labelManage.querySelector('#colorPicker'); // 选取颜色模块
-		let labelTip = labelManage.querySelector('.labelTip');  // 标签提示
-		let input = document.getElementById('colorHex');
-		let labelManageTitle = document.querySelector('.labelManage-Title');
-		let flag = false;
-		let flagIndex = 0;
-		let labels = !localStorage.getItem("labels") ? [] : JSON.parse(localStorage.getItem("labels"));
-		if (labels.length > 0) {
-			eachLabels(labels)
-		}
-		else {
-			labelTip.style.display = "block";
-		}
-		function eachLabels(labelList) {
-			//加载标签数据
-			labelTip.style.display = "none";
-			labelManegeUL.innerHTML = "";
-			let fragment = document.createDocumentFragment();
-			labelList.forEach((item, index) => {
-				let labelLi = document.createElement("li");
-				labelLi.innerText = item.labelName;
-				labelLi.value = item.labelColor;
-				labelLi.setAttribute("data-index", index);
-				labelLi.setAttribute("data-r", item.labelColorR);
-				labelLi.setAttribute("data-g", item.labelColorG);
-				labelLi.setAttribute("data-b", item.labelColorB);
-				labelLi.style.color = item.labelColor;
-				labelLi.style.borderColor = item.labelColor;
-				fragment.appendChild(labelLi);
-
-				labelLi.onmouseover = function () {
-					labelLi.style.color = "#fff";
-					labelLi.style.background = item.labelColor;
-				};
-				labelLi.onmouseleave = function () {
-					labelLi.style.color = item.labelColor;
-					labelLi.style.background = "transparent";
-				};
-				labelLi.onclick = function () {
-					addLabelName.value = item.labelName;
-					colorPicker.style.background = item.labelColor;
-					input.value = item.labelColor;
-					flag = true;
-					flagIndex = index;
-					labelManageTitle.innerText = "编辑标签";
-					labelManageInfo.style.display = "none";
-					labelManageCreateInfo.style.display = "block";
-					removeLabel.style.display = "block";
-				};
-			});
-			labelManegeUL.appendChild(fragment);
-		}
-
-		// 添加标签事件
-		labelManageCreate.onclick = function () {
-			flag = false;
-			labelManageTitle.innerText = "创建标签";
-			addLabelName.value = "";
-			labelManageInfo.style.display = "none";
-			labelManageCreateInfo.style.display = "block";
-			removeLabel.style.display = "none";
-		};
-
-		closeAdd.onclick = function () {
-			labelManageInfo.style.display = "block";
-			labelManageCreateInfo.style.display = "none";
-			eachLabels(labels)
-		};
-
-		removeLabel.onclick = function () {
-			if (confirm('确定删除 "' + addLabelName.value + '" 标签吗？')) {
-				labelManageInfo.style.display = "block";
-				labelManageCreateInfo.style.display = "none";
-				labels.splice(flagIndex, 1);
-				localStorage.setItem('labels', JSON.stringify(labels));
-				eachLabels(labels);
-			}
-		};
-
-		colorPicker.onclick = function () {
-			let colorDiv = document.querySelector('.colorDiv');
-			if (!colorDiv) {
-				Colorpicker.create({
-					bindClass: 'colorPicker',
-					change: function (elem, hex, rgb) {
-						elem.style.backgroundColor = hex;
-						input.value = hex;
-						input.setAttribute('data-r', rgb.r);
-						input.setAttribute('data-g', rgb.g);
-						input.setAttribute('data-b', rgb.b);
-					}
-				});
-				document.querySelector('.colorDiv').style.display = "block";
-			}
-		};
-
-
-		addLabel.onclick = function () {
-			if (!!addLabelName.value) {
-				if (flag) {
-					labels[flagIndex].labelName = addLabelName.value;
-					labels[flagIndex].labelColor = addLabelColor.value;
-					labels[flagIndex].labelColorR = addLabelColor.getAttribute("data-r");
-					labels[flagIndex].labelColorG = addLabelColor.getAttribute("data-g");
-					labels[flagIndex].labelColorB = addLabelColor.getAttribute("data-b");
-					localStorage.setItem("labels", JSON.stringify(labels));
-					toastr.success("添加成功");
-				} else {
-					let createData = {
-						"labelName": addLabelName.value,
-						"labelColor": addLabelColor.value,
-						"labelColorR": addLabelColor.getAttribute("data-r"),
-						"labelColorG": addLabelColor.getAttribute("data-g"),
-						"labelColorB": addLabelColor.getAttribute("data-b")
-					};
-					labels.push(createData);
-					localStorage.setItem("labels", JSON.stringify(labels));
-					addLabelName.value = "";
-					toastr.success("添加成功");
-				}
-				eachLabels(labels)
-				labelManageInfo.style.display = "block";
-				labelManageCreateInfo.style.display = "none";
-			}
-			else {
-				toastr.warning('请填写标签名称');
-			}
-
-		};
-
-		// 判断是否显示标签管理
-		if (labelManage.className.indexOf("focus") === -1) {
-			labelManage.classList.remove("blur");
-			labelManage.classList.add("focus");
-		} else {
-			labelManage.classList.remove("focus");
-			labelManage.classList.add("blur");
-		}
-
-		labelSearch.onchange = function (e) {
-			let filterLabel = labels.filter(label => {
-				return label.labelName.indexOf(e.currentTarget.value) > -1;
-			});
-			eachLabels(filterLabel);
-		};
-
-		// 关闭标签管理
-		closeLabel.onclick = function () {
-			labelManage.classList.remove("focus");
-			labelManage.classList.add("blur");
-		}
-	};
-
-	getTime = () => {
-		let date = new Date();
-		let month = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : (`0${date.getMonth() + 1}`);
-		let day = date.getDate() > 9 ? date.getDate() : (`0${date.getDate}`);
-		return `${date.getFullYear()}-${month}-${day}`
 	}
 
 	//----全屏显示事件
@@ -1324,6 +1137,7 @@ class LabelImage {
 			});
 		});
 	};
+
 	//----按缩放程度修改数据展示面板数据
 	ReplaceAnnotateShow = () => {
 		this.Arrays.imageAnnotateShower.splice(0, this.Arrays.imageAnnotateShower.length);

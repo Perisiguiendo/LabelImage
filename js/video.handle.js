@@ -22,12 +22,7 @@ let captureImage = function () {
       div.className = "pic-item";
       let divBtn = document.createElement("div");
       divBtn.className = "div-Btm"
-      divBtn.innerHTML = `
-                          <div class="anal-pic">自动检测</div>
-                          <div class="frame-pic">第${id}帧</div>
-                          <div class="del-pic">删除</div>
-                        `;
-
+      divBtn.innerHTML = `<div class="anal-pic">自动检测</div><div class="frame-pic">第${id}帧</div><div class="del-pic">删除</div>`;
       let img = document.createElement("img");
       img.src = canvas.toDataURL("image/png");
       img.dataset.id = id;
@@ -141,31 +136,14 @@ function completeDate(value) {
   return value < 10 ? "0" + value : value;
 }
 
-
-
 jQuery("#screenShot").on("click", ".del-pic", function () {
   jQuery(jQuery(this)[0].parentElement.parentElement).remove();
   let key = jQuery(this).parent().prev()[0].attributes[1].value;
   frameArr = frameArr.filter(v => v !== parseInt(key))
 })
 
-jQuery('#screenShot').on('mousewheel DOMMouseScroll', onMouseScroll);
-
-function onMouseScroll(e) {
-  e.preventDefault();
-  var wheel = e.originalEvent.wheelDelta || -e.originalEvent.detail;
-  var delta = Math.max(-1, Math.min(1, wheel));
-  let step = 50;
-  if (delta < 0) {
-    this.scrollLeft -= step;
-  } else {
-    this.scrollLeft += step;
-  }
-}
-
-
 /**
- * 4. 血管动态分析
+ * 血管动态分析
  * @param {*} video 
  */
 function VideoAna(video) {
@@ -186,7 +164,7 @@ function VideoAna(video) {
 }
 
 /**
- * 5. 获取数据的接口
+ * 获取数据的接口
  * @param {*} video 
  */
 function getVideoData(video) {
@@ -210,7 +188,10 @@ function getVideoData(video) {
   })
 }
 
-$('#article-parent header').click(function () {
-  $(this).parent().find('.two_div').slideDown();
-  $(this).parent().siblings('article').find('.two_div').slideUp();
+/** 
+ * 手风琴展示
+*/
+jQuery('#article-parent header').click(function () {
+  jQuery(this).parent().find('.two_div').slideDown();
+  jQuery(this).parent().siblings('article').find('.two_div').slideUp();
 });
