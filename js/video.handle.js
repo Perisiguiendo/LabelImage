@@ -32,6 +32,8 @@ let captureImage = function () {
       img.src = canvas.toDataURL("image/png");
       img.dataset.id = id;
       img.className = "screenShotPic";
+      img.width = video.videoWidth;
+      img.height = video.videoHeight;
       div.appendChild(img);
       div.appendChild(divBtn);
       output.appendChild(div);
