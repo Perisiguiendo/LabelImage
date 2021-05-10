@@ -148,6 +148,7 @@ class LabelImage {
 		_nodes.resultGroup.addEventListener('mouseover', this.ResultListOperation);
 		_nodes.labelsNode.addEventListener('click', this.showAllLabels);
 		this.changeInputVal();
+		this.BrowserWidthChange();
 	};
 
 	showAllLabels = () => {
@@ -273,7 +274,6 @@ class LabelImage {
 		}
 		this.Features[f] = value;
 
-
 		// 清空标注结果列表中classList
 		let resultList = this.Nodes.resultGroup.getElementsByClassName("result_list");
 		for (let i = 0; i < resultList.length; i++) {
@@ -285,6 +285,7 @@ class LabelImage {
 
 	//----更新画板数据, 将存储面板数据绘制到展示面板已经缩略图面板
 	UpdateCanvas = () => {
+		// debugger;
 		let _nodes = this.Nodes;
 		_nodes.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
 		_nodes.sCtx.clearRect(0, 0, this.sWidth, this.sWidth * this.iHeight / this.iHeight);
@@ -334,6 +335,12 @@ class LabelImage {
 
 		_nodes.scalePanel.innerText = (this.scale * 100).toFixed(2) + "%";
 	};
+
+	BrowserWidthChange = () => {
+		let _nodes = this.Nodes;
+		console.log(_nodes.cWidth);
+		console.log(_nodes.cHeight);
+	}
 
 	//----监听画板鼠标移动
 	CanvasMouseMove = (e) => {
@@ -996,6 +1003,7 @@ class LabelImage {
 			this.drawFlag = false;
 		}
 	};
+
 	//----监听滚动条缩放是否结束
 	IsMouseWheelEnd = () => {
 		this.ReplaceAnnotateShow();

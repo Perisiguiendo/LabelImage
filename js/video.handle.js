@@ -106,7 +106,7 @@ jQuery("#video").change(function () {
     // 单图片参数
     jQuery("#spwjid01").val("[{\"tpid\":\"121\", \"xgcspjz\":\"血管参数平均值\", \"dtpzdbg\":\"诊断报告\",\"dftpdxgfxList\":[{\"xgwzzsj\":\"xgwzzsj\", \"xgwzyxjzb\":\"xgwzyxjzb\", \"cszfc\":\"cszfc\"}]}]")
 
-    // VideoAna("1.wmv");
+    VideoAna("1.wmv");
   }
 }); 
 

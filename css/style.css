@@ -40,6 +40,7 @@ body, html {
     overflow-y: hidden;
     overflow-x: hidden;
     height: 100%;
+    min-width: 1500px;
 }
 
 /*遮罩层*/
@@ -1239,7 +1240,7 @@ input[type=file] {
 }
 
 .two_div {
-    /* height: 320px; */
+    height: calc(100% - 37px);
     background-color: #293245;
 }
 
@@ -1250,6 +1251,7 @@ input[type=file] {
 .params-content {
     color: #fff;
     padding: 10px;
+    box-sizing: border-box;
 }
 
 #editor {
